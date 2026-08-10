@@ -12,6 +12,8 @@ export const noteService = {
     query,
     get,
     getEmptyNote,
+    save,
+    // remove
 
 }
 
@@ -39,6 +41,14 @@ function query(filterBy = {}) {
 function get(noteId) {
     return storageService.get(NOTES_KEY, noteId)
         .then(note => note)
+}
+
+function save(note) {
+    if (note.id) {
+        return storageService.put(NOTES_KEY, note)
+    } else {
+        return storageService.post(NOTES_KEY, note)
+    }
 }
 
 function _createNotes() {
