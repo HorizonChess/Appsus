@@ -13,7 +13,7 @@ export const noteService = {
     get,
     getEmptyNote,
     save,
-    // remove
+    remove
 
 }
 
@@ -49,6 +49,12 @@ function save(note) {
     } else {
         return storageService.post(NOTES_KEY, note)
     }
+}
+
+function remove(noteId){
+    return storageService.remove(NOTES_KEY,noteId)
+        .then(()=>console.log(`Note ${noteId} was successfully remove`))
+        .catch(()=>console.log(`Note ${noteId} does not exist`))
 }
 
 function _createNotes() {
