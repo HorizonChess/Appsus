@@ -73,15 +73,23 @@ function getEmptyNote(type = 'NoteTxt', info = {}) {
 function _filterByText(notes, text) {
     const regExp = new RegExp(text, 'i')
 
-    return notes.filter(note => {
-        const {info} = note
-        if (!info) return false
-        console.log(note)
-        const { title, txt } = note.info
-        
-        console.log('txt',txt)
-        if (title) return regExp.test(title)
 
-        if (txt) return regExp.test(txt)
+    return notes.filter(note => {
+        const { info } = note
+        if (!info) return false
+
+        var isContainTxt = false
+
+        const { title, txt, todos } = note.info
+
+        if (title) isContainTxt = regExp.test(title)
+
+        if (txt) isContainTxt = regExp.test(txt)
+
+        if (todos) isContainTxt = todos.some(todo => {
+            return regExp.test(todo.txt)
+        })
+
+        return isContainTxt
     })
 }
