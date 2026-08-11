@@ -19,7 +19,7 @@ function NoteTxt({ info, key }) {
 function NoteTodos({ info, key }) {
     const { title, todos } = info
 
-    return <div  className="note-content" key={key}>
+    return <div className="note-content" key={key}>
         <h3>{title}</h3>
         {todos.map(todo => {
             return <div key={todo.txt}>
@@ -31,10 +31,20 @@ function NoteTodos({ info, key }) {
     </div>
 }
 
+function NoteImg({ info, key }) {
+    const { title, url } = info
+
+    return <div className="note-content" key={key}>
+        <h3>{title}</h3>
+        <img src={url} alt="" />
+    </div>
+}
+
 function DynamicNote(props) {
     const cmpMap = {
         'NoteTxt': <NoteTxt {...props} />,
-        'NoteTodos': <NoteTodos {...props} />
+        'NoteTodos': <NoteTodos {...props} />,
+        'NoteImg': <NoteImg {...props} />
     }
 
     return cmpMap[props.type]
