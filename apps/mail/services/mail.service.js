@@ -30,8 +30,6 @@ export const mailService = {
     MAIL_LABELS,
 }
 
-// TEMPORARY - lets us drive the service from the console in phase 1.
-// Remove before final submission.
 window.ms = mailService
 
 function query(filterBy = {}) {
@@ -66,8 +64,6 @@ function save(mail) {
     }
 }
 
-// Sending is just saving with the sender + sentAt stamped on it.
-// A draft that gets sent keeps its id, so it leaves the draft folder by itself.
 function send(mail) {
     return save({
         ...mail,
@@ -84,14 +80,9 @@ function toggleStar(mailId) {
         .then(mail => storageService.put(MAIL_KEY, { ...mail, isStared: !mail.isStared }))
 }
 
-// Pass isRead to force a value, omit it to flip whatever is there
-function toggleRead(mailId, isRead) {
+function toggleRead(mailId) {
     return storageService.get(MAIL_KEY, mailId)
-        .then(mail => {
-            const nextIsRead = (isRead === undefined) ? !mail.isRead : isRead
-            if (mail.isRead === nextIsRead) return mail
-            return storageService.put(MAIL_KEY, { ...mail, isRead: nextIsRead })
-        })
+        .then(mail => storageService.put(MAIL_KEY, { ...mail, isRead: !mail.isRead }))
 }
 
 // Feeds the badges in the folder list: { inbox: { total, unread }, ... }
@@ -162,9 +153,6 @@ function _filterMails(mails, criteria) {
         ))
     }
 
-    // isRead / isStared are three-state: true, false or null ("show all"),
-    // so we check against null rather than truthiness - false is falsy and
-    // would silently skip the "unread only" filter.
     if (criteria.isRead !== null) {
         mails = mails.filter(mail => mail.isRead === criteria.isRead)
     }
