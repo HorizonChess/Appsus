@@ -1,1 +1,200 @@
 // mail service
+
+import { utilService } from '../../../services/util.service.js'
+import { storageService } from '../../../services/async-storage.service.js'
+import { demoMails } from '../data/demo.data.js'
+
+
+export const loggedinUser = {
+    email: 'user@appsus.com',
+    fullname: 'Mahatma Appsus',
+}
+
+export const MAIL_LABELS = ['critical', 'family', 'work', 'friends', 'spam', 'memories', 'romantic']
+
+const MAIL_KEY = 'mailDB'
+_createMails()
+
+export const mailService = {
+    query,
+    get,
+    remove,
+    save,
+    send,
+    toggleStar,
+    toggleRead,
+    getEmptyMail,
+    getDefaultFilter,
+    getFolderCounts,
+    loggedinUser,
+    MAIL_LABELS,
+}
+
+// TEMPORARY - lets us drive the service from the console in phase 1.
+// Remove before final submission.
+window.ms = mailService
+
+function query(filterBy = {}) {
+    const criteria = { ...getDefaultFilter(), ...filterBy }
+
+    return storageService.query(MAIL_KEY)
+        .then(mails => {
+            mails = mails.filter(mail => _isInFolder(mail, criteria.status))
+
+            if (criteria.txt) {
+                const txt = criteria.txt.toLowerCase()
+                mails = mails.filter(mail => (
+                    mail.subject.toLowerCase().includes(txt) ||
+                    mail.body.toLowerCase().includes(txt) ||
+                    mail.from.toLowerCase().includes(txt) ||
+                    mail.fromName.toLowerCase().includes(txt) ||
+                    mail.to.toLowerCase().includes(txt)
+                ))
+            }
+
+            // isRead / isStared are three-state: true, false or null ("show all"),
+            // so we check against null rather than truthiness - false is falsy and
+            // would silently skip the "unread only" filter.
+            if (criteria.isRead !== null) {
+                mails = mails.filter(mail => mail.isRead === criteria.isRead)
+            }
+
+            if (criteria.isStared !== null) {
+                mails = mails.filter(mail => mail.isStared === criteria.isStared)
+            }
+
+            // has ANY of the selected labels
+            if (criteria.labels && criteria.labels.length) {
+                mails = mails.filter(mail => mail.labels.some(label => criteria.labels.includes(label)))
+            }
+
+            return _sortMails(mails, criteria.sortBy, criteria.sortDir)
+        })
+}
+
+function get(mailId) {
+    return storageService.get(MAIL_KEY, mailId)
+}
+
+// Two stage delete, like gmail:
+// first call moves the mail to trash, a second call deletes it for good.
+function remove(mailId) {
+    return storageService.get(MAIL_KEY, mailId)
+        .then(mail => {
+            if (mail.removedAt) return storageService.remove(MAIL_KEY, mailId)
+            return storageService.put(MAIL_KEY, { ...mail, removedAt: Date.now() })
+        })
+}
+
+function save(mail) {
+    if (mail.id) {
+        return storageService.put(MAIL_KEY, mail)
+    } else {
+        return storageService.post(MAIL_KEY, mail)
+    }
+}
+
+// Sending is just saving with the sender + sentAt stamped on it.
+// A draft that gets sent keeps its id, so it leaves the draft folder by itself.
+function send(mail) {
+    return save({
+        ...mail,
+        from: loggedinUser.email,
+        fromName: loggedinUser.fullname,
+        sentAt: Date.now(),
+        removedAt: null,
+        isRead: true,
+    })
+}
+
+function toggleStar(mailId) {
+    return storageService.get(MAIL_KEY, mailId)
+        .then(mail => storageService.put(MAIL_KEY, { ...mail, isStared: !mail.isStared }))
+}
+
+// Pass isRead to force a value, omit it to flip whatever is there
+function toggleRead(mailId, isRead) {
+    return storageService.get(MAIL_KEY, mailId)
+        .then(mail => {
+            const nextIsRead = (isRead === undefined) ? !mail.isRead : isRead
+            if (mail.isRead === nextIsRead) return mail
+            return storageService.put(MAIL_KEY, { ...mail, isRead: nextIsRead })
+        })
+}
+
+// Feeds the badges in the folder list: { inbox: { total, unread }, ... }
+function getFolderCounts() {
+    return storageService.query(MAIL_KEY)
+        .then(mails => {
+            const counts = {}
+            const folders = ['inbox', 'starred', 'sent', 'draft', 'trash']
+
+            folders.forEach(status => {
+                const folderMails = mails.filter(mail => _isInFolder(mail, status))
+                counts[status] = {
+                    total: folderMails.length,
+                    unread: folderMails.filter(mail => !mail.isRead).length,
+                }
+            })
+
+            return counts
+        })
+}
+
+function getEmptyMail(subject = '', body = '') {
+    return { subject, body }
+}
+
+function getDefaultFilter() {
+    return {
+        status: 'inbox',
+        txt: '',
+        isRead: null,     // null = show all
+        isStared: null,   // null = show all
+        labels: [],
+        from: '',
+        subject: '',
+        sortBy: 'date',   // date / subject / from
+        sortDir: -1,      // 1 = ascending, -1 = descending (newest first)
+    }
+}
+
+// ---------------------------------------------------------------- privates
+
+// inbox / sent / draft / trash are exclusive - a mail is in exactly one of them,
+// starred is not exclusive, it is a view over the others, so a starred inbox
+// mail correctly shows up in both.
+function _isInFolder(mail, status) {
+    switch (status) {
+        case 'trash': return mail.removedAt !== null
+        case 'draft': return mail.removedAt === null && !mail.sentAt
+        case 'sent': return mail.removedAt === null && !!mail.sentAt && mail.from === loggedinUser.email
+        case 'inbox': return mail.removedAt === null && !!mail.sentAt && mail.to === loggedinUser.email
+        case 'starred': return mail.removedAt === null && mail.isStared
+        case 'all': return mail.removedAt === null
+        default: return true
+    }
+}
+
+function _sortMails(mails, sortBy, sortDir) {
+    const dir = +sortDir || -1
+
+    return mails.sort((mail1, mail2) => {
+        switch (sortBy) {
+            case 'subject':
+                return mail1.subject.localeCompare(mail2.subject) * dir
+            case 'from':
+                return (mail1.fromName || mail1.from).localeCompare(mail2.fromName || mail2.from) * dir
+            case 'date':
+            default:
+                return ((mail1.sentAt || mail1.createdAt) - (mail2.sentAt || mail2.createdAt)) * dir
+        }
+    })
+}
+
+function _createMails() {
+    const mails = utilService.loadFromStorage(MAIL_KEY)
+    if (!mails || !mails.length) {
+        utilService.saveToStorage(MAIL_KEY, demoMails)
+    }
+}
