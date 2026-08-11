@@ -1,0 +1,8 @@
+plans/
+
+# Editor / OS
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+

@@ -8,7 +8,7 @@ export function NotePreview({ note }) {
             key={note.id}
             type={note.type}
             info={note.info} />
-        <input onChange={onChaneBgClr}type="color" />
+        {/* <input onChange={onChaneBgClr}type="color" /> */}
     </article>
 }
 
