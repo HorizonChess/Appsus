@@ -3,9 +3,7 @@ export const demoNotes = [
         createdAt: 1754812800000,
         type: 'NoteTxt',
         isPinned: true,
-        style: {
-            backgroundColor: '#fff475'
-        },
+        style: { backgroundColor: '#fff475' },
         info: {
             txt: 'Finish my Keep app today!'
         }
@@ -14,9 +12,7 @@ export const demoNotes = [
         createdAt: 1754726400000,
         type: 'NoteTxt',
         isPinned: false,
-        style: {
-            backgroundColor: '#ccff90'
-        },
+        style: { backgroundColor: '#ccff90' },
         info: {
             txt: 'Remember to buy milk, eggs and coffee.'
         }
@@ -25,9 +21,7 @@ export const demoNotes = [
         createdAt: 1754640000000,
         type: 'NoteTodos',
         isPinned: true,
-        style: {
-            backgroundColor: '#ffcc80'
-        },
+        style: { backgroundColor: '#ffcc80' },
         info: {
             title: 'Things to do this week',
             todos: [
@@ -42,9 +36,7 @@ export const demoNotes = [
         createdAt: 1754553600000,
         type: 'NoteImg',
         isPinned: false,
-        style: {
-            backgroundColor: '#f8bbd0'
-        },
+        style: { backgroundColor: '#f8bbd0' },
         info: {
             url: 'https://images.unsplash.com/photo-1507525428034-b723cf961d3e',
             title: 'Summer vacation'
@@ -52,22 +44,29 @@ export const demoNotes = [
     },
     {
         createdAt: 1754467200000,
-        type: 'NoteTxt',
-        isPinned: false,
-        style: {
-            backgroundColor: '#b3e5fc'
-        },
+        type: 'NoteVideo',
+        isPinned: true,
+        style: { backgroundColor: '#b3e5fc' },
         info: {
-            txt: 'Ideas for my next project: AI task manager, habit tracker, or personal dashboard.'
+            url: 'https://www.w3schools.com/html/mov_bbb.mp4',
+            title: 'Funny video'
         }
     },
     {
         createdAt: 1754380800000,
+        type: 'NoteAudio',
+        isPinned: false,
+        style: { backgroundColor: '#d7aefb' },
+        info: {
+            url: 'https://www.w3schools.com/html/horse.mp3',
+            title: 'My favorite audio'
+        }
+    },
+    {
+        createdAt: 1754294400000,
         type: 'NoteTodos',
         isPinned: false,
-        style: {
-            backgroundColor: '#d7aefb'
-        },
+        style: { backgroundColor: '#e6ee9c' },
         info: {
             title: 'Shopping list',
             todos: [
@@ -80,54 +79,32 @@ export const demoNotes = [
         }
     },
     {
-        createdAt: 1754294400000,
-        type: 'NoteImg',
-        isPinned: true,
-        style: {
-            backgroundColor: '#e6ee9c'
-        },
-        info: {
-            url: 'https://images.unsplash.com/photo-1497250681960-ef046c08a56e',
-            title: 'My favorite plants'
-        }
-    },
-    {
         createdAt: 1754208000000,
         type: 'NoteTxt',
         isPinned: false,
-        style: {
-            backgroundColor: '#ffffff'
-        },
+        style: { backgroundColor: '#ffffff' },
         info: {
             txt: 'A good programmer is not someone who knows everything — it is someone who knows how to find the answer.'
         }
     },
     {
         createdAt: 1754121600000,
-        type: 'NoteTodos',
+        type: 'NoteVideo',
         isPinned: false,
-        style: {
-            backgroundColor: '#ff8a80'
-        },
+        style: { backgroundColor: '#ff8a80' },
         info: {
-            title: 'Weekend plans',
-            todos: [
-                { txt: 'Watch a movie', isDone: false },
-                { txt: 'Go for a run', isDone: true },
-                { txt: 'Clean the apartment', isDone: false },
-                { txt: 'Cook dinner', isDone: false }
-            ]
+            url: 'https://www.w3schools.com/html/movie.mp4',
+            title: 'Weekend video'
         }
     },
     {
         createdAt: 1754035200000,
-        type: 'NoteTxt',
-        isPinned: false,
-        style: {
-            backgroundColor: '#80cbc4'
-        },
+        type: 'NoteAudio',
+        isPinned: true,
+        style: { backgroundColor: '#80cbc4' },
         info: {
-            txt: 'Project idea: Build a Kanban board with drag and drop.'
+            url: 'https://fileexamples.com/api/download?file=sample_podcast_episode.mp3&type=audio/mpeg',
+            title: 'Morning recording'
         }
     }
 ]

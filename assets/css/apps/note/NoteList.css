@@ -1,12 +1,15 @@
  /* note list */
 
  .notes {
-     columns: auto 200px;
+     columns: auto 250px;
  }
 
  .note {
      break-inside: avoid;
 
+     box-shadow:
+         1px 1px 5px rgb(221, 220, 220),
+         -1px -1px 5px rgb(221, 220, 220);
      margin-block-end: 1em;
-     padding: 2em;
+     padding: 1em;
  }
