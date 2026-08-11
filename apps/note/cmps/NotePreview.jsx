@@ -2,10 +2,14 @@ const { useState } = React
 
 export function NotePreview({ note }) {
 
-    return <DynamicNote
-        key={note.id}
-        type={note.type}
-        info={note.info} />
+    
+    return <article key={note.id} className="note" style={note.style}>
+        <DynamicNote
+            key={note.id}
+            type={note.type}
+            info={note.info} />
+        <input onChange={onChaneBgClr}type="color" />
+    </article>
 }
 
 function NoteTxt({ info, key }) {
