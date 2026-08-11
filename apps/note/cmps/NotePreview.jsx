@@ -1,24 +1,25 @@
 const { useState } = React
 
 export function NotePreview({ note }) {
-    const [style, setStyle] = useState(note.style)
 
-    return <article style={style}>
-        <DynamicNote
-            type={note.type}
-            info={note.info} />
-    </article>
+    return <DynamicNote
+        key={note.id}
+        type={note.type}
+        info={note.info} />
 }
 
-function NoteTxt({ info }) {
+function NoteTxt({ info, key }) {
     const { txt } = info
-    return <p>{txt}</p>
+
+    return <div className="note-content" key={key}>
+        <p>{txt}</p>
+    </div>
 }
 
-function NoteTodos({ info }) {
+function NoteTodos({ info, key }) {
     const { title, todos } = info
 
-    return <div>
+    return <div  className="note-content" key={key}>
         <h3>{title}</h3>
         {todos.map(todo => {
             return <div key={todo.txt}>
