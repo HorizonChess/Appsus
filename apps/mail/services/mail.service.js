@@ -39,35 +39,7 @@ function query(filterBy = {}) {
 
     return storageService.query(MAIL_KEY)
         .then(mails => {
-            mails = mails.filter(mail => _isInFolder(mail, criteria.status))
-
-            if (criteria.txt) {
-                const txt = criteria.txt.toLowerCase()
-                mails = mails.filter(mail => (
-                    mail.subject.toLowerCase().includes(txt) ||
-                    mail.body.toLowerCase().includes(txt) ||
-                    mail.from.toLowerCase().includes(txt) ||
-                    mail.fromName.toLowerCase().includes(txt) ||
-                    mail.to.toLowerCase().includes(txt)
-                ))
-            }
-
-            // isRead / isStared are three-state: true, false or null ("show all"),
-            // so we check against null rather than truthiness - false is falsy and
-            // would silently skip the "unread only" filter.
-            if (criteria.isRead !== null) {
-                mails = mails.filter(mail => mail.isRead === criteria.isRead)
-            }
-
-            if (criteria.isStared !== null) {
-                mails = mails.filter(mail => mail.isStared === criteria.isStared)
-            }
-
-            // has ANY of the selected labels
-            if (criteria.labels && criteria.labels.length) {
-                mails = mails.filter(mail => mail.labels.some(label => criteria.labels.includes(label)))
-            }
-
+            mails = _filterMails(mails, criteria)
             return _sortMails(mails, criteria.sortBy, criteria.sortDir)
         })
 }
@@ -174,6 +146,39 @@ function _isInFolder(mail, status) {
         case 'all': return mail.removedAt === null
         default: return true
     }
+}
+
+function _filterMails(mails, criteria) {
+    mails = mails.filter(mail => _isInFolder(mail, criteria.status))
+
+    if (criteria.txt) {
+        const txt = criteria.txt.toLowerCase()
+        mails = mails.filter(mail => (
+            mail.subject.toLowerCase().includes(txt) ||
+            mail.body.toLowerCase().includes(txt) ||
+            mail.from.toLowerCase().includes(txt) ||
+            mail.fromName.toLowerCase().includes(txt) ||
+            mail.to.toLowerCase().includes(txt)
+        ))
+    }
+
+    // isRead / isStared are three-state: true, false or null ("show all"),
+    // so we check against null rather than truthiness - false is falsy and
+    // would silently skip the "unread only" filter.
+    if (criteria.isRead !== null) {
+        mails = mails.filter(mail => mail.isRead === criteria.isRead)
+    }
+
+    if (criteria.isStared !== null) {
+        mails = mails.filter(mail => mail.isStared === criteria.isStared)
+    }
+
+    // has ANY of the selected labels
+    if (criteria.labels && criteria.labels.length) {
+        mails = mails.filter(mail => mail.labels.some(label => criteria.labels.includes(label)))
+    }
+
+    return mails
 }
 
 function _sortMails(mails, sortBy, sortDir) {
