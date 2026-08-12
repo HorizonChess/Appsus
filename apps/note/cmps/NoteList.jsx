@@ -11,12 +11,9 @@ export function NoteList({ notes, updateNote,onRemoveNote }) {
                 
                 <button 
                 className="remove-note-btn"
-                onClick={()=>onRemoveNote(note.id)}>Delete</button>
+                onClick={()=>onRemoveNote(note.id)}><i className="fa-solid fa-trash-can"></i></button>
 
             </li>
-
-
-
         })}
         note list
     </ul>

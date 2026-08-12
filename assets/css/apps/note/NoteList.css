@@ -2,9 +2,11 @@
 
  .notes {
      columns: auto 250px;
+     /* padding: 2em; */
  }
 
  .note {
+     position: relative;
      break-inside: avoid;
      transition: 0.3s ease;
      box-shadow: 1px 1px 5px rgb(221, 220, 220),
@@ -12,10 +14,40 @@
      margin-block-end: 20px;
      padding: 1em;
 
-    border-radius: 5px;
+     border-radius: 5px;
  }
 
  .note:hover {
      box-shadow: 1px 1px 5px rgb(172, 171, 171),
          -1px -1px 5px rgb(221, 220, 220);
+ }
+
+
+ .remove-note-btn {
+     position: absolute;
+     z-index: 100;
+     top: 0;
+     left: 0;
+     transform: translate(1.25em, -0.25em);
+
+     border-radius: 50%;
+     justify-self: center;
+     align-content: center;
+     line-height: 100%;
+     display: grid;
+
+     width: 2em;
+     height: 2em;
+    border:none;
+     background-color: transparent;
+     color: black;
+     opacity: 0;
+     font-size: 0.8em;
+
+     transition: 0.3s ease;
+
+ }
+
+ li:hover .remove-note-btn {
+     opacity: 1;
  }
