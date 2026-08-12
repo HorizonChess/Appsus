@@ -14,25 +14,35 @@ export function NoteIndex() {
             .then(notes => setNotes(notes))
     }, [])
 
-    function updateNote(note) {
-        console.log('updateNote--<note', note)
-
-        noteService.save(note)
+    function updateNote(updatednote) {
+        noteService.save(updatednote)
             .then(updatedNote => {
                 const updatedNotes = [...notes]
                 const updatedNoteIsx = notes.findIndex(note => note.id === updatedNote.id)
                 updatedNotes.splice(updatedNoteIsx, 1, updatedNote)
+                setNotes(updatedNotes)
             })
+    }
+
+    function onChangeStyle(ev, note) {
+        const { target } = ev
+        const { style } = note
+        const newStyle = { ...style, backgroundColor: target.value }
+        const updatedNote = { ...note, style: newStyle }
+
+        updateNote(updatedNote)
+        const updatedNotes = [...notes]
+        const updatedNoteIsx = notes.findIndex(note => note.id === updatedNote.id)
+        updatedNotes.splice(updatedNoteIsx, 1, updatedNote)
+        setNotes(updatedNotes)
     }
 
     function removeNote(noteId) {
         noteService.remove(noteId)
-            .then(() => {
-                const updatedNotes = [...notes]
-                const removedNoteIsx = notes.findIndex(note => note.id === noteId)
-                updatedNotes.splice(removedNoteIsx, 1)
-                setNotes(updatedNotes)
-            })
+        const updatedNotes = [...notes]
+        const removedNoteIsx = notes.findIndex(note => note.id === noteId)
+        updatedNotes.splice(removedNoteIsx, 1)
+        setNotes(updatedNotes)
     }
 
     if (!notes || !notes.length) return <section className="container">
@@ -45,6 +55,7 @@ export function NoteIndex() {
         <NoteList
             notes={notes}
             updateNote={updateNote}
-            onRemoveNote={removeNote} />
+            onRemoveNote={removeNote}
+            onChangeStyle={onChangeStyle} />
     </section>
 }
