@@ -1,4 +1,5 @@
 import { mailService } from '../services/mail.service.js'
+import { MailList } from '../cmps/MailList.jsx'
 
 const { useState, useEffect } = React
 
@@ -7,14 +8,6 @@ export function MailIndex() {
 
     useEffect(() => {
         loadMails()
-
-        // //test the service from the console
-        // mailService.query({ status: 'inbox' }).then(console.table)        // 15
-        // mailService.query({ status: 'draft' }).then(console.table)        //  2
-        // mailService.query({ status: 'trash' }).then(console.table)        //  2
-        // mailService.query({ status: 'inbox', isRead: false }).then(m => console.log(m.length))
-        // mailService.getFolderCounts().then(console.log)
-        // mailService.query({ status: 'inbox', sortBy: 'subject', sortDir: 1 }).then(console.table)
     }, [])
 
     function loadMails() {
@@ -23,13 +16,25 @@ export function MailIndex() {
             .catch(err => console.log('Had issues loading mails', err))
     }
 
-    if (!mails) return <section className="container">Loading...</section>
+    // optimistic - the storage service costs 500ms per call and toggleStar makes
+    // two, so we flip it in state now and restore the old list if the save fails
+    function onToggleStar(mailId) {
+        const prevMails = mails
 
-    // Temporary - phase 3 replaces this with MailFolderList + MailList + MailPreview
-    return <section className="container">
-        <h2>Inbox ({mails.length})</h2>
-        <ul>
-            {mails.map(mail => <li key={mail.id}>{mail.fromName} - {mail.subject}</li>)}
-        </ul>
+        setMails(mails.map(mail => (
+            mail.id === mailId ? { ...mail, isStared: !mail.isStared } : mail
+        )))
+
+        mailService.toggleStar(mailId)
+            .catch(err => {
+                console.log('Had issues starring mail', err)
+                setMails(prevMails)
+            })
+    }
+
+    if (!mails) return <section className="mail-index">Loading...</section>
+
+    return <section className="mail-index">
+        <MailList mails={mails} onToggleStar={onToggleStar} />
     </section>
 }

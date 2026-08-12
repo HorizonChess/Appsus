@@ -1,1 +1,14 @@
- /* mail index  */
+/* mail index */
+
+.mail-index {
+    font-family: var(--mail-font-main);
+    font-size: var(--mail-fs-body);
+    line-height: var(--mail-lh-body);
+    color: var(--mail-clr-text);
+    background-color: var(--mail-clr-bg-app);
+}
+
+.mail-index img {
+    width: auto;
+    height: auto;
+}

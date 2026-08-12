@@ -1,12 +1,8 @@
-/* mail preview */
 
 .mail-preview {
     display: grid;
     grid-template-columns:
-        var(--mail-star-size)
-        calc(var(--mail-col-sender-w) + var(--mail-col-sender-indent))
-        minmax(0, 1fr)
-        calc(var(--mail-col-date-w) + var(--mail-sp-4));
+        var(--mail-star-size) calc(var(--mail-col-sender-w) + var(--mail-col-sender-indent)) minmax(0, 1fr) calc(var(--mail-col-date-w) + var(--mail-sp-4));
     align-items: center;
     min-height: var(--mail-row-h);
     padding-inline: var(--mail-sp-2);
@@ -95,10 +91,30 @@
     color: var(--mail-clr-text);
 }
 
-.mail-preview .label-critical { background-color: var(--mail-label-critical); }
-.mail-preview .label-family   { background-color: var(--mail-label-family); }
-.mail-preview .label-work     { background-color: var(--mail-label-work); }
-.mail-preview .label-friends  { background-color: var(--mail-label-friends); }
-.mail-preview .label-spam     { background-color: var(--mail-label-spam); }
-.mail-preview .label-memories { background-color: var(--mail-label-memories); }
-.mail-preview .label-romantic { background-color: var(--mail-label-romantic); }
+.mail-preview .label-critical {
+    background-color: var(--mail-label-critical);
+}
+
+.mail-preview .label-family {
+    background-color: var(--mail-label-family);
+}
+
+.mail-preview .label-work {
+    background-color: var(--mail-label-work);
+}
+
+.mail-preview .label-friends {
+    background-color: var(--mail-label-friends);
+}
+
+.mail-preview .label-spam {
+    background-color: var(--mail-label-spam);
+}
+
+.mail-preview .label-memories {
+    background-color: var(--mail-label-memories);
+}
+
+.mail-preview .label-romantic {
+    background-color: var(--mail-label-romantic);
+}
