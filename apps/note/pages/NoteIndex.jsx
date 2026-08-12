@@ -15,11 +15,15 @@ export function NoteIndex() {
     }, [])
 
     function updateNote(note) {
-        storageService.save(note)
+        console.log('updateNote--<note',note)
+
+        noteService.save(note)
             .then(updatedNote => {
+                const updatedNotes = [...notes]
                 const updatedNoteIsx = notes.findIndex(note => note.id === updatedNote.id)
-                const updatedNotes = notes.splice(updatedNoteIsx,1,updatedNote)
-                setNotes(updatedNotes)
+                updatedNotes.splice(updatedNoteIsx, 1, updatedNote)
+                console.log('updatedNotes', updatedNotes)
+                // setNotes(updatedNotes)
             })
     }
 
