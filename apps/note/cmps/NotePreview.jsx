@@ -1,5 +1,6 @@
 const { useState, useRef, useEffect } = React
 import { colorOptions } from "../data/note-color-options.js"
+import { NoteToolbar } from "./NoteToolbar.jsx"
 
 export function NotePreview({ note, updateNote }) {
     const dialogRef = useRef()
@@ -36,8 +37,9 @@ export function NotePreview({ note, updateNote }) {
             type={note.type}
             info={note.info} />
 
-        <button onClick={onOpenModal}></button>
-
+        <NoteToolbar 
+            onOpenModal={onOpenModal}
+            onCloseModal = {onCloseModal}/>
         <dialog className="color-picker" ref={dialogRef} closedby="any" onClose={onCloseModal} key={note.id + 'Dialog'} id={note.id}>
             <form action="">
 
@@ -64,6 +66,8 @@ export function NotePreview({ note, updateNote }) {
                 })}
             </form>
         </dialog>
+
+
     </article >
 }
 

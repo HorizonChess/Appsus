@@ -1,0 +1,16 @@
+.note-toolbar {}
+
+.toolbar-btn {
+    width: 2em;
+    height: 2em;
+    background-color: transparent;
+    border: none;
+    color: rgba(0, 0, 0, 0.54);
+    transition: 0.3s ease;
+    border-radius: 50%;
+    background-color: rgba(128, 128, 128, 0);
+}
+
+.toolbar-btn:hover {
+    background-color: rgba(128, 128, 128, 0.293);
+}
