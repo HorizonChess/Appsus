@@ -1,0 +1,64 @@
+
+.mail-index {
+    --mail-font-main: 'Google Sans', Roboto, RobotoDraft, Helvetica, Arial, sans-serif;
+    --mail-fs-body: 14px;
+    --mail-fs-small: 12px;
+    --mail-fs-subject: ;
+    --mail-lh-body: 20px;
+    --mail-fw-read: 400;
+    --mail-fw-unread: 700;
+
+    --mail-clr-bg-app: rgb(248, 250, 253);
+    --mail-clr-surface: ;
+    --mail-clr-surface-read: rgb(242, 246, 252);
+    --mail-clr-hover: ;
+    --mail-clr-search-bg: ;
+    --mail-clr-nav-active: ;
+    --mail-clr-compose-bg: ;
+
+    --mail-clr-text: rgb(32, 33, 36);
+    --mail-clr-text-secondary: ;
+    --mail-clr-text-muted: rgb(95, 99, 104);
+
+    --mail-clr-accent: ;
+    --mail-clr-star-on: ;
+    --mail-clr-star-off: ;
+    --mail-clr-danger: ;
+
+    --mail-clr-border: ;
+    --mail-clr-row-line: rgba(100, 121, 143, .12);
+    --mail-shadow-row-line: inset 0 -1px 0 0 var(--mail-clr-row-line);
+    --mail-shadow-row-hover: ;
+    --mail-shadow-modal: ;
+
+    --mail-radius-sm: ;
+    --mail-radius-md: ;
+    --mail-radius-lg: ;
+    --mail-radius-pill: ;
+    --mail-radius-nav: ;
+    --mail-sidebar-w: ;
+    --mail-row-h: 40px;
+    --mail-nav-item-h: ;
+    --mail-icon-btn-size: ;
+    --mail-avatar-size: ;
+    --mail-compose-w: ;
+    --mail-star-size: 20px;
+    --mail-col-sender-w: 168px;
+    --mail-col-sender-indent: 32px;
+    --mail-col-date-w: 56px;
+
+    --mail-sp-1: 4px;
+    --mail-sp-2: 8px;
+    --mail-sp-3: 12px;
+    --mail-sp-4: 16px;
+    --mail-sp-5: 24px;
+    --mail-sp-6: 32px;
+
+    --mail-label-critical: #e8483c;
+    --mail-label-family: #1565c0;
+    --mail-label-work: #43a047;
+    --mail-label-friends: #f5e11a;
+    --mail-label-spam: #f79b1e;
+    --mail-label-memories: #ba68e8;
+    --mail-label-romantic: #29b6d8;
+}

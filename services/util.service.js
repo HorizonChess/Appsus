@@ -71,3 +71,21 @@ function getMonthName(date) {
     ]
     return monthNames[date.getMonth()]
 }
+
+
+function formatMailDate(timestamp) {
+    if (!timestamp) return ''
+
+    const date = new Date(timestamp)
+    const now = new Date()
+
+    if (date.toDateString() === now.toDateString()) {
+        return `${utilService.padNum(date.getHours())}:${utilService.padNum(date.getMinutes())}`
+    }
+
+    if (date.getFullYear() === now.getFullYear()) {
+        return `${utilService.getMonthName(date).slice(0, 3)} ${date.getDate()}`
+    }
+
+    return `${utilService.padNum(date.getDate())}/${utilService.padNum(date.getMonth() + 1)}/${date.getFullYear()}`
+}

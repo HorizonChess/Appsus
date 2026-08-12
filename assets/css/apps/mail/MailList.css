@@ -1,1 +1,13 @@
- /* mail list */
+/* mail list */
+
+.mail-list {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+.mail-list-empty {
+    padding: var(--mail-sp-6);
+    text-align: center;
+    color: var(--mail-clr-text-muted);
+}

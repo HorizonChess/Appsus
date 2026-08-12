@@ -26,6 +26,7 @@ export const mailService = {
     getEmptyMail,
     getDefaultFilter,
     getFolderCounts,
+    formatMailDate,
     loggedinUser,
     MAIL_LABELS,
 }
@@ -120,6 +121,24 @@ function getDefaultFilter() {
         sortBy: 'date',   // date / subject / from
         sortDir: -1,      // 1 = ascending, -1 = descending (newest first)
     }
+}
+
+// Gmail's date rule: today -> 14:32, this year -> Sep 12, older -> 12/09/2019
+function formatMailDate(timestamp) {
+    if (!timestamp) return ''
+
+    const date = new Date(timestamp)
+    const now = new Date()
+
+    if (date.toDateString() === now.toDateString()) {
+        return `${utilService.padNum(date.getHours())}:${utilService.padNum(date.getMinutes())}`
+    }
+
+    if (date.getFullYear() === now.getFullYear()) {
+        return `${utilService.getMonthName(date).slice(0, 3)} ${date.getDate()}`
+    }
+
+    return `${utilService.padNum(date.getDate())}/${utilService.padNum(date.getMonth() + 1)}/${date.getFullYear()}`
 }
 
 // ---------------------------------------------------------------- privates
