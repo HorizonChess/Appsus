@@ -1,11 +1,97 @@
-.note-content{
+.note{
+    position:relative;
+}
+.note-content {
     /* overflow: scroll; */
 }
 
 audio {
-    width:250px;
+    width: 250px;
 }
 
-figure{
+figure {
     margin: 0;
+}
+
+.color-picker {
+    z-index: 100;
+    position: absolute;
+    border: none;
+    box-shadow: 0 1px 2px 0 rgba(60, 64, 67, 0.3), 0 2px 6px 2px rgba(60, 64, 67, 0.15);
+    border-radius: 5px;
+    break-inside: avoid;
+
+}
+
+.color-picker input {
+    display: none;
+}
+
+.color-picker form {
+    display: flex;
+    gap: 0.2em
+}
+
+.color-picker-label {
+    position: relative;
+    display: grid;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    font-size: 0.7em;
+}
+
+.color-picker-label:has(.picker-option.empty) {
+    outline: solid 2px rgb(178, 178, 178);
+}
+
+.color-picker-label .picker-option.empty {
+    display: grid;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 0.1em;
+    width: 1em;
+    height: 1em;
+    border-radius: 50%;
+    color: black;
+}
+.color-picker-label:has(.picker-option):hover{
+        outline: solid 2px black;
+}
+.color-picker-label:has(.picker-option):has(+ input:checked){
+    outline: solid 2px rgb(161, 66, 244);
+}
+
+.color-picker-label .picker-option:not(.empty) {
+    position: absolute;
+    top: -0.2em;
+    left: -0.2em;
+    background-color: rgb(161, 66, 244);
+    padding: 0.1em;
+    width: 1em;
+    height: 1em;
+    border-radius: 50%;
+    text-align: center;
+    color: white;
+    display: none;
+}
+
+
+
+
+.color-picker-label:has(+ input:checked) {
+    outline: solid 2px rgb(161, 66, 244);
+}
+
+.color-picker label:has(+ input:checked) .picker-option:not(.empty) {
+    display: unset;
+}
+
+
+.color-picker-label {
+    display: grid;
+    width: 25px;
+    height: 25px;
+    border-radius: 50%;
 }

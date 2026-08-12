@@ -2,14 +2,18 @@
 
  .notes {
      columns: auto 250px;
+      column-fill: auto;
+     height:100vh
  }
 
+ li{
+    /* padding-block-end: 40px; */
+ }
  .note {
      break-inside: avoid;
-
-     box-shadow:
-         1px 1px 5px rgb(221, 220, 220),
+     transition: background-color 0.3s ease;
+         box-shadow: 1px 1px 5px rgb(221, 220, 220),
          -1px -1px 5px rgb(221, 220, 220);
-     margin-block-end: 1em;
+     margin-block-end: 40px;
      padding: 1em;
  }
