@@ -1,0 +1,104 @@
+/* mail preview */
+
+.mail-preview {
+    display: grid;
+    grid-template-columns:
+        var(--mail-star-size)
+        calc(var(--mail-col-sender-w) + var(--mail-col-sender-indent))
+        minmax(0, 1fr)
+        calc(var(--mail-col-date-w) + var(--mail-sp-4));
+    align-items: center;
+    min-height: var(--mail-row-h);
+    padding-inline: var(--mail-sp-2);
+    box-shadow: var(--mail-shadow-row-line);
+    white-space: nowrap;
+    cursor: pointer;
+}
+
+.mail-preview.is-unread {
+    background-color: var(--mail-clr-surface);
+    font-weight: var(--mail-fw-unread);
+}
+
+.mail-preview.is-read {
+    background-color: var(--mail-clr-surface-read);
+    font-weight: var(--mail-fw-read);
+}
+
+.mail-preview:hover {
+    box-shadow: var(--mail-shadow-row-hover);
+    z-index: 1;
+}
+
+.mail-preview .star-btn {
+    display: grid;
+    place-items: center;
+    inline-size: var(--mail-star-size);
+    block-size: var(--mail-star-size);
+    padding: 0;
+    border: none;
+    background: none;
+    font-size: var(--mail-star-size);
+    line-height: 1;
+    color: var(--mail-clr-star-off);
+    cursor: pointer;
+}
+
+.mail-preview .star-btn .is-stared {
+    color: var(--mail-clr-star-on);
+}
+
+.mail-preview .mail-sender {
+    padding-inline-start: var(--mail-col-sender-indent);
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.mail-preview .mail-txt {
+    display: flex;
+    align-items: center;
+    gap: var(--mail-sp-1);
+    min-width: 0;
+    overflow: hidden;
+}
+
+.mail-preview .mail-subject {
+    flex: 0 1 auto;
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.mail-preview .mail-snippet {
+    flex: 1 1 auto;
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    color: var(--mail-clr-text-muted);
+    font-weight: var(--mail-fw-read);
+}
+
+.mail-preview .mail-date {
+    padding-inline-start: var(--mail-sp-4);
+    font-size: var(--mail-fs-small);
+    text-align: end;
+}
+
+.mail-preview .label-chip {
+    flex: 0 0 auto;
+    padding-block: var(--mail-sp-1);
+    padding-inline: var(--mail-sp-2);
+    border-radius: var(--mail-radius-sm);
+    font-size: var(--mail-fs-small);
+    font-weight: var(--mail-fw-read);
+    line-height: 1;
+    color: var(--mail-clr-text);
+}
+
+.mail-preview .label-critical { background-color: var(--mail-label-critical); }
+.mail-preview .label-family   { background-color: var(--mail-label-family); }
+.mail-preview .label-work     { background-color: var(--mail-label-work); }
+.mail-preview .label-friends  { background-color: var(--mail-label-friends); }
+.mail-preview .label-spam     { background-color: var(--mail-label-spam); }
+.mail-preview .label-memories { background-color: var(--mail-label-memories); }
+.mail-preview .label-romantic { background-color: var(--mail-label-romantic); }
