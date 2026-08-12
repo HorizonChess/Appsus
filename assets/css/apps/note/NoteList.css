@@ -2,9 +2,6 @@
 
  .notes {
      columns: auto 250px;
-     column-fill: auto;
-     height: 100vh;
-     overflow-x: auto;
  }
 
  .note {

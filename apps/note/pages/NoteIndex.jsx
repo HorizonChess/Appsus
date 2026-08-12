@@ -15,15 +15,23 @@ export function NoteIndex() {
     }, [])
 
     function updateNote(note) {
-        console.log('updateNote--<note',note)
+        console.log('updateNote--<note', note)
 
         noteService.save(note)
             .then(updatedNote => {
                 const updatedNotes = [...notes]
                 const updatedNoteIsx = notes.findIndex(note => note.id === updatedNote.id)
                 updatedNotes.splice(updatedNoteIsx, 1, updatedNote)
-                console.log('updatedNotes', updatedNotes)
-                // setNotes(updatedNotes)
+            })
+    }
+
+    function removeNote(noteId) {
+        noteService.remove(noteId)
+            .then(() => {
+                const updatedNotes = [...notes]
+                const removedNoteIsx = notes.findIndex(note => note.id === noteId)
+                updatedNotes.splice(removedNoteIsx, 1)
+                setNotes(updatedNotes)
             })
     }
 
@@ -36,6 +44,7 @@ export function NoteIndex() {
         <h1>Notes app</h1>
         <NoteList
             notes={notes}
-            updateNote={updateNote} />
+            updateNote={updateNote}
+            onRemoveNote={removeNote} />
     </section>
 }
