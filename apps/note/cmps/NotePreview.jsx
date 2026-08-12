@@ -85,9 +85,9 @@ function NoteTodos({ info, key }) {
     return <div className="note-content" key={key}>
         <h3>{title}</h3>
         {todos.map(todo => {
-            return <div key={todo.txt}>
-                <input type="checkbox" id={todo.txt} name={todo.txt} />
+            return <div className="todo-list" key={todo.txt}>
                 <label htmlFor={todo.txt}>{todo.txt}</label>
+                <input type="checkbox" id={todo.txt} name={todo.txt} checked={todo.isDone}/>
 
             </div>
         })}

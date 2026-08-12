@@ -1,6 +1,7 @@
-.note{
-    position:relative;
+.note {
+    position: relative;
 }
+
 .note-content {
     /* overflow: scroll; */
 }
@@ -56,10 +57,12 @@ figure {
     border-radius: 50%;
     color: black;
 }
-.color-picker-label:has(.picker-option):hover{
-        outline: solid 2px black;
+
+.color-picker-label:has(.picker-option):hover {
+    outline: solid 2px black;
 }
-.color-picker-label:has(.picker-option):has(+ input:checked){
+
+.color-picker-label:has(.picker-option):has(+ input:checked) {
     outline: solid 2px rgb(161, 66, 244);
 }
 
@@ -94,4 +97,35 @@ figure {
     width: 25px;
     height: 25px;
     border-radius: 50%;
+}
+
+.todo-list{
+    display: flex;
+    flex-direction: row-reverse;
+    justify-content: flex-end;
+
+    align-items: center;
+}
+
+label:has(+ input[type="checkbox"]:checked) {
+    text-decoration: line-through;
+
+}
+
+input[type="checkbox"] {
+    appearance: none;
+    background-color: transparent;
+    width: 18px;
+    height: 18px;
+    border: 2px solid black;
+}
+
+input[type="checkbox"]::before {
+    content: "✓";
+    display: none;
+}
+
+input[type="checkbox"]:checked::before {
+    display: grid;
+    justify-self: center;
 }

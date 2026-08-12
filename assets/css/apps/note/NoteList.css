@@ -2,18 +2,23 @@
 
  .notes {
      columns: auto 250px;
-      column-fill: auto;
-     height:100vh
+     column-fill: auto;
+     height: 100vh;
+     overflow-x: auto;
  }
 
- li{
-    /* padding-block-end: 40px; */
- }
  .note {
      break-inside: avoid;
-     transition: background-color 0.3s ease;
-         box-shadow: 1px 1px 5px rgb(221, 220, 220),
+     transition: 0.3s ease;
+     box-shadow: 1px 1px 5px rgb(221, 220, 220),
          -1px -1px 5px rgb(221, 220, 220);
-     margin-block-end: 40px;
+     margin-block-end: 20px;
      padding: 1em;
+
+    border-radius: 5px;
+ }
+
+ .note:hover {
+     box-shadow: 1px 1px 5px rgb(172, 171, 171),
+         -1px -1px 5px rgb(221, 220, 220);
  }

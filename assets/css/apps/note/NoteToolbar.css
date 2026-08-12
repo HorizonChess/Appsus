@@ -1,4 +1,10 @@
-.note-toolbar {}
+.note-toolbar{
+    transition: 0.3s ease;
+    opacity: 0;
+}
+.note:hover .note-toolbar{
+    opacity: 1;
+}
 
 .toolbar-btn {
     width: 2em;
@@ -13,4 +19,5 @@
 
 .toolbar-btn:hover {
     background-color: rgba(128, 128, 128, 0.293);
+
 }
