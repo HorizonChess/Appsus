@@ -9,11 +9,12 @@
      position: relative;
      break-inside: avoid;
      transition: 0.3s ease;
-     box-shadow: 1px 1px 5px rgb(221, 220, 220),
-         -1px -1px 5px rgb(221, 220, 220);
+     /* box-shadow: 1px 1px 5px rgb(221, 220, 220),
+         -1px -1px 5px rgb(221, 220, 220); */
      margin-block-end: 20px;
      padding: 1em;
 
+     border: 1px solid rgb(221, 220, 220);
      border-radius: 5px;
  }
 
