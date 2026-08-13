@@ -13,21 +13,21 @@ export function NoteAdd({ emptyNote, addNote }) {
         setEmptyNoteToEdit({ ...emptyNoteToEdit, info: newInfo })
     }
 
-    return <div>
+    return <fieldset className="add-note">
         <DynamicAddNote
             inputType={inputType}
             emptyNoteToEdit={emptyNoteToEdit}
             info={emptyNoteToEdit.info}
             onInputChange={onInputChange} />
         <button onClick={() => addNote(emptyNoteToEdit)}>Submit</button>
-    </div>
+    </fieldset>
 }
 
 function AddTxt({ info, emptyNoteToEdit, onInputChange }) {
 
-    return <div className="add-textNote">
+    return <div className="add-txt">
         <input
-            className="text-input-title"
+            className="add-input title"
             type='text'
             placeholder="Enter Title"
             onChange={(ev) => {
@@ -41,7 +41,7 @@ function AddTxt({ info, emptyNoteToEdit, onInputChange }) {
         </input>
 
         <input
-            className="text-input-txt"
+            className="add-input txt"
             type='text'
             placeholder="Enter Text"
             onChange={(ev) => {

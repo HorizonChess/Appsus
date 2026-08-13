@@ -1,0 +1,33 @@
+.add-note {
+    width: 600px;
+    margin: auto;
+    border-radius: 8px;
+    border: none;
+     box-shadow: 0 1px 2px 0 rgba(60, 64, 67, 0.3),
+        0 2px 6px 2px rgba(60, 64, 67, 0.15);
+    padding:1em;
+}
+
+.add-txt {
+    display: grid;
+}
+
+.add-input {
+    border: none;
+}
+
+.add-input.title{
+    font-size: 20px;
+}
+.add-input.txt{
+    padding-block:12px
+}
+
+.add-input::placeholder{
+    color:rgba(53, 55, 59, 0.799)
+
+}
+
+.add-input:focus-visible {
+    outline: none;
+}
