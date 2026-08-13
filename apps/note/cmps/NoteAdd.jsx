@@ -1,7 +1,7 @@
 const { useState, useEffect } = React
 
 export function NoteAdd({ emptyNote, addNote }) {
-    const [inputType, setInputType] = useState('NoteTxt')
+    const [inputType, setInputType] = useState(null)
     const [emptyNoteToEdit, setEmptyNoteToEdit] = useState(emptyNote)
 
     console.log('emptyNoteToEdit.info', emptyNoteToEdit.info)
@@ -13,6 +13,16 @@ export function NoteAdd({ emptyNote, addNote }) {
         setEmptyNoteToEdit({ ...emptyNoteToEdit, info: newInfo })
     }
 
+
+    if (!inputType) return <fieldset className="add-note">
+        <input
+            placeholder="Take a note..."
+            className="add-input title"
+            onClick={() => setInputType('NoteTxt')}
+            type="text"
+        />
+    </fieldset >
+
     return <fieldset className="add-note">
         <DynamicAddNote
             inputType={inputType}
@@ -20,9 +30,13 @@ export function NoteAdd({ emptyNote, addNote }) {
             info={emptyNoteToEdit.info}
             onInputChange={onInputChange} />
 
+
         <button
             className="submit-note-btn"
-            onClick={() => addNote(emptyNoteToEdit)}
+            onClick={() => {
+                setInputType(null)
+                addNote(emptyNoteToEdit)
+            }}
 
         >
             <i class="fa-solid fa-play"></i>
