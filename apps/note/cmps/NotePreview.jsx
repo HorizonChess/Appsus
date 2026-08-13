@@ -12,9 +12,10 @@ export function NotePreview({ note, updateNote }) {
 }
 
 function NoteTxt({ info, key }) {
-    const { txt } = info
+    const { txt,title } = info
 
     return <div className="note-content" key={key}>
+        <h3>{title}</h3>
         <p>{txt}</p>
     </div>
 }
