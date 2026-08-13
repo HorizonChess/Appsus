@@ -4,6 +4,7 @@ export function NoteAdd({ emptyNote, addNote }) {
     const [inputType, setInputType] = useState('NoteTxt')
     const [emptyNoteToEdit, setEmptyNoteToEdit] = useState(emptyNote)
 
+    console.log('emptyNoteToEdit.info', emptyNoteToEdit.info)
     useEffect(() => {
         setEmptyNoteToEdit({ ...emptyNoteToEdit, type: inputType })
     }, [inputType])
@@ -16,7 +17,7 @@ export function NoteAdd({ emptyNote, addNote }) {
         <DynamicAddNote
             inputType={inputType}
             emptyNoteToEdit={emptyNoteToEdit}
-            info={emptyNote.info}
+            info={emptyNoteToEdit.info}
             onInputChange={onInputChange} />
         <button onClick={() => addNote(emptyNoteToEdit)}>Submit</button>
     </div>
@@ -24,14 +25,35 @@ export function NoteAdd({ emptyNote, addNote }) {
 
 function AddTxt({ info, emptyNoteToEdit, onInputChange }) {
 
-    return <textarea onChange={(ev) => {
-        const newInfo = { txt: ev.target.value }
-        onInputChange(emptyNoteToEdit, newInfo)
-    }}
-        name=""
-        id="">
+    return <div className="add-textNote">
+        <input
+            className="text-input-title"
+            type='text'
+            placeholder="Enter Title"
+            onChange={(ev) => {
 
-    </textarea>
+                const newInfo = { ...info, title: ev.target.value }
+                onInputChange(emptyNoteToEdit, newInfo)
+            }}
+            name=""
+            id="">
+
+        </input>
+
+        <input
+            className="text-input-txt"
+            type='text'
+            placeholder="Enter Text"
+            onChange={(ev) => {
+                const newInfo = {...info,  txt: ev.target.value }
+                onInputChange(emptyNoteToEdit, newInfo)
+            }}
+            name=""
+            id="">
+
+        </input>
+    </div>
+
 }
 
 function DynamicAddNote(props) {

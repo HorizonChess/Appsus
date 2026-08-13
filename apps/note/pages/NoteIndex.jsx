@@ -9,7 +9,7 @@ const { useState, useRef, useEffect } = React
 
 export function NoteIndex() {
     const [notes, setNotes] = useState([])
-    console.log('notes',notes)
+
     useEffect(() => {
         noteService.query({})
             .then(notes => setNotes(notes))
