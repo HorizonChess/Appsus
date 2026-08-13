@@ -2,13 +2,14 @@
 import { noteService } from "../services/note.service.js"
 
 import { NoteList } from "../cmps/NoteList.jsx"
+import { NoteAdd } from "../cmps/NoteAdd.jsx"
 import { storageService } from "../../../services/async-storage.service.js"
 
 const { useState, useRef, useEffect } = React
 
 export function NoteIndex() {
     const [notes, setNotes] = useState([])
-
+    console.log('notes',notes)
     useEffect(() => {
         noteService.query({})
             .then(notes => setNotes(notes))
@@ -22,6 +23,13 @@ export function NoteIndex() {
                 updatedNotes.splice(updatedNoteIsx, 1, updatedNote)
                 setNotes(updatedNotes)
             })
+    }
+
+    function addNote(emptyNote) {
+        const newNotes= [...notes]
+        newNotes.push(emptyNote)
+        setNotes(newNotes)
+        noteService.save(emptyNote)
     }
 
     function onChangeStyle(ev, note) {
@@ -52,6 +60,11 @@ export function NoteIndex() {
 
     return <section className="container">
         <h1>Notes app</h1>
+        <NoteAdd
+            emptyNote={noteService.getEmptyNote()}
+            addNote={addNote}
+
+        />
         <NoteList
             notes={notes}
             updateNote={updateNote}
