@@ -35,9 +35,9 @@ export function NoteList({ notes, updateNote, onRemoveNote, onChangeStyle }) {
                     <NoteModal
                         isOpen={isModalOpen}
                         editedNoteId={editedNoteId}
-                    onCloseModal={onCloseModal}
-                    note={note}
-                    onChangeStyle={onChangeStyle}
+                        onCloseModal={onCloseModal}
+                        note={note}
+                        onChangeStyle={onChangeStyle}
                     />
                 </article>
 

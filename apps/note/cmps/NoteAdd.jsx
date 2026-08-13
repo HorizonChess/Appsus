@@ -19,7 +19,15 @@ export function NoteAdd({ emptyNote, addNote }) {
             emptyNoteToEdit={emptyNoteToEdit}
             info={emptyNoteToEdit.info}
             onInputChange={onInputChange} />
-        <button onClick={() => addNote(emptyNoteToEdit)}>Submit</button>
+
+        <button
+            className="submit-note-btn"
+            onClick={() => addNote(emptyNoteToEdit)}
+
+        >
+            <i class="fa-solid fa-play"></i>
+        </button>
+        
     </fieldset>
 }
 
@@ -45,7 +53,7 @@ function AddTxt({ info, emptyNoteToEdit, onInputChange }) {
             type='text'
             placeholder="Enter Text"
             onChange={(ev) => {
-                const newInfo = {...info,  txt: ev.target.value }
+                const newInfo = { ...info, txt: ev.target.value }
                 onInputChange(emptyNoteToEdit, newInfo)
             }}
             name=""
