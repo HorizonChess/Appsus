@@ -2,7 +2,7 @@ const { useState, useEffect } = React
 
 export function NoteAdd({ emptyNote, addNote }) {
     const [inputType, setInputType] = useState(null)
-    const [emptyNoteToEdit, setEmptyNoteToEdit] = useState(emptyNote)
+    const [emptyNoteToEdit, setEmptyNoteToEdit] = useState(JSON.parse(JSON.stringify(emptyNote)))
 
     useEffect(() => {
         setEmptyNoteToEdit({ ...emptyNoteToEdit, type: inputType })
@@ -12,11 +12,6 @@ export function NoteAdd({ emptyNote, addNote }) {
 
         setEmptyNoteToEdit({ ...emptyNoteToEdit, info: newInfo })
     }
-
-    function onTodoChange(value, todo) {
-        const newTodo = { ...todo, txt: +value }
-    }
-
 
     if (!inputType) return <fieldset className="add-note">
         <input
@@ -45,6 +40,7 @@ export function NoteAdd({ emptyNote, addNote }) {
         <button
             className="submit-note-btn"
             onClick={() => {
+                setEmptyNoteToEdit(emptyNote)
                 setInputType(null)
                 addNote(emptyNoteToEdit)
             }}
@@ -64,7 +60,6 @@ function AddTodos({ info, emptyNoteToEdit, onInputChange }) {
     function onAddTodo() {
         newTodos.push({ txt: '', isDone: false })
         const newInfo = { ...info, todos: newTodos }
-        console.log('newInfo',newInfo)
         onInputChange(emptyNoteToEdit, newInfo)
     }
 
