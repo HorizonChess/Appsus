@@ -1,6 +1,6 @@
 import { mailService } from '../services/mail.service.js'
 
-export function MailPreview({ mail, onToggleStar }) {
+export function MailPreview({ mail, onToggleStar, onSelectMail }) {
     const { subject, body, from, fromName, isRead, isStared, labels = [] } = mail
     const sentAt = mail.sentAt || mail.createdAt
 
@@ -9,7 +9,9 @@ export function MailPreview({ mail, onToggleStar }) {
         onToggleStar(mail.id)
     }
 
-    return <li className={`mail-preview ${isRead ? 'is-read' : 'is-unread'}`}>
+    return <li
+        className={`mail-preview ${isRead ? 'is-read' : 'is-unread'}`}
+        onClick={() => onSelectMail(mail.id)}>
 
         <button
             className="star-btn"
