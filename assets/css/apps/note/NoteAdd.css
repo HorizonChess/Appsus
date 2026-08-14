@@ -59,3 +59,12 @@
         transition: 0.2s ease-in;
     opacity: 0.3
 }
+
+input[type="file"]{
+    display: none;
+}
+
+.note-add-toolbar{
+    grid-row:1;
+    justify-self: end;
+}

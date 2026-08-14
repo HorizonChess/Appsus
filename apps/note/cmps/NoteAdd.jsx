@@ -3,6 +3,7 @@ const { useState, useEffect } = React
 import { NoteCheck } from "./NoteCheck.jsx"
 import { NoteTitle } from "./NoteTitle.jsx"
 import { NoteTxt } from "./NoteTxt.jsx"
+import { NoteImg } from "./NoteImg.jsx"
 
 export function NoteAdd({ emptyNote, addNote }) {
     const [inputType, setInputType] = useState(null)
@@ -16,6 +17,26 @@ export function NoteAdd({ emptyNote, addNote }) {
         setEmptyNoteToEdit({ ...emptyNoteToEdit, info: newInfo })
     }
 
+    function onImgInput(ev, emptyNoteToEdit) {
+        loadImageFromInput(ev, emptyNoteToEdit)
+    }
+
+    function loadImageFromInput(ev, emptyNoteToEdit) {
+        const reader = new FileReader()
+
+        reader.onload = function (event) {
+            const img = new Image()
+            img.onload = () => {
+                const newInfo = { ...emptyNoteToEdit.info, url: event.target.result }
+                setInputType('NoteImg')
+                onInputChange(emptyNoteToEdit, newInfo)
+            }
+            img.src = event.target.result
+        }
+        reader.readAsDataURL(ev.target.files[0])
+
+    }
+
     if (!inputType) return <fieldset className="add-note">
         <input
             placeholder="Take a note..."
@@ -24,12 +45,22 @@ export function NoteAdd({ emptyNote, addNote }) {
             type="text"
         />
 
-        <button
-            className="change-type-btn"
-            onClick={() => setInputType('NoteTodos')}
-        >
-            <i class="fa-regular fa-square-check"></i>
-        </button>
+        <div className="note-add-toolbar">
+            <button
+                className="change-type-btn"
+                onClick={() => setInputType('NoteTodos')}
+            >
+                <i class="fa-regular fa-square-check"></i>
+            </button>
+
+
+            <label for="file-upload" class="change-type-btn">
+                <i class="fa-regular fa-image"></i>
+            </label>
+            <input id="file-upload" type="file" onChange={ev => onImgInput(ev, emptyNoteToEdit)} />
+        </div>
+
+
     </fieldset >
 
     return <fieldset className="add-note">
@@ -127,11 +158,25 @@ function AddTxt({ info, emptyNoteToEdit, onInputChange }) {
     </div>
 }
 
+function AddImg({ info, emptyNoteToEdit, onInputChange }) {
+    return <div>
+        <NoteTitle
+            note={emptyNoteToEdit}
+            info={info}
+            onInputChange={onInputChange}
+        />
+        <NoteImg
+            info={info}
+        />
+    </div>
+}
+
+
 function DynamicAddNote(props) {
     const cmpMap = {
         'NoteTxt': <AddTxt {...props} />,
         'NoteTodos': <AddTodos {...props} />,
-        // 'NoteImg': <NoteImg {...props} />,
+        'NoteImg': <AddImg {...props} />
         // 'NoteVideo': <NoteVideo {...props} />,
         // 'NoteAudio': <NoteAudio {...props} />
     }
