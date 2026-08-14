@@ -61,13 +61,21 @@ function AddTodos({ info, emptyNoteToEdit, onInputChange }) {
     const newTodos = todos ? todos : [{ txt: '', isDone: false }]
     info.todos = newTodos
 
-    function onChangeTodos(info, name, newValue,idx) {
-        const newInfo = { ...info }
+    function onAddTodo() {
+        newTodos.push({ txt: '', isDone: false })
+        const newInfo = { ...info, todos: newTodos }
+        console.log('newInfo',newInfo)
+        onInputChange(emptyNoteToEdit, newInfo)
+    }
 
+    function onChangeTodos(info, name, newValue, idx,ev) {
+
+        const newInfo = { ...info }
         if (name === 'title') {
             newInfo.title = newValue
         } else {
-            newInfo.todos[idx][name] = newValue
+            const todo = newInfo.todos[idx]
+            todo[name] = newValue
         }
 
         onInputChange(emptyNoteToEdit, newInfo)
@@ -85,7 +93,7 @@ function AddTodos({ info, emptyNoteToEdit, onInputChange }) {
         </input>
 
         {newTodos.map((todo, idx) => {
-            return <div className="todo-list" key={todo.txt}>
+            return <div className="todo-list" key={`todo-text-${idx}`}>
                 <input
                     className="add-input txt"
                     type='text'
@@ -93,18 +101,20 @@ function AddTodos({ info, emptyNoteToEdit, onInputChange }) {
                     value={todo.txt}
                     autoFocus={true}
                     name='txt'
-                    onChange={ev => onChangeTodos(info, 'txt', ev.target.value,idx)}
-                    id="" />
+                    onChange={ev => onChangeTodos(info, 'txt', ev.target.value, idx)}
+                    id={`txt-${idx}`} />
 
 
-                <input type="checkbox"
-                    id={todo.txt}
-                    name='isDone'
+                <input type="checkbox" key={`todo-check-${idx}`}
+                    id={`check-${idx}`}
+                     name='isDone'
                     checked={todo.isDone}
-                    onChange={(ev) => onChangeTodos(info, 'isDone', ev.target.value,idx)} />
+                    onChange={(ev) => onChangeTodos(info, 'isDone', ev.target.value, idx)} />
 
             </div>
         })}
+
+        <button onClick={onAddTodo} className="add-todo">+</button>
     </div>
 
 
