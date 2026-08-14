@@ -1,5 +1,6 @@
 const { useState, useEffect } = React
 
+import { NoteCheck } from "./NoteCheck.jsx"
 import { NoteTitle } from "./NoteTitle.jsx"
 import { NoteTxt } from "./NoteTxt.jsx"
 
@@ -11,8 +12,7 @@ export function NoteAdd({ emptyNote, addNote }) {
         setEmptyNoteToEdit({ ...emptyNoteToEdit, type: inputType })
     }, [inputType])
 
-    function onInputChange(demptyNoteToEdit, newInfo, todo) {
-
+    function onInputChange(emptyNoteToEdit, newInfo) {
         setEmptyNoteToEdit({ ...emptyNoteToEdit, info: newInfo })
     }
 
@@ -56,7 +56,7 @@ export function NoteAdd({ emptyNote, addNote }) {
 }
 
 function AddTodos({ info, emptyNoteToEdit, onInputChange }) {
-    const { title, todos } = info
+    const { todos } = info
     const newTodos = todos ? todos : [{ txt: '', isDone: false }]
     info.todos = newTodos
 
@@ -66,7 +66,7 @@ function AddTodos({ info, emptyNoteToEdit, onInputChange }) {
         onInputChange(emptyNoteToEdit, newInfo)
     }
 
-    function onChangeTodos(info, name, newValue, idx, ev) {
+    function onChangeTodos(info, name, newValue, idx) {
 
         const newInfo = { ...info }
         if (name === 'title') {
@@ -93,19 +93,17 @@ function AddTodos({ info, emptyNoteToEdit, onInputChange }) {
                     value={todo.txt}
                     id={`todo-${idx}`}
                 />
-                <input type="checkbox" key={`todo-check-${idx}`}
-                    id={`check-${idx}`}
-                    name='isDone'
-                    checked={todo.isDone}
-                    onChange={(ev) => onChangeTodos(info, 'isDone', ev.target.value, idx)} />
+
+                <NoteCheck
+                    isChecked={todo.isDone}
+                    onInputChange={ev => onChangeTodos(info, 'isDone', ev.target.value, idx)}
+                    id={`todo-check-${idx}`} />
 
             </div>
         })}
 
         <button onClick={onAddTodo} className="add-todo">+</button>
     </div>
-
-
 }
 
 
