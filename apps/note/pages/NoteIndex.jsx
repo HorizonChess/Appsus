@@ -10,6 +10,7 @@ const { useState, useRef, useEffect } = React
 export function NoteIndex() {
     const [notes, setNotes] = useState([])
 
+    console.log(notes)
     useEffect(() => {
         noteService.query({})
             .then(notes => setNotes(notes))
@@ -26,10 +27,16 @@ export function NoteIndex() {
     }
 
     function addNote(emptyNote) {
-        const newNotes= [...notes]
+        const newNotes = [...notes]
         newNotes.push(emptyNote)
-        setNotes(newNotes)
+        const noteIdx = newNotes.length - 1
         noteService.save(emptyNote)
+            .then(savedNote => {
+                const updatedNotes = [...notes]
+                updatedNotes.splice(noteIdx, 1, savedNote)
+                setNotes(updatedNotes)
+            })
+        setNotes([...newNotes])
     }
 
     function onChangeStyle(ev, note) {

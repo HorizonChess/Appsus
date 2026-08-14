@@ -40,9 +40,9 @@ export function NoteAdd({ emptyNote, addNote }) {
         <button
             className="submit-note-btn"
             onClick={() => {
+                addNote(emptyNoteToEdit)
                 setEmptyNoteToEdit(emptyNote)
                 setInputType(null)
-                addNote(emptyNoteToEdit)
             }}
 
         >
