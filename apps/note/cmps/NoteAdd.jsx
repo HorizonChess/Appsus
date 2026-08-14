@@ -1,5 +1,8 @@
 const { useState, useEffect } = React
 
+import { NoteTitle } from "./NoteTitle.jsx"
+import { NoteTxt } from "./NoteTxt.jsx"
+
 export function NoteAdd({ emptyNote, addNote }) {
     const [inputType, setInputType] = useState(null)
     const [emptyNoteToEdit, setEmptyNoteToEdit] = useState(JSON.parse(JSON.stringify(emptyNote)))
@@ -63,7 +66,7 @@ function AddTodos({ info, emptyNoteToEdit, onInputChange }) {
         onInputChange(emptyNoteToEdit, newInfo)
     }
 
-    function onChangeTodos(info, name, newValue, idx,ev) {
+    function onChangeTodos(info, name, newValue, idx, ev) {
 
         const newInfo = { ...info }
         if (name === 'title') {
@@ -77,32 +80,22 @@ function AddTodos({ info, emptyNoteToEdit, onInputChange }) {
     }
 
     return <div className="note-content" >
-        <input
-            className="add-input title"
-            type='text'
-            name='title'
-            placeholder="Enter Title"
-            onChange={(ev) => onChangeTodos(info, 'title', ev.target.value)}
-            id="">
-
-        </input>
+        <NoteTitle
+            note={emptyNoteToEdit}
+            info={info}
+            onInputChange={onInputChange}
+        />
 
         {newTodos.map((todo, idx) => {
             return <div className="todo-list" key={`todo-text-${idx}`}>
-                <input
-                    className="add-input txt"
-                    type='text'
-                    placeholder="Enter Text"
+                <NoteTxt
+                    onInputChange={ev => onChangeTodos(info, 'txt', ev.target.value, idx)}
                     value={todo.txt}
-                    autoFocus={true}
-                    name='txt'
-                    onChange={ev => onChangeTodos(info, 'txt', ev.target.value, idx)}
-                    id={`txt-${idx}`} />
-
-
+                    id={`todo-${idx}`}
+                />
                 <input type="checkbox" key={`todo-check-${idx}`}
                     id={`check-${idx}`}
-                     name='isDone'
+                    name='isDone'
                     checked={todo.isDone}
                     onChange={(ev) => onChangeTodos(info, 'isDone', ev.target.value, idx)} />
 
@@ -114,37 +107,26 @@ function AddTodos({ info, emptyNoteToEdit, onInputChange }) {
 
 
 }
+
+
 function AddTxt({ info, emptyNoteToEdit, onInputChange }) {
+    function onChangeInfoTxt(info, emptyNoteToEdit, ev) {
+        const newInfo = { ...info, txt: ev.target.value }
+        onInputChange(emptyNoteToEdit, newInfo)
+    }
 
-    return <div className="add-txt">
-        <input
-            className="add-input title"
-            type='text'
-            placeholder="Enter Title"
-            onChange={(ev) => {
-
-                const newInfo = { ...info, title: ev.target.value }
-                onInputChange(emptyNoteToEdit, newInfo)
-            }}
-            name=""
-            id="">
-
-        </input>
-
-        <input
-            className="add-input txt"
-            type='text'
-            placeholder="Enter Text"
-            onChange={(ev) => {
-                const newInfo = { ...info, txt: ev.target.value }
-                onInputChange(emptyNoteToEdit, newInfo)
-            }}
-            name=""
-            id="">
-
-        </input>
+    return <div>
+        <NoteTitle
+            note={emptyNoteToEdit}
+            info={info}
+            onInputChange={onInputChange}
+        />
+        <NoteTxt
+            onInputChange={ev => onChangeInfoTxt(info, emptyNoteToEdit, ev)}
+            value={info.txt}
+            id={`txt`}
+        />
     </div>
-
 }
 
 function DynamicAddNote(props) {
