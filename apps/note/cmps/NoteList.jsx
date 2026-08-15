@@ -2,7 +2,6 @@ import { NotePreview } from "./NotePreview.jsx"
 
 const { useState } = React
 export function NoteList({ notes, updateNote, onRemoveNote, onChangeStyle,onOpenModal }) {
-    const [editedNoteId, setEditedNoteId] = useState(null)
 
     return <ul className="notes">
         {notes.map(note => {

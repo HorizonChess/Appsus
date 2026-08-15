@@ -3,12 +3,16 @@ import { noteService } from "../services/note.service.js"
 
 import { NoteList } from "../cmps/NoteList.jsx"
 import { storageService } from "../../../services/async-storage.service.js"
-import {NoteModal} from "../cmps/NoteModal.jsx"
+import { NoteModal } from "../cmps/NoteModal.jsx"
+import { NoteEdit } from "../cmps/NoteEdit.jsx"
+
 const { useState, useRef, useEffect } = React
 
 export function NoteIndex() {
     const [notes, setNotes] = useState([])
     const [isShown, setIsShown] = useState(false)
+    const [editedNote, setEditedNote] = useState(null)
+
 
     useEffect(() => {
         noteService.query({})
@@ -52,14 +56,21 @@ export function NoteIndex() {
     </section>
 
 
-    function onOpenModal() {
+    function onOpenModal(noteId) {
+        noteService.get(noteId)
+            .then(note => {
+                setEditedNote(note)
+
+            })
         console.log('Modal has opened...')
-        setIsShown(true)
+        // setIsShown(true)
     }
 
     function onCloseModal() {
         console.log('Modal has closed...')
-        setIsShown(false)
+        setEditedNote(null)
+
+        // setIsShown(false)
     }
 
     return <section className="container">
@@ -72,8 +83,11 @@ export function NoteIndex() {
             onOpenModal={onOpenModal} />
 
         <NoteModal
-            isShown={isShown}
-            onClose={onCloseModal} >
+            isShown={editedNote !== null}
+            onClose={onCloseModal}
+            editedNote={editedNote}
+        >
+            {editedNote ? <NoteEdit note={editedNote} /> : <span></span>}
         </NoteModal>
 
     </section>
