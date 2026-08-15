@@ -2,7 +2,7 @@ const { useRef, useEffect } = React
 
 export function NoteModal({ isShown, children, onClose = null }) {
 	const dialogRef = useRef(null)
-
+    console.log(children)
 	useEffect(() => {
 		if (isShown && dialogRef.current) dialogRef.current.showModal()
 		else if (dialogRef.current) dialogRef.current.close()

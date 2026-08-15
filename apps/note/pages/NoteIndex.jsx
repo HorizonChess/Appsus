@@ -10,14 +10,18 @@ const { useState, useRef, useEffect } = React
 
 export function NoteIndex() {
     const [notes, setNotes] = useState([])
-    const [isShown, setIsShown] = useState(false)
+    // const [isShown, setIsShown] = useState(false)
     const [editedNote, setEditedNote] = useState(null)
-
 
     useEffect(() => {
         noteService.query({})
             .then(notes => setNotes(notes))
     }, [])
+
+    function onChangeInfo(newInfo) {
+        updateNote({ ...editedNote, info: newInfo })
+        setEditedNote(prev => ({ ...prev, info: newInfo }))
+    }
 
     function updateNote(updatednote) {
         noteService.save(updatednote)
@@ -81,7 +85,7 @@ export function NoteIndex() {
             onClose={onCloseModal}
             editedNote={editedNote}
         >
-            {editedNote ? <NoteEdit note={editedNote} /> : <span></span>}
+            {editedNote ? <NoteEdit note={editedNote} onChangeInfo={onChangeInfo} /> : <span></span>}
         </NoteModal>
 
     </section>

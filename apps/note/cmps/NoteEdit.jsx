@@ -1,34 +1,60 @@
 const { useState, useRef, useEffect } = React
 import { colorOptions } from "../data/note-color-options.js"
 import { NoteToolbar } from "./NoteToolbar.jsx"
+import { NoteTodoCheckMark } from "./NoteTodoCheckmark.jsx"
+import { NoteInputTxt } from "./NoteInputTxt.jsx"
 
-export function NoteEdit({ note, updateNote }) {
-    console.log('note',note)
+export function NoteEdit({ note, updateNote, onChangeInfo }) {
+
     return <DynamicNote
         key={note.id}
         type={note.type}
-        info={note.info} />
+        info={note.info}
+        onChangeInfo={onChangeInfo} />
 
 }
 
-function NoteTxt({ info, key }) {
+function NoteTxt({ info, key, onChangeInfo }) {
     const { txt } = info
 
+    function onChangeTxt(txt) {
+        onChangeInfo({ ...info, txt })
+    }
+
     return <div className="note-content" key={key}>
-        <p>{txt}</p>
+        <NoteInputTxt txt={txt} onChangeTxt={onChangeTxt} key={key} className={'note-title'}/>
     </div>
 }
 
-function NoteTodos({ info, key }) {
+function NoteTodos({ info, key, onChangeInfo }) {
     const { title, todos } = info
 
-    return <div className="note-content" key={key}>
-        <h3>{title}</h3>
-        {todos.map(todo => {
-            return <div className="todo-list" key={todo.txt}>
-                <label htmlFor={todo.txt}>{todo.txt}</label>
-                <input type="checkbox" id={todo.txt} name={todo.txt} checked={todo.isDone} />
+    function onChangeTitle(txt) {
+        onChangeInfo({ ...info, title: txt })
+    }
+    function onChangeTxt(txt) {
+        onChangeInfo({ ...info, txt })
+    }
 
+    function onChangeTodoTxt(newTxt,todo) {
+        todo.txt = newTxt
+        onChangeInfo({ ...info })
+
+    }
+
+    function onChangeTodoCheck(todo) {
+        todo.isDone = !todo.isDone
+        onChangeInfo({ ...info })
+    }
+
+    return <div className="note-content" key={key}>
+
+        <NoteInputTxt txt={title} onChangeTxt={onChangeTitle} key={key} className={'note-title'}/>
+
+        {todos.map((todo, idx) => {
+            return <div className="todo-list" key={todo.txt}>
+                <NoteInputTxt todo={todo} txt={todo.txt} onChangeTxt={onChangeTodoTxt} key={key} className={'note-todo-text'} />
+                <NoteTodoCheckMark todo={todo} onChangeTodo={onChangeTodoCheck} idx={idx} />
             </div>
         })}
     </div>
