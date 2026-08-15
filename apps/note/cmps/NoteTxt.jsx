@@ -1,4 +1,4 @@
-export function NoteTxt({ txtValue, onInputChange,id }) {
+export function NoteTxt({ txtValue, onInputChange,id,placeholder}) {
 
     
     return <div className="add-txt">
@@ -6,7 +6,7 @@ export function NoteTxt({ txtValue, onInputChange,id }) {
             className="add-input txt"
             type='text'
             value={txtValue}
-            placeholder="Enter Text"
+            placeholder={placeholder}
             onChange={onInputChange}
             name={id}
             id={id}>

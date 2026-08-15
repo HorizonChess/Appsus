@@ -43,6 +43,5 @@ export function NoteList({ notes, updateNote, onRemoveNote, onChangeStyle }) {
 
             </li>
         })}
-        note list
     </ul>
 }

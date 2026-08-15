@@ -8,7 +8,7 @@ import { NoteImg } from "./NoteImg.jsx"
 export function NoteAdd({ emptyNote, addNote }) {
     const [inputType, setInputType] = useState(null)
     const [emptyNoteToEdit, setEmptyNoteToEdit] = useState(JSON.parse(JSON.stringify(emptyNote)))
-
+    console.log('emptyNoteToEdit',emptyNoteToEdit)
     useEffect(() => {
         setEmptyNoteToEdit({ ...emptyNoteToEdit, type: inputType })
     }, [inputType])
@@ -48,9 +48,7 @@ export function NoteAdd({ emptyNote, addNote }) {
         <div className="note-add-toolbar">
             <button
                 className="change-type-btn"
-                onClick={() => setInputType('NoteTodos')}
-            >
-                <i class="fa-regular fa-square-check"></i>
+                onClick={() => setInputType('NoteTodos')}> <i class="fa-regular fa-square-check"></i>
             </button>
 
 
@@ -58,7 +56,19 @@ export function NoteAdd({ emptyNote, addNote }) {
                 <i class="fa-regular fa-image"></i>
             </label>
             <input id="file-upload" type="file" onChange={ev => onImgInput(ev, emptyNoteToEdit)} />
+
+            <button
+                className="change-type-btn"
+                onClick={() => setInputType('NoteVideo')}
+            > <i class="fa-brands fa-youtube"></i></button>
+
+            <button
+                className="change-type-btn"
+                onClick={() => setInputType('NoteAudio')}
+            > <i class="fa-solid fa-volume-high"></i></button>
         </div>
+
+
 
 
     </fieldset >
@@ -123,6 +133,7 @@ function AddTodos({ info, emptyNoteToEdit, onInputChange }) {
                     onInputChange={ev => onChangeTodos(info, 'txt', ev.target.value, idx)}
                     value={todo.txt}
                     id={`todo-${idx}`}
+                    placeholder={'Enter a new task...'}
                 />
 
                 <NoteCheck
@@ -154,6 +165,7 @@ function AddTxt({ info, emptyNoteToEdit, onInputChange }) {
             onInputChange={ev => onChangeInfoTxt(info, emptyNoteToEdit, ev)}
             value={info.txt}
             id={`txt`}
+            placeholder={'Enter text..'}
         />
     </div>
 }
@@ -171,14 +183,55 @@ function AddImg({ info, emptyNoteToEdit, onInputChange }) {
     </div>
 }
 
+function AddVideo({ info, emptyNoteToEdit, onInputChange }) {
+    function onChangeInfoUrl(info, emptyNoteToEdit, ev) {
+        const newInfo = { ...info, url: ev.target.value }
+        onInputChange(emptyNoteToEdit, newInfo)
+    }
+
+    return <div>
+        <NoteTitle
+            note={emptyNoteToEdit}
+            info={info}
+            onInputChange={onInputChange}
+        />
+        <NoteTxt
+            onInputChange={ev => onChangeInfoUrl(info, emptyNoteToEdit, ev)}
+            value={info.txt}
+            id={`txt`}
+            placeholder={'Enter a valid video URL..'}
+        />
+    </div>
+}
+function AddAudio({ info, emptyNoteToEdit, onInputChange }) {
+    function onChangeInfoUrl(info, emptyNoteToEdit, ev) {
+        const newInfo = { ...info, url: ev.target.value }
+        onInputChange(emptyNoteToEdit, newInfo)
+    }
+
+    return <div>
+        <NoteTitle
+            note={emptyNoteToEdit}
+            info={info}
+            onInputChange={onInputChange}
+        />
+        <NoteTxt
+            onInputChange={ev => onChangeInfoUrl(info, emptyNoteToEdit, ev)}
+            value={info.txt}
+            id={`txt`}
+            placeholder={'Enter a valid Audio URL...'}
+        />
+    </div>
+}
+
 
 function DynamicAddNote(props) {
     const cmpMap = {
         'NoteTxt': <AddTxt {...props} />,
         'NoteTodos': <AddTodos {...props} />,
-        'NoteImg': <AddImg {...props} />
-        // 'NoteVideo': <NoteVideo {...props} />,
-        // 'NoteAudio': <NoteAudio {...props} />
+        'NoteImg': <AddImg {...props} />,
+        'NoteVideo': <AddVideo {...props} />,
+        'NoteAudio': <AddAudio {...props} />
     }
 
     return cmpMap[props.inputType]
