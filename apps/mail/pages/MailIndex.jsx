@@ -1,5 +1,6 @@
 import { mailService } from '../services/mail.service.js'
 import { MailList } from '../cmps/MailList.jsx'
+import { MailDetails } from '../cmps/MailDetails.jsx'
 
 const { useState, useEffect } = React
 const { useSearchParams } = ReactRouterDOM
@@ -45,6 +46,26 @@ export function MailIndex() {
         markAsRead(mailId)
     }
 
+    // the service decides trash-vs-destroy, we just drop it from the current view
+    function onRemoveMail(mailId) {
+        const prevMails = mails
+
+        setMails(mails.filter(mail => mail.id !== mailId))
+        if (selectedMailId === mailId) onCloseMail()
+
+        mailService.remove(mailId)
+            .catch(err => {
+                console.log('Had issues removing mail', err)
+                setMails(prevMails)
+            })
+    }
+
+    function onCloseMail() {
+        const nextParams = new URLSearchParams(searchParams)
+        nextParams.delete('mailId')
+        setSearchParams(nextParams)
+    }
+
     function markAsRead(mailId) {
         const mailToRead = mails.find(mail => mail.id === mailId)
         if (!mailToRead || mailToRead.isRead) return
@@ -62,11 +83,15 @@ export function MailIndex() {
             })
     }
 
-    if (!mails) return <section className="mail-index">Loading...</section>
+    if (!mails) return <section className="mail-index"><div className="loader"></div></section>
 
     return <section className="mail-index">
         {selectedMailId
-            ? <p>details placeholder for {selectedMailId}</p>
-            : <MailList mails={mails} onToggleStar={onToggleStar} onSelectMail={onSelectMail} />}
+            ? <MailDetails mailId={selectedMailId} onCloseMail={onCloseMail} onRemoveMail={onRemoveMail} />
+            : <MailList
+                mails={mails}
+                onToggleStar={onToggleStar}
+                onSelectMail={onSelectMail}
+                onRemoveMail={onRemoveMail} />}
     </section>
 }

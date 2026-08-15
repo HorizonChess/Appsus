@@ -7,8 +7,3 @@
     color: var(--mail-clr-text);
     background-color: var(--mail-clr-bg-app);
 }
-
-.mail-index img {
-    width: auto;
-    height: auto;
-}
