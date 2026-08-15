@@ -1,0 +1,23 @@
+/* shared by more than one mail component */
+
+.mail-index img {
+    width: auto;
+    height: auto;
+}
+
+.mail-icon-btn {
+    display: grid;
+    place-items: center;
+    inline-size: var(--mail-icon-btn-size);
+    block-size: var(--mail-icon-btn-size);
+    padding: 0;
+    border: none;
+    border-radius: 50%;
+    background: none;
+    color: var(--mail-clr-text-secondary);
+    cursor: pointer;
+}
+
+.mail-icon-btn:hover {
+    background-color: var(--mail-clr-hover);
+}

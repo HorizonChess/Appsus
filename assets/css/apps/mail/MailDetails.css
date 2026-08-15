@@ -1,0 +1,13 @@
+/* mail details */
+
+.mail-details {
+    padding: var(--mail-sp-4);
+}
+
+.mail-details-toolbar {
+    display: flex;
+    align-items: center;
+    gap: var(--mail-sp-1);
+    margin-block-end: var(--mail-sp-4);
+}
+

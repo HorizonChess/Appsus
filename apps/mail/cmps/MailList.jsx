@@ -1,6 +1,6 @@
 import { MailPreview } from './MailPreview.jsx'
 
-export function MailList({ mails, onToggleStar, onSelectMail }) {
+export function MailList({ mails, onToggleStar, onSelectMail, onRemoveMail }) {
     if (!mails.length) return <p className="mail-list-empty">No mails found</p>
 
     return <ul className="mail-list">
@@ -9,7 +9,8 @@ export function MailList({ mails, onToggleStar, onSelectMail }) {
                 key={mail.id}
                 mail={mail}
                 onToggleStar={onToggleStar}
-                onSelectMail={onSelectMail} />
+                onSelectMail={onSelectMail}
+                onRemoveMail={onRemoveMail} />
         ))}
     </ul>
 }

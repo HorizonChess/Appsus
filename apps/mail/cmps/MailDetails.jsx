@@ -2,7 +2,7 @@ import { mailService } from '../services/mail.service.js'
 
 const { useState, useEffect } = React
 
-export function MailDetails({ mailId, onCloseMail }) {
+export function MailDetails({ mailId, onCloseMail, onRemoveMail }) {
     const [mail, setMail] = useState(null)
 
     useEffect(() => {
@@ -22,9 +22,15 @@ export function MailDetails({ mailId, onCloseMail }) {
 
     return <section className="mail-details">
 
-        <button className="back-btn" title="Back to list" onClick={onCloseMail}>
-            <i className="fa-solid fa-arrow-left"></i>
-        </button>
+        <div className="mail-details-toolbar">
+            <button className="mail-icon-btn" title="Back to list" onClick={onCloseMail}>
+                <i className="fa-solid fa-arrow-left"></i>
+            </button>
+
+            <button className="mail-icon-btn" title="Delete" onClick={() => onRemoveMail(mailId)}>
+                <i className="fa-solid fa-trash"></i>
+            </button>
+        </div>
 
         <h2 className="mail-details-subject">{subject}</h2>
 

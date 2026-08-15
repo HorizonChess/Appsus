@@ -46,6 +46,20 @@ export function MailIndex() {
         markAsRead(mailId)
     }
 
+    // the service decides trash-vs-destroy, we just drop it from the current view
+    function onRemoveMail(mailId) {
+        const prevMails = mails
+
+        setMails(mails.filter(mail => mail.id !== mailId))
+        if (selectedMailId === mailId) onCloseMail()
+
+        mailService.remove(mailId)
+            .catch(err => {
+                console.log('Had issues removing mail', err)
+                setMails(prevMails)
+            })
+    }
+
     function onCloseMail() {
         const nextParams = new URLSearchParams(searchParams)
         nextParams.delete('mailId')
@@ -73,7 +87,11 @@ export function MailIndex() {
 
     return <section className="mail-index">
         {selectedMailId
-            ? <MailDetails mailId={selectedMailId} onCloseMail={onCloseMail} />
-            : <MailList mails={mails} onToggleStar={onToggleStar} onSelectMail={onSelectMail} />}
+            ? <MailDetails mailId={selectedMailId} onCloseMail={onCloseMail} onRemoveMail={onRemoveMail} />
+            : <MailList
+                mails={mails}
+                onToggleStar={onToggleStar}
+                onSelectMail={onSelectMail}
+                onRemoveMail={onRemoveMail} />}
     </section>
 }
