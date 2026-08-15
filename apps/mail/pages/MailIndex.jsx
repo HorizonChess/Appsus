@@ -1,5 +1,6 @@
 import { mailService } from '../services/mail.service.js'
 import { MailList } from '../cmps/MailList.jsx'
+import { MailDetails } from '../cmps/MailDetails.jsx'
 
 const { useState, useEffect } = React
 const { useSearchParams } = ReactRouterDOM
@@ -45,6 +46,12 @@ export function MailIndex() {
         markAsRead(mailId)
     }
 
+    function onCloseMail() {
+        const nextParams = new URLSearchParams(searchParams)
+        nextParams.delete('mailId')
+        setSearchParams(nextParams)
+    }
+
     function markAsRead(mailId) {
         const mailToRead = mails.find(mail => mail.id === mailId)
         if (!mailToRead || mailToRead.isRead) return
@@ -66,7 +73,7 @@ export function MailIndex() {
 
     return <section className="mail-index">
         {selectedMailId
-            ? <p>details placeholder for {selectedMailId}</p>
+            ? <MailDetails mailId={selectedMailId} onCloseMail={onCloseMail} />
             : <MailList mails={mails} onToggleStar={onToggleStar} onSelectMail={onSelectMail} />}
     </section>
 }
