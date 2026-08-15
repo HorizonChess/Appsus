@@ -8,7 +8,7 @@ import { NoteImg } from "./NoteImg.jsx"
 export function NoteAdd({ emptyNote, addNote }) {
     const [inputType, setInputType] = useState(null)
     const [emptyNoteToEdit, setEmptyNoteToEdit] = useState(JSON.parse(JSON.stringify(emptyNote)))
-    console.log('emptyNoteToEdit',emptyNoteToEdit)
+
     useEffect(() => {
         setEmptyNoteToEdit({ ...emptyNoteToEdit, type: inputType })
     }, [inputType])
@@ -18,25 +18,12 @@ export function NoteAdd({ emptyNote, addNote }) {
     }
 
     function onImgInput(ev, emptyNoteToEdit) {
-        loadImageFromInput(ev, emptyNoteToEdit)
+        const newInfo = { ...emptyNoteToEdit.info, url: ev.target.files[0] }
+        onInputChange(emptyNoteToEdit, newInfo)
+        setInputType('NoteImg')
     }
 
-    function loadImageFromInput(ev, emptyNoteToEdit) {
-        const reader = new FileReader()
-
-        reader.onload = function (event) {
-            const img = new Image()
-            img.onload = () => {
-                const newInfo = { ...emptyNoteToEdit.info, url: event.target.result }
-                setInputType('NoteImg')
-                onInputChange(emptyNoteToEdit, newInfo)
-            }
-            img.src = event.target.result
-        }
-        reader.readAsDataURL(ev.target.files[0])
-
-    }
-
+    
     if (!inputType) return <fieldset className="add-note">
         <input
             placeholder="Take a note..."
@@ -171,6 +158,21 @@ function AddTxt({ info, emptyNoteToEdit, onInputChange }) {
 }
 
 function AddImg({ info, emptyNoteToEdit, onInputChange }) {
+    if (typeof (info.url) !== 'string') {
+        const reader = new FileReader()
+
+        reader.onload = function (event) {
+            const img = new Image()
+            img.onload = () => {
+                const newInfo = { ...emptyNoteToEdit.info, url: event.target.result }
+                onInputChange(emptyNoteToEdit, newInfo)
+            }
+            img.src = event.target.result
+        }
+        reader.readAsDataURL(info.url)
+    }
+
+
     return <div>
         <NoteTitle
             note={emptyNoteToEdit}
