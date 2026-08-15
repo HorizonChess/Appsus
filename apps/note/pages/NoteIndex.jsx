@@ -58,19 +58,13 @@ export function NoteIndex() {
 
     function onOpenModal(noteId) {
         noteService.get(noteId)
-            .then(note => {
-                setEditedNote(note)
-
-            })
+        setEditedNote(notes.find(note => note.id === noteId))
         console.log('Modal has opened...')
-        // setIsShown(true)
     }
 
     function onCloseModal() {
         console.log('Modal has closed...')
         setEditedNote(null)
-
-        // setIsShown(false)
     }
 
     return <section className="container">
