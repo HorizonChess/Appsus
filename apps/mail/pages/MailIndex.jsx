@@ -69,7 +69,7 @@ export function MailIndex() {
             })
     }
 
-    if (!mails) return <section className="mail-index">Loading...</section>
+    if (!mails) return <section className="mail-index"><div className="loader"></div></section>
 
     return <section className="mail-index">
         {selectedMailId

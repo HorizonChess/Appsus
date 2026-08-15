@@ -15,7 +15,7 @@ export function MailDetails({ mailId, onCloseMail }) {
             .catch(err => console.log('Had issues loading mail', err))
     }
 
-    if (!mail) return <section className="mail-details">Loading...</section>
+    if (!mail) return <section className="mail-details"><div className="loader"></div></section>
 
     const { subject, body, from, fromName } = mail
     const sentAt = mail.sentAt || mail.createdAt
