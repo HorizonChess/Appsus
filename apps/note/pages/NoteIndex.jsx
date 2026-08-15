@@ -3,11 +3,12 @@ import { noteService } from "../services/note.service.js"
 
 import { NoteList } from "../cmps/NoteList.jsx"
 import { storageService } from "../../../services/async-storage.service.js"
-
+import {NoteModal} from "../cmps/NoteModal.jsx"
 const { useState, useRef, useEffect } = React
 
 export function NoteIndex() {
     const [notes, setNotes] = useState([])
+    const [isShown, setIsShown] = useState(false)
 
     useEffect(() => {
         noteService.query({})
@@ -50,12 +51,30 @@ export function NoteIndex() {
 
     </section>
 
+
+    function onOpenModal() {
+        console.log('Modal has opened...')
+        setIsShown(true)
+    }
+
+    function onCloseModal() {
+        console.log('Modal has closed...')
+        setIsShown(false)
+    }
+
     return <section className="container">
         <h1>Notes app</h1>
         <NoteList
             notes={notes}
             updateNote={updateNote}
             onRemoveNote={removeNote}
-            onChangeStyle={onChangeStyle} />
+            onChangeStyle={onChangeStyle}
+            onOpenModal={onOpenModal} />
+
+        <NoteModal
+            isShown={isShown}
+            onClose={onCloseModal} >
+        </NoteModal>
+
     </section>
 }
