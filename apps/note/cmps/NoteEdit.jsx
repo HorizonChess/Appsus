@@ -104,7 +104,7 @@ function NoteVideo({ info, key, onChangeInfo }) {
     return <div className="note-content" key={key}>
         < NoteInputTxt txt={title} onChangeTxt={onChangeTitle} key={key} className={'note-title'} />
 
-        <video controls width="200">
+        <video controls width="200" className="note-media">
             <source src={url} type="video/webm" />
             <source src={url} type="video/mp4" />
         </video>
@@ -121,7 +121,7 @@ function NoteAudio({ info, key,onChangeInfo }) {
     return <div className="note-content" key={key}>
         < NoteInputTxt txt={title} onChangeTxt={onChangeTitle} key={key} className={'note-title'} />
         
-        <figure>
+        <figure  className="note-media">
             <audio controls src={url}></audio>
         </figure>
     </div>

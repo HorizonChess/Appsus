@@ -15,7 +15,7 @@ function NoteTxt({ info, key }) {
     const { title, txt } = info
 
     return <div className="note-content" key={key}>
-        <h3>{title}</h3>
+        <h3 className="note-title">{title}</h3>
         <p className="note-txt">{txt}</p>
     </div>
 }
@@ -24,7 +24,7 @@ function NoteTodos({ info, key }) {
     const { title, todos } = info
 
     return <div className="note-content" key={key}>
-        <h3>{title}</h3>
+        <h3 className="note-title">{title}</h3>
         {todos.map(todo => {
             return <div className="todo-list" key={todo.txt}>
                 <label className="note-txt" htmlFor={todo.txt}>{todo.txt}</label>
@@ -39,8 +39,8 @@ function NoteImg({ info, key }) {
     const { title, url } = info
 
     return <div className="note-content" key={key}>
-        <h3>{title}</h3>
-        <img src={url} alt="" />
+        <h3 className="note-title">{title}</h3>
+        <img src={url} alt="" className="note-media"/>
     </div>
 }
 
@@ -48,9 +48,9 @@ function NoteVideo({ info, key }) {
     const { title, url } = info
 
     return <div className="note-content" key={key}>
-        <h3>{title}</h3>
+        <h3 className="note-title">{title}</h3>
 
-        <video controls width="200">
+        <video controls width="200" className="note-media">
             <source src={url} type="video/webm" />
             <source src={url} type="video/mp4" />
         </video>
@@ -61,9 +61,9 @@ function NoteAudio({ info, key }) {
     const { title, url } = info
 
     return <div className="note-content" key={key}>
-        <h3>{title}</h3>
+        <h3 className="note-title">{title}</h3>
 
-        <figure>
+        <figure className="note-media">
             <audio controls src={url}></audio>
         </figure>
     </div>

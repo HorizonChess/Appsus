@@ -1,7 +1,6 @@
 .note-content {
     align-items: start;
-    display: flex;
-    flex-direction: column;
+    display: grid;
     /* overflow: scroll; */
 }
 
@@ -147,5 +146,9 @@ input:has(+ .note-todo-checkbox:checked) {
 
 .note-todo-checkbox:checked::before {
     display: grid;
+    justify-self: center;
+}
+
+.note-media{
     justify-self: center;
 }
