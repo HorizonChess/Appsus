@@ -49,11 +49,17 @@
     --mail-radius-md: 8px;
     --mail-radius-lg: ;
     --mail-radius-pill: 18px;
+    --mail-radius-btn: 16px;
     --mail-radius-nav: 0 16px 16px 0;
     --mail-sidebar-w: 256px;
     --mail-row-h: 40px;
     --mail-nav-item-h: 32px;
-    --mail-icon-btn-size: 40px; /* UNVERIFIED - snap it */
+    /* the pill stops short of the sidebar edge - 240 wide in a 256 nav */
+    --mail-nav-pill-inset: 16px;
+    --mail-compose-btn-h: 56px;
+    /* must fit inside --mail-row-h - the list rows swap the date for these on
+       hover, so anything taller makes the row grow */
+    --mail-icon-btn-size: 40px;
     --mail-avatar-size: ;
     --mail-compose-w: 600px;
     --mail-compose-h: 616px;

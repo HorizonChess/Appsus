@@ -16,14 +16,15 @@
     align-items: center;
     gap: var(--mail-sp-3);
     align-self: flex-start;
-    block-size: var(--mail-btn-h);
+    block-size: var(--mail-compose-btn-h);
     margin-inline: var(--mail-sp-2);
-    padding-inline: var(--mail-sp-4);
+    padding-inline: var(--mail-sp-4) var(--mail-sp-5);
     border: none;
-    border-radius: var(--mail-radius-pill);
+    border-radius: var(--mail-radius-btn);
     background-color: var(--mail-clr-compose-bg);
     font-family: inherit;
     font-size: var(--mail-fs-body);
+    font-weight: 500;
     color: var(--mail-clr-text);
     cursor: pointer;
     box-shadow: var(--mail-shadow-btn-rest);
@@ -44,6 +45,7 @@
     align-items: center;
     gap: var(--mail-sp-4);
     block-size: var(--mail-nav-item-h);
+    margin-inline-end: var(--mail-nav-pill-inset);
     /* the pill is flush left and rounded on the right, so the padding is uneven */
     padding-inline: var(--mail-sp-5) var(--mail-sp-3);
     border: none;
