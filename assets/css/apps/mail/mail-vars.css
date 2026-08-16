@@ -9,18 +9,19 @@
     --mail-fw-unread: 700;
 
     --mail-clr-bg-app: rgb(248, 250, 253);
-    --mail-clr-surface: ;
+    --mail-clr-surface: rgb(255, 255, 255);
     --mail-clr-surface-read: rgb(242, 246, 252);
     --mail-clr-hover: ;
     --mail-clr-search-bg: ;
     --mail-clr-nav-active: ;
     --mail-clr-compose-bg: ;
+    --mail-clr-compose-header: rgb(242, 246, 252);
 
     --mail-clr-text: rgb(32, 33, 36);
     --mail-clr-text-secondary: ;
     --mail-clr-text-muted: rgb(95, 99, 104);
 
-    --mail-clr-accent: ;
+    --mail-clr-accent: rgb(11, 87, 208);
     --mail-clr-star-on: ;
     --mail-clr-star-off: ;
     --mail-clr-danger: ;
@@ -29,19 +30,22 @@
     --mail-clr-row-line: rgba(100, 121, 143, .12);
     --mail-shadow-row-line: inset 0 -1px 0 0 var(--mail-clr-row-line);
     --mail-shadow-row-hover: ;
-    --mail-shadow-modal: ;
+    --mail-shadow-modal: rgba(0, 0, 0, .14) 0 8px 10px 1px, rgba(0, 0, 0, .12) 0 3px 14px 2px, rgba(0, 0, 0, .2) 0 5px 5px -3px;
 
     --mail-radius-sm: ;
-    --mail-radius-md: ;
+    --mail-radius-md: 8px;
     --mail-radius-lg: ;
-    --mail-radius-pill: ;
+    --mail-radius-pill: 18px;
     --mail-radius-nav: ;
     --mail-sidebar-w: ;
     --mail-row-h: 40px;
     --mail-nav-item-h: ;
     --mail-icon-btn-size: ;
     --mail-avatar-size: ;
-    --mail-compose-w: ;
+    --mail-compose-w: 600px;
+    --mail-compose-h: 616px;
+    --mail-compose-header-h: 40px;
+    --mail-btn-h: 36px;
     --mail-star-size: 20px;
     --mail-col-sender-w: 168px;
     --mail-col-sender-indent: 32px;

@@ -12,6 +12,9 @@ export const loggedinUser = {
 
 export const MAIL_LABELS = ['critical', 'family', 'work', 'friends', 'spam', 'memories', 'romantic']
 
+// the join key between the sidebar and getFolderCounts, and the sidebar's order
+export const MAIL_FOLDERS = ['inbox', 'starred', 'sent', 'draft', 'trash']
+
 const MAIL_KEY = 'mailDB'
 _createMails()
 
@@ -29,6 +32,7 @@ export const mailService = {
     formatMailDate,
     loggedinUser,
     MAIL_LABELS,
+    MAIL_FOLDERS,
 }
 
 window.ms = mailService
@@ -93,9 +97,8 @@ function getFolderCounts() {
     return storageService.query(MAIL_KEY)
         .then(mails => {
             const counts = {}
-            const folders = ['inbox', 'starred', 'sent', 'draft', 'trash']
 
-            folders.forEach(status => {
+            MAIL_FOLDERS.forEach(status => {
                 const folderMails = mails.filter(mail => _isInFolder(mail, status))
                 counts[status] = {
                     total: folderMails.length,
@@ -107,8 +110,22 @@ function getFolderCounts() {
         })
 }
 
-function getEmptyMail(subject = '', body = '') {
-    return { subject, body }
+// no sentAt is what puts it in the Draft folder, and the nulls are load bearing -
+// _isInFolder reads missing fields as "not null", which would file it under trash
+function getEmptyMail({ to = '', subject = '', body = '' } = {}) {
+    return {
+        to,
+        subject,
+        body,
+        from: loggedinUser.email,
+        fromName: loggedinUser.fullname,
+        createdAt: Date.now(),
+        sentAt: null,
+        removedAt: null,
+        isRead: true,
+        isStared: false,
+        labels: [],
+    }
 }
 
 function getDefaultFilter() {
