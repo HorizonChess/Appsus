@@ -45,17 +45,22 @@ export function MailIndex() {
     
     function onToggleStar(mailId) {
         const prevMails = mails
+        const isStared = !mails.find(mail => mail.id === mailId).isStared
 
-        setMails(mails.map(mail => (
-            mail.id === mailId ? { ...mail, isStared: !mail.isStared } : mail
-        )))
+        applyChange(mailId, { isStared })
 
-        mailService.toggleStar(mailId)
+        mailService.toggleStar(mailId, isStared)
             .then(loadCounts)
             .catch(err => {
                 console.log('Had issues starring mail', err)
                 setMails(prevMails)
             })
+    }
+
+    function applyChange(mailId, changes) {
+        setMails(mails
+            .map(mail => (mail.id === mailId ? { ...mail, ...changes } : mail))
+            .filter(mail => mailService.isInFolder(mail, status)))
     }
 
     function onSelectMail(mailId) {
@@ -124,9 +129,7 @@ export function MailIndex() {
     function onSetRead(mailId, isRead) {
         const prevMails = mails
 
-        setMails(mails.map(mail => (
-            mail.id === mailId ? { ...mail, isRead } : mail
-        )))
+        applyChange(mailId, { isRead })
 
         mailService.toggleRead(mailId, isRead)
             .then(loadCounts)
