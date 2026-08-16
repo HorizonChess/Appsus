@@ -12,10 +12,11 @@ export function NotePreview({ note, updateNote }) {
 }
 
 function NoteTxt({ info, key }) {
-    const { txt } = info
+    const { title, txt } = info
 
     return <div className="note-content" key={key}>
-        <p>{txt}</p>
+        <h3>{title}</h3>
+        <p className="note-txt">{txt}</p>
     </div>
 }
 
@@ -26,8 +27,8 @@ function NoteTodos({ info, key }) {
         <h3>{title}</h3>
         {todos.map(todo => {
             return <div className="todo-list" key={todo.txt}>
-                <label htmlFor={todo.txt}>{todo.txt}</label>
-                <input type="checkbox" id={todo.txt} name={todo.txt} checked={todo.isDone} />
+                <label className="note-txt" htmlFor={todo.txt}>{todo.txt}</label>
+                <input className="note-todo-checkbox" type="checkbox" id={todo.txt} name={todo.txt} checked={todo.isDone} />
 
             </div>
         })}

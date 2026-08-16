@@ -1,7 +1,8 @@
 export function NoteInputTxt({ txt, onChangeTxt, key, className, todo }) {
 
-    return <input
+    return <textarea
         className={className}
+        placeholder={className==='note-title'?'Enter title':'Enter text'}
         type="text"
         value={txt}
         id={`${key}-txt`}

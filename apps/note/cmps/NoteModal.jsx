@@ -17,11 +17,11 @@ export function NoteModal({ isShown, children, onClose = null }) {
             closedby="any"
             ref={dialogRef}
             onCancel={onCloseModal} 
-            className="modal">
+            className="note-modal">
 
-                <button 
+                {/* <button 
                     className="btn-close"
-                    onClick={onCloseModal}>x</button>
+                    onClick={onCloseModal}>x</button> */}
 
                 { children }
 		</dialog>

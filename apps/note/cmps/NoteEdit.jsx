@@ -15,14 +15,20 @@ export function NoteEdit({ note, updateNote, onChangeInfo }) {
 }
 
 function NoteTxt({ info, key, onChangeInfo }) {
-    const { txt } = info
+    const { txt,title } = info
 
     function onChangeTxt(txt) {
         onChangeInfo({ ...info, txt })
     }
+    
+    function onChangeTitle(txt) {
+        onChangeInfo({ ...info, title: txt })
+    }
 
     return <div className="note-content" key={key}>
-        <NoteInputTxt txt={txt} onChangeTxt={onChangeTxt} key={key} className={'note-title'}/>
+        <NoteInputTxt txt={title} onChangeTxt={onChangeTitle} key={key} className={'note-title'} />
+
+        <NoteInputTxt txt={txt} onChangeTxt={onChangeTxt} key={key} className={'note-txt'} />
     </div>
 }
 
@@ -36,7 +42,7 @@ function NoteTodos({ info, key, onChangeInfo }) {
         onChangeInfo({ ...info, txt })
     }
 
-    function onChangeTodoTxt(newTxt,todo) {
+    function onChangeTodoTxt(newTxt, todo) {
         todo.txt = newTxt
         onChangeInfo({ ...info })
 
@@ -49,12 +55,12 @@ function NoteTodos({ info, key, onChangeInfo }) {
 
     return <div className="note-content" key={key}>
 
-        <NoteInputTxt txt={title} onChangeTxt={onChangeTitle} key={key} className={'note-title'}/>
+        <NoteInputTxt txt={title} onChangeTxt={onChangeTitle} key={key} className={'note-title'} />
 
         {todos.map((todo, idx) => {
             return <div className="todo-list" key={todo.txt}>
-                <NoteInputTxt todo={todo} txt={todo.txt} onChangeTxt={onChangeTodoTxt} key={key} className={'note-todo-text'} />
-                <NoteTodoCheckMark todo={todo} onChangeTodo={onChangeTodoCheck} idx={idx} />
+                <NoteInputTxt todo={todo} txt={todo.txt} onChangeTxt={onChangeTodoTxt} key={key} className={'note-txt'} />
+                <NoteTodoCheckMark todo={todo} onChangeTodo={onChangeTodoCheck} idx={idx} className={'note-todo-checkbox'} />
             </div>
         })}
     </div>

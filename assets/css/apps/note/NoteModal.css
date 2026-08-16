@@ -1,0 +1,9 @@
+ .note-modal {
+     border: 1px solid rgb(221, 220, 220);
+     transition: 0.3s ease;
+
+     padding: 1em;
+
+     border-radius: 5px;
+     width: 360px;
+ }

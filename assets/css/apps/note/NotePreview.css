@@ -13,7 +13,7 @@ figure {
 .color-picker {
     z-index: 100;
     position: absolute;
-    bottom:1px;
+    bottom: 1px;
     border: none;
     box-shadow: 0 1px 2px 0 rgba(60, 64, 67, 0.3), 0 2px 6px 2px rgba(60, 64, 67, 0.15);
     border-radius: 5px;
@@ -21,7 +21,7 @@ figure {
 
 }
 
-.color-picker input {
+.color-picker note-todo-checkbox {
     display: none;
 }
 
@@ -59,7 +59,7 @@ figure {
     outline: solid 2px black;
 }
 
-.color-picker-label:has(.picker-option):has(+ input:checked) {
+.color-picker-label:has(.picker-option):has(+ .note-todo-checkbox:checked) {
     outline: solid 2px rgb(161, 66, 244);
 }
 
@@ -80,11 +80,11 @@ figure {
 
 
 
-.color-picker-label:has(+ input:checked) {
+.color-picker-label:has(+ .note-todo-checkbox:checked) {
     outline: solid 2px rgb(161, 66, 244);
 }
 
-.color-picker label:has(+ input:checked) .picker-option:not(.empty) {
+.color-picker label:has(+ .note-todo-checkbox:checked) .picker-option:not(.empty) {
     display: unset;
 }
 
@@ -96,7 +96,7 @@ figure {
     border-radius: 50%;
 }
 
-.todo-list{
+.todo-list {
     display: flex;
     flex-direction: row-reverse;
     justify-content: flex-end;
@@ -104,12 +104,32 @@ figure {
     align-items: center;
 }
 
-label:has(+ input[type="checkbox"]:checked) {
+.note-txt:has(+ .note-todo-checkbox:checked),
+input:has(+ .note-todo-checkbox:checked) {
     text-decoration: line-through;
 
 }
 
-input[type="checkbox"] {
+.note-txt:focus,
+.note-title:focus {
+    outline: none;
+}
+
+.note-txt,
+.note-title {
+    border: none;
+    field-sizing: content;
+    resize: none;
+
+}
+
+.note-title {
+    border: none;
+    font-weight: 700;
+    font-size: 1.25em;
+}
+
+.note-todo-checkbox {
     appearance: none;
     background-color: transparent;
     width: 18px;
@@ -117,12 +137,12 @@ input[type="checkbox"] {
     border: 2px solid black;
 }
 
-input[type="checkbox"]::before {
+.note-todo-checkbox::before {
     content: "✓";
     display: none;
 }
 
-input[type="checkbox"]:checked::before {
+.note-todo-checkbox:checked::before {
     display: grid;
     justify-self: center;
 }
