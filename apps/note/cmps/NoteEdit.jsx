@@ -5,7 +5,7 @@ import { NoteTodoCheckMark } from "./NoteTodoCheckmark.jsx"
 import { NoteInputTxt } from "./NoteInputTxt.jsx"
 
 export function NoteEdit({ note, updateNote, onChangeInfo }) {
-
+    console.log('note.type', note.type)
     return <DynamicNote
         key={note.id}
         type={note.type}
@@ -35,15 +35,16 @@ function NoteTxt({ info, key, onChangeInfo }) {
 }
 
 function NoteTodos({ info, key, onChangeInfo }) {
-    const { title, todos } = info
+    if (!info.todos) {
+        info.todos = [{ txt: '', isDone: false }]
+    }
+
+    const { title,todos } = info
+
 
     function onChangeTitle(newTitle) {
         info.title = newTitle
         onChangeInfo({ ...info })
-    }
-
-    function onChangeTxt(txt) {
-        onChangeInfo({ ...info, txt })
     }
 
     function onChangeTodoTxt(newTxt, todo) {
@@ -111,7 +112,7 @@ function NoteVideo({ info, key, onChangeInfo }) {
     </div>
 }
 
-function NoteAudio({ info, key,onChangeInfo }) {
+function NoteAudio({ info, key, onChangeInfo }) {
     const { title, url } = info
 
     function onChangeTitle(newTitle) {
@@ -120,8 +121,8 @@ function NoteAudio({ info, key,onChangeInfo }) {
     }
     return <div className="note-content" key={key}>
         < NoteInputTxt txt={title} onChangeTxt={onChangeTitle} key={key} className={'note-title'} />
-        
-        <figure  className="note-media">
+
+        <figure className="note-media">
             <audio controls src={url}></audio>
         </figure>
     </div>

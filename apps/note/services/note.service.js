@@ -51,10 +51,10 @@ function save(note) {
     }
 }
 
-function remove(noteId){
-    return storageService.remove(NOTES_KEY,noteId)
-        .then(()=>console.log(`Note ${noteId} was successfully remove`))
-        .catch(()=>console.log(`Note ${noteId} does not exist`))
+function remove(noteId) {
+    return storageService.remove(NOTES_KEY, noteId)
+        .then(() => console.log(`Note ${noteId} was successfully remove`))
+        .catch(() => console.log(`Note ${noteId} does not exist`))
 }
 
 function _createNotes() {
@@ -78,16 +78,18 @@ function _createNote(demoNote) {
 
     return {
         ...getEmptyNote(),
+        type: 'NoteTxt',
         id: utilService.makeId(),
         createdAt: Date.now()
     }
 
 }
 
-function getEmptyNote(type = 'NoteTxt', info = {}) {
+function getEmptyNote(type = null, info = {}, style = { backgroundColor: '#ffffff' }) {
     return {
         type,
-        info
+        info,
+        style
     }
 }
 
