@@ -21,3 +21,18 @@
 .mail-icon-btn:hover {
     background-color: var(--mail-clr-hover);
 }
+
+/* form controls never inherit font-family, so without this the editor renders
+   in the browser default while everything around it is Google Sans */
+.mail-editor-field,
+.mail-editor-body {
+    border: none;
+    background: none;
+    font-family: inherit;
+    font-size: var(--mail-fs-body);
+    color: var(--mail-clr-text);
+}
+
+.mail-editor-body {
+    resize: none;
+}

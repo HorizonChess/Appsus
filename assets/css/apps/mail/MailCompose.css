@@ -1,0 +1,78 @@
+/* mail compose - the bottom-right modal chrome */
+
+.mail-compose {
+    position: fixed;
+    z-index: 20;
+    inset-block-end: 0;
+    inset-inline-end: var(--mail-sp-6);
+    display: flex;
+    flex-direction: column;
+    inline-size: var(--mail-compose-w);
+    max-inline-size: calc(100vw - var(--mail-sp-4) * 2);
+    block-size: var(--mail-compose-h);
+    max-block-size: calc(100vh - var(--mail-sp-5));
+    border-radius: var(--mail-radius-md) var(--mail-radius-md) 0 0;
+    background-color: var(--mail-clr-surface);
+    box-shadow: var(--mail-shadow-modal);
+}
+
+.mail-compose-header {
+    display: flex;
+    flex: 0 0 auto;
+    align-items: center;
+    justify-content: space-between;
+    block-size: var(--mail-compose-header-h);
+    padding-inline: var(--mail-sp-4);
+    border-radius: var(--mail-radius-md) var(--mail-radius-md) 0 0;
+    background-color: var(--mail-clr-compose-header);
+}
+
+.mail-compose-title {
+    margin: 0;
+    font-size: var(--mail-fs-body);
+    font-weight: 500;
+}
+
+.mail-compose .mail-editor {
+    display: flex;
+    flex: 1 1 auto;
+    flex-direction: column;
+    min-block-size: 0;
+    padding-inline: var(--mail-sp-4);
+}
+
+/* gmail has no real borders in compose - this is the same 1px inset the list
+   rows use, so every divider in the app stays on one token */
+.mail-compose .mail-editor-field {
+    flex: 0 0 auto;
+    block-size: var(--mail-row-h);
+    box-shadow: var(--mail-shadow-row-line);
+}
+
+.mail-compose .mail-editor-body {
+    flex: 1 1 auto;
+    min-block-size: 0;
+    padding-block: var(--mail-sp-3);
+}
+
+.mail-compose-footer {
+    display: flex;
+    flex: 0 0 auto;
+    align-items: center;
+    gap: var(--mail-sp-2);
+    padding-block: var(--mail-sp-3);
+    padding-inline: var(--mail-sp-4);
+}
+
+.mail-compose-send {
+    block-size: var(--mail-btn-h);
+    padding-inline: var(--mail-sp-5);
+    border: none;
+    border-radius: var(--mail-radius-pill);
+    background-color: var(--mail-clr-accent);
+    color: var(--mail-clr-surface);
+    font-family: inherit;
+    font-size: var(--mail-fs-body);
+    font-weight: 500;
+    cursor: pointer;
+}
