@@ -26,10 +26,12 @@
     font-size: var(--mail-fs-body);
     color: var(--mail-clr-text);
     cursor: pointer;
+    box-shadow: var(--mail-shadow-btn-rest);
+    transition: var(--mail-transition-btn);
 }
 
 .mail-compose-btn:hover {
-    box-shadow: var(--mail-shadow-modal);
+    box-shadow: var(--mail-shadow-btn-hover);
 }
 
 .mail-folders {

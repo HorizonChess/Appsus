@@ -24,6 +24,7 @@
        --mail-clr-text-muted, kept separate only so the names stay meaningful */
     --mail-clr-text-secondary: rgb(95, 99, 104);
     --mail-clr-text-muted: rgb(95, 99, 104);
+    --mail-clr-placeholder: rgb(116, 119, 117);
 
     --mail-clr-accent: rgb(11, 87, 208);
     --mail-clr-star-on: ;
@@ -32,9 +33,17 @@
 
     --mail-clr-border: ;
     --mail-clr-row-line: rgba(100, 121, 143, .12);
+    --mail-clr-row-edge: rgb(218, 220, 224); /* UNVERIFIED - snap it */
     --mail-shadow-row-line: inset 0 -1px 0 0 var(--mail-clr-row-line);
-    --mail-shadow-row-hover: ;
+    --mail-shadow-row-hover:
+        inset 1px 0 0 var(--mail-clr-row-edge),
+        inset -1px 0 0 var(--mail-clr-row-edge),
+        0 1px 2px 0 rgba(60, 64, 67, .3),
+        0 1px 3px 1px rgba(60, 64, 67, .15);
+    --mail-shadow-btn-rest: 0 1px 2px 0 rgba(0, 0, 0, 0), 0 1px 3px 1px rgba(0, 0, 0, 0);
+    --mail-shadow-btn-hover: 0 1px 2px 0 rgba(60, 64, 67, .3), 0 1px 3px 1px rgba(60, 64, 67, .15); /* UNVERIFIED - snap it */
     --mail-shadow-modal: rgba(0, 0, 0, .14) 0 8px 10px 1px, rgba(0, 0, 0, .12) 0 3px 14px 2px, rgba(0, 0, 0, .2) 0 5px 5px -3px;
+    --mail-transition-btn: box-shadow .08s linear;
 
     --mail-radius-sm: ;
     --mail-radius-md: 8px;

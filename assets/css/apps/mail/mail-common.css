@@ -33,6 +33,18 @@
     color: var(--mail-clr-text);
 }
 
+/* chrome paints its default black focus ring here otherwise - gmail's fields
+   show nothing on focus */
+.mail-editor-field:focus,
+.mail-editor-body:focus {
+    outline: none;
+}
+
+.mail-editor-field::placeholder,
+.mail-editor-body::placeholder {
+    color: var(--mail-clr-placeholder);
+}
+
 .mail-editor-body {
     resize: none;
 }
