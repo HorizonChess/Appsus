@@ -1,13 +1,17 @@
 const { useState, useRef, useEffect } = React
 import { colorOptions } from "../data/note-color-options.js"
 import { NoteToolbar } from "./NoteToolbar.jsx"
+import { NoteInputTxt } from "./NoteInputTxt.jsx"
+import { NoteTodoCheckMark } from "./NoteTodoCheckmark.jsx"
 
-export function NotePreview({ note, updateNote }) {
+export function NotePreview({ note, updateNote, onChangeInfo }) {
 
     return <DynamicNote
+        noteId={note.id}
         key={note.id}
         type={note.type}
-        info={note.info} />
+        info={note.info}
+        onChangeInfo={onChangeInfo} />
 
 }
 
@@ -20,18 +24,25 @@ function NoteTxt({ info, key }) {
     </div>
 }
 
-function NoteTodos({ info, key }) {
+function NoteTodos({ info, key, onChangeInfo,noteId }) {
     const { title, todos } = info
 
-    return <div className="note-content" key={key}>
-        <h3 className="note-title">{title}</h3>
-        {todos.map(todo => {
-            return <div className="todo-list" key={todo.txt}>
-                <label className="note-txt" htmlFor={todo.txt}>{todo.txt}</label>
-                <input className="note-todo-checkbox" type="checkbox" id={todo.txt} name={todo.txt} checked={todo.isDone} />
+    function onChangeTodoCheck(todo) {
+        todo.isDone = !todo.isDone
+        onChangeInfo({ ...info },noteId)
+    }
 
+    return <div className="note-content" key={key}>
+
+        <NoteInputTxt txt={title} key={key} className={'note-title'} />
+
+        {todos.map((todo, idx) => {
+            return <div className="todo-list" key={todo.txt}>
+                <NoteInputTxt todo={todo} txt={todo.txt} key={key} className={'note-txt'} />
+                <NoteTodoCheckMark todo={todo} onChangeTodo={onChangeTodoCheck} idx={idx} className={'note-todo-checkbox'} />
             </div>
         })}
+
     </div>
 }
 
@@ -40,7 +51,7 @@ function NoteImg({ info, key }) {
 
     return <div className="note-content" key={key}>
         <h3 className="note-title">{title}</h3>
-        <img src={url} alt="" className="note-media"/>
+        <img src={url} alt="" className="note-media" />
     </div>
 }
 

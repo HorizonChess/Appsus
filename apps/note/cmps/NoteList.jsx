@@ -1,7 +1,7 @@
 import { NotePreview } from "./NotePreview.jsx"
 
 const { useState } = React
-export function NoteList({ notes, updateNote, onRemoveNote, onChangeStyle,onOpenModal }) {
+export function NoteList({ notes, updateNote, onRemoveNote, onChangeStyle,onOpenModal,onChangeInfo }) {
 
     return <ul className="notes">
         {notes.map(note => {
@@ -9,7 +9,8 @@ export function NoteList({ notes, updateNote, onRemoveNote, onChangeStyle,onOpen
                 <article key={note.id} className="note" style={note.style} >
                     <NotePreview
                         note={note}
-                        updateNote={updateNote} />
+                        updateNote={updateNote}
+                        onChangeInfo={onChangeInfo} />
 
                     <button
                         className="remove-note-btn"

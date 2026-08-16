@@ -10,7 +10,7 @@ const { useState, useRef, useEffect } = React
 
 export function NoteIndex() {
     const [notes, setNotes] = useState([])
-    // const [isShown, setIsShown] = useState(false)
+    const [isShown, setIsShown] = useState(false)
     const [editedNote, setEditedNote] = useState(null)
 
     useEffect(() => {
@@ -18,19 +18,25 @@ export function NoteIndex() {
             .then(notes => setNotes(notes))
     }, [])
 
-    function onChangeInfo(newInfo) {
-        updateNote({ ...editedNote, info: newInfo })
-        setEditedNote(prev => ({ ...prev, info: newInfo }))
+    function onChangeInfo(newInfo, noteId) {
+        console.log('noteId', noteId)
+        if (!noteId) {
+            updateNote({ ...editedNote, info: newInfo })
+            setEditedNote(prev => ({ ...prev, info: newInfo }))
+        } else {
+            const note = notes.find(note => note.id === noteId)
+            updateNote({ ...note, info: newInfo })
+
+        }
     }
 
     function updateNote(updatednote) {
         noteService.save(updatednote)
-            .then(updatedNote => {
-                const updatedNotes = [...notes]
-                const updatedNoteIsx = notes.findIndex(note => note.id === updatedNote.id)
-                updatedNotes.splice(updatedNoteIsx, 1, updatedNote)
-                setNotes(updatedNotes)
-            })
+        const updatedNotes = [...notes]
+        const updatedNoteIsx = notes.findIndex(note => note.id === updatednote.id)
+        updatedNotes.splice(updatedNoteIsx, 1, updatednote)
+        setNotes(updatedNotes)
+
     }
 
     function onChangeStyle(ev, note) {
@@ -64,11 +70,13 @@ export function NoteIndex() {
         noteService.get(noteId)
         setEditedNote(notes.find(note => note.id === noteId))
         console.log('Modal has opened...')
+        setIsShown(true)
     }
 
     function onCloseModal() {
         console.log('Modal has closed...')
         setEditedNote(null)
+        setIsShown(false)
     }
 
     return <section className="notes-container">
@@ -78,10 +86,11 @@ export function NoteIndex() {
             updateNote={updateNote}
             onRemoveNote={removeNote}
             onChangeStyle={onChangeStyle}
-            onOpenModal={onOpenModal} />
+            onOpenModal={onOpenModal}
+            onChangeInfo={onChangeInfo} />
 
         <NoteModal
-            isShown={editedNote !== null}
+            isShown={isShown}
             onClose={onCloseModal}
             editedNote={editedNote}
         >
