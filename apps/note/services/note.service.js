@@ -78,13 +78,14 @@ function _createNote(demoNote) {
 
     return {
         ...getEmptyNote(),
+        type: 'NoteTxt',
         id: utilService.makeId(),
         createdAt: Date.now()
     }
 
 }
 
-function getEmptyNote(type = 'NoteTxt', info = {}, style = { backgroundColor: '#ffffff' }) {
+function getEmptyNote(type = null, info = {}, style = { backgroundColor: '#ffffff' }) {
     return {
         type,
         info,

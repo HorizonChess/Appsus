@@ -4,18 +4,20 @@ import { NoteCheck } from "./NoteCheck.jsx"
 import { NoteTitle } from "./NoteTitle.jsx"
 import { NoteTxt } from "./NoteTxt.jsx"
 import { NoteImg } from "./NoteImg.jsx"
+import { NoteTodoCheckMark } from "./NoteTodoCheckmark.jsx"
 
-export function NoteAdd({ emptyNote, addNote }) {
+export function NoteAdd({ emptyNote, addNote, onChangeInfo, children ,onChangeInputType}) {
     const [inputType, setInputType] = useState(null)
-    const [emptyNoteToEdit, setEmptyNoteToEdit] = useState(JSON.parse(JSON.stringify(emptyNote)))
-
+    const [emptyNoteToEdit, setEmptyNoteToEdit] = useState({...emptyNote})
+    
     useEffect(() => {
-        setEmptyNoteToEdit({ ...emptyNoteToEdit, type: inputType })
-    }, [inputType])
+        setInputType(emptyNoteToEdit.type)
+    }, [emptyNoteToEdit])
+    
+    useEffect(() => {
+        setEmptyNoteToEdit({...emptyNote})
+    }, [emptyNote])
 
-    function onInputChange(emptyNoteToEdit, newInfo) {
-        setEmptyNoteToEdit({ ...emptyNoteToEdit, info: newInfo })
-    }
 
     function onImgInput(ev, emptyNoteToEdit) {
         const newInfo = { ...emptyNoteToEdit.info, url: ev.target.files[0] }
@@ -23,19 +25,20 @@ export function NoteAdd({ emptyNote, addNote }) {
         setInputType('NoteImg')
     }
 
-    
     if (!inputType) return <fieldset className="add-note">
         <input
             placeholder="Take a note..."
             className="add-input title"
-            onClick={() => setInputType('NoteTxt')}
+            onClick={() => {
+                
+                onChangeInputType('NoteTxt')}}
             type="text"
         />
 
         <div className="note-add-toolbar">
             <button
                 className="change-type-btn"
-                onClick={() => setInputType('NoteTodos')}> <i class="fa-regular fa-square-check"></i>
+                onClick={() => onChangeInputType('NoteTodos')}> <i class="fa-regular fa-square-check"></i>
             </button>
 
 
@@ -46,12 +49,12 @@ export function NoteAdd({ emptyNote, addNote }) {
 
             <button
                 className="change-type-btn"
-                onClick={() => setInputType('NoteVideo')}
+                onClick={() => onChangeInputType('NoteVideo')}
             > <i class="fa-brands fa-youtube"></i></button>
 
             <button
                 className="change-type-btn"
-                onClick={() => setInputType('NoteAudio')}
+                onClick={() => onChangeInputType('NoteAudio')}
             > <i class="fa-solid fa-volume-high"></i></button>
         </div>
 
@@ -61,18 +64,12 @@ export function NoteAdd({ emptyNote, addNote }) {
     </fieldset >
 
     return <fieldset className="add-note">
-        <DynamicAddNote
-            inputType={inputType}
-            emptyNoteToEdit={emptyNoteToEdit}
-            info={emptyNoteToEdit.info}
-            onInputChange={onInputChange} />
-
-
+        {children}
         <button
             className="submit-note-btn"
             onClick={() => {
                 addNote(emptyNoteToEdit)
-                setEmptyNoteToEdit(emptyNote)
+                // setEmptyNoteToEdit(nul)
                 setInputType(null)
             }}
 
@@ -83,58 +80,101 @@ export function NoteAdd({ emptyNote, addNote }) {
     </fieldset>
 }
 
-function AddTodos({ info, emptyNoteToEdit, onInputChange }) {
-    const { todos } = info
-    const newTodos = todos ? todos : [{ txt: '', isDone: false }]
-    info.todos = newTodos
+// function AddTodos({ info, emptyNoteToEdit, onInputChange }) {
+//     const { todos } = info
+//     const newTodos = todos ? todos : [{ txt: '', isDone: false }]
+//     info.todos = newTodos
 
+//     function onAddTodo() {
+//         newTodos.push({ txt: '', isDone: false })
+//         const newInfo = { ...info, todos: newTodos }
+//         onInputChange(emptyNoteToEdit, newInfo)
+//     }
+
+//     function onChangeTodos(info, name, newValue, idx) {
+
+//         const newInfo = { ...info }
+//         if (name === 'title') {
+//             newInfo.title = newValue
+//         } else {
+//             const todo = newInfo.todos[idx]
+//             todo[name] = newValue
+//         }
+
+//         onInputChange(emptyNoteToEdit, newInfo)
+//     }
+
+//     return <div className="note-content" >
+//         <NoteTitle
+//             note={emptyNoteToEdit}
+//             info={info}
+//             onInputChange={onInputChange}
+//         />
+
+//         {newTodos.map((todo, idx) => {
+//             return <div className="todo-list" key={`todo-text-${idx}`}>
+//                 <NoteTxt
+//                     onInputChange={ev => onChangeTodos(info, 'txt', ev.target.value, idx)}
+//                     value={todo.txt}
+//                     id={`todo-${idx}`}
+//                     placeholder={'Enter a new task...'}
+//                 />
+
+//                 <NoteTodoCheckMark
+//                     isChecked={todo.isDone}
+//                     onInputChange={ev => onChangeTodos(info, 'isDone', ev.target.value, idx)}
+//                     id={`todo-check-${idx}`} />
+
+//             </div>
+//         })}
+
+//         <button onClick={onAddTodo} className="add-todo">+</button>
+//     </div>
+// }
+
+function AddTodos({ info, key, onChangeInfo }) {
+    const { title, todos } = info
+
+    function onChangeTitle(newTitle) {
+        info.title = newTitle
+        onChangeInfo({ ...info })
+    }
+
+    function onChangeTxt(txt) {
+        onChangeInfo({ ...info, txt })
+    }
+
+    function onChangeTodoTxt(newTxt, todo) {
+        todo.txt = newTxt
+        onChangeInfo({ ...info })
+
+    }
     function onAddTodo() {
-        newTodos.push({ txt: '', isDone: false })
-        const newInfo = { ...info, todos: newTodos }
-        onInputChange(emptyNoteToEdit, newInfo)
+        const newTodo = { txt: '', isDone: false }
+        info.todos.push(newTodo)
+        onChangeInfo({ ...info })
+
     }
 
-    function onChangeTodos(info, name, newValue, idx) {
-
-        const newInfo = { ...info }
-        if (name === 'title') {
-            newInfo.title = newValue
-        } else {
-            const todo = newInfo.todos[idx]
-            todo[name] = newValue
-        }
-
-        onInputChange(emptyNoteToEdit, newInfo)
+    function onChangeTodoCheck(todo) {
+        todo.isDone = !todo.isDone
+        onChangeInfo({ ...info })
     }
 
-    return <div className="note-content" >
-        <NoteTitle
-            note={emptyNoteToEdit}
-            info={info}
-            onInputChange={onInputChange}
-        />
+    return <div className="note-content" key={key}>
 
-        {newTodos.map((todo, idx) => {
-            return <div className="todo-list" key={`todo-text-${idx}`}>
-                <NoteTxt
-                    onInputChange={ev => onChangeTodos(info, 'txt', ev.target.value, idx)}
-                    value={todo.txt}
-                    id={`todo-${idx}`}
-                    placeholder={'Enter a new task...'}
-                />
+        <NoteInputTxt txt={title} onChangeTxt={onChangeTitle} key={key} className={'note-title'} />
 
-                <NoteCheck
-                    isChecked={todo.isDone}
-                    onInputChange={ev => onChangeTodos(info, 'isDone', ev.target.value, idx)}
-                    id={`todo-check-${idx}`} />
-
+        {todos.map((todo, idx) => {
+            return <div className="todo-list" key={todo.txt}>
+                <NoteInputTxt todo={todo} txt={todo.txt} onChangeTxt={onChangeTodoTxt} key={key} className={'note-txt'} />
+                <NoteTodoCheckMark todo={todo} onChangeTodo={onChangeTodoCheck} idx={idx} className={'note-todo-checkbox'} />
             </div>
         })}
 
-        <button onClick={onAddTodo} className="add-todo">+</button>
+        <button className="todo-add" onClick={onAddTodo}>+</button>
     </div>
 }
-
 
 function AddTxt({ info, emptyNoteToEdit, onInputChange }) {
     function onChangeInfoTxt(info, emptyNoteToEdit, ev) {
