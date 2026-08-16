@@ -3,7 +3,7 @@
     --mail-font-main: 'Google Sans', Roboto, RobotoDraft, Helvetica, Arial, sans-serif;
     --mail-fs-body: 14px;
     --mail-fs-small: 12px;
-    --mail-fs-subject: ;
+    --mail-fs-subject: 14px;
     --mail-lh-body: 20px;
     --mail-fw-read: 400;
     --mail-fw-unread: 700;
@@ -11,14 +11,18 @@
     --mail-clr-bg-app: rgb(248, 250, 253);
     --mail-clr-surface: rgb(255, 255, 255);
     --mail-clr-surface-read: rgb(242, 246, 252);
-    --mail-clr-hover: ;
-    --mail-clr-search-bg: ;
-    --mail-clr-nav-active: ;
-    --mail-clr-compose-bg: ;
+    /* measured off gmail's div.TO row wrapper - stays translucent so it can sit
+       over both the nav background and the active row */
+    --mail-clr-hover: rgba(32, 33, 36, .06);
+    --mail-clr-search-bg: rgb(233, 238, 246);
+    --mail-clr-nav-active: rgb(211, 227, 253);
+    --mail-clr-compose-bg: rgb(194, 231, 255);
     --mail-clr-compose-header: rgb(242, 246, 252);
 
     --mail-clr-text: rgb(32, 33, 36);
-    --mail-clr-text-secondary: ;
+    /* gmail uses one grey for both the date and the snippet - same value as
+       --mail-clr-text-muted, kept separate only so the names stay meaningful */
+    --mail-clr-text-secondary: rgb(95, 99, 104);
     --mail-clr-text-muted: rgb(95, 99, 104);
 
     --mail-clr-accent: rgb(11, 87, 208);
@@ -36,11 +40,11 @@
     --mail-radius-md: 8px;
     --mail-radius-lg: ;
     --mail-radius-pill: 18px;
-    --mail-radius-nav: ;
-    --mail-sidebar-w: ;
+    --mail-radius-nav: 0 16px 16px 0;
+    --mail-sidebar-w: 256px;
     --mail-row-h: 40px;
-    --mail-nav-item-h: ;
-    --mail-icon-btn-size: ;
+    --mail-nav-item-h: 32px;
+    --mail-icon-btn-size: 40px; /* UNVERIFIED - snap it */
     --mail-avatar-size: ;
     --mail-compose-w: 600px;
     --mail-compose-h: 616px;

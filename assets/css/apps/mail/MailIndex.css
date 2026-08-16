@@ -1,9 +1,23 @@
 /* mail index */
 
 .mail-index {
+    /* nav is fixed width, the list takes the rest. minmax(0,1fr) instead of a
+       bare 1fr so a long subject line cannot blow the column out */
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr);
+    /* claim the rest of the viewport, so the nav and the list surface run to the
+       bottom instead of stopping under the last row */
+    flex-grow: 1;
     font-family: var(--mail-font-main);
     font-size: var(--mail-fs-body);
     line-height: var(--mail-lh-body);
     color: var(--mail-clr-text);
     background-color: var(--mail-clr-bg-app);
+}
+
+/* the list is a surface floating on the app background - gmail rounds only the
+   corner that faces the nav */
+.mail-content {
+    background-color: var(--mail-clr-surface);
+    border-start-start-radius: var(--mail-radius-md);
 }

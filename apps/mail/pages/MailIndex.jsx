@@ -7,6 +7,9 @@ import { MailFolderList } from '../cmps/MailFolderList.jsx'
 const { useState, useEffect } = React
 const { useSearchParams } = ReactRouterDOM
 
+// everything compose puts in the url, so closing it can clear the lot
+const COMPOSE_PARAMS = ['compose', 'to', 'subject', 'body']
+
 export function MailIndex() {
     const [mails, setMails] = useState(null)
     const [counts, setCounts] = useState({})
@@ -110,10 +113,7 @@ export function MailIndex() {
     // the prefill params go too, or reopening compose refills the old values
     function onCloseCompose() {
         const nextParams = new URLSearchParams(searchParams)
-        nextParams.delete('compose')
-        nextParams.delete('to')
-        nextParams.delete('subject')
-        nextParams.delete('body')
+        COMPOSE_PARAMS.forEach(param => nextParams.delete(param))
         setSearchParams(nextParams)
     }
 

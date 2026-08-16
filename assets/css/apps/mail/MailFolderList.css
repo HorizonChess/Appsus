@@ -1,0 +1,85 @@
+/* mail folder list - the left nav */
+
+.mail-folder-list {
+    display: flex;
+    flex-direction: column;
+    gap: var(--mail-sp-2);
+    inline-size: var(--mail-sidebar-w);
+    padding-block: var(--mail-sp-2);
+    /* the nav sits on the app background, not on a surface - that is what makes
+       the translucent hover and the active pill read the way gmail's do */
+    background-color: var(--mail-clr-bg-app);
+}
+
+.mail-compose-btn {
+    display: flex;
+    align-items: center;
+    gap: var(--mail-sp-3);
+    align-self: flex-start;
+    block-size: var(--mail-btn-h);
+    margin-inline: var(--mail-sp-2);
+    padding-inline: var(--mail-sp-4);
+    border: none;
+    border-radius: var(--mail-radius-pill);
+    background-color: var(--mail-clr-compose-bg);
+    font-family: inherit;
+    font-size: var(--mail-fs-body);
+    color: var(--mail-clr-text);
+    cursor: pointer;
+}
+
+.mail-compose-btn:hover {
+    box-shadow: var(--mail-shadow-modal);
+}
+
+.mail-folders {
+    display: flex;
+    flex-direction: column;
+}
+
+.mail-folder {
+    display: flex;
+    align-items: center;
+    gap: var(--mail-sp-4);
+    block-size: var(--mail-nav-item-h);
+    /* the pill is flush left and rounded on the right, so the padding is uneven */
+    padding-inline: var(--mail-sp-5) var(--mail-sp-3);
+    border: none;
+    border-radius: var(--mail-radius-nav);
+    background-color: transparent;
+    font-family: inherit;
+    font-size: var(--mail-fs-body);
+    color: var(--mail-clr-text);
+    text-align: start;
+    cursor: pointer;
+}
+
+.mail-folder:hover {
+    background-color: var(--mail-clr-hover);
+}
+
+.mail-folder.is-active {
+    background-color: var(--mail-clr-nav-active);
+    font-weight: var(--mail-fw-unread);
+}
+
+.mail-folder-label {
+    flex-grow: 1;
+}
+
+/* the count is the only thing that ever pushes the row wider, so it gets no
+   grow - the label absorbs the space instead and the counts stay right-aligned */
+.mail-folder-count {
+    font-size: var(--mail-fs-small);
+    font-weight: var(--mail-fw-unread);
+}
+
+.mail-folder i {
+    inline-size: var(--mail-sp-5);
+    font-size: var(--mail-fs-body);
+    color: var(--mail-clr-text-secondary);
+}
+
+.mail-folder.is-active i {
+    color: var(--mail-clr-text);
+}
