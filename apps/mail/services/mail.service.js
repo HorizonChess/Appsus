@@ -107,8 +107,22 @@ function getFolderCounts() {
         })
 }
 
-function getEmptyMail(subject = '', body = '') {
-    return { subject, body }
+// no sentAt is what puts it in the Draft folder, and the nulls are load bearing -
+// _isInFolder reads missing fields as "not null", which would file it under trash
+function getEmptyMail({ to = '', subject = '', body = '' } = {}) {
+    return {
+        to,
+        subject,
+        body,
+        from: loggedinUser.email,
+        fromName: loggedinUser.fullname,
+        createdAt: Date.now(),
+        sentAt: null,
+        removedAt: null,
+        isRead: true,
+        isStared: false,
+        labels: [],
+    }
 }
 
 function getDefaultFilter() {

@@ -1,6 +1,7 @@
 import { mailService } from '../services/mail.service.js'
 import { MailList } from '../cmps/MailList.jsx'
 import { MailDetails } from '../cmps/MailDetails.jsx'
+import { MailCompose } from '../cmps/MailCompose.jsx'
 
 const { useState, useEffect } = React
 const { useSearchParams } = ReactRouterDOM
@@ -11,6 +12,9 @@ export function MailIndex() {
 
     // which mail is open lives in the URL, not in state
     const selectedMailId = searchParams.get('mailId')
+
+    // 'new' | a draft id | null when the modal is closed
+    const composeId = searchParams.get('compose')
 
     useEffect(() => {
         loadMails()
@@ -65,6 +69,25 @@ export function MailIndex() {
         setSearchParams(nextParams)
     }
 
+    // the prefill params go too, or reopening compose refills the old values
+    function onCloseCompose() {
+        const nextParams = new URLSearchParams(searchParams)
+        nextParams.delete('compose')
+        nextParams.delete('to')
+        nextParams.delete('subject')
+        nextParams.delete('body')
+        setSearchParams(nextParams)
+    }
+
+    // ?compose=new&to=..&subject=..&body=.. - how a note becomes a mail
+    function getComposePrefill() {
+        return {
+            to: searchParams.get('to') || '',
+            subject: searchParams.get('subject') || '',
+            body: searchParams.get('body') || '',
+        }
+    }
+
     function onSetRead(mailId, isRead) {
         const prevMails = mails
 
@@ -90,5 +113,10 @@ export function MailIndex() {
                 onSetRead={onSetRead}
                 onSelectMail={onSelectMail}
                 onRemoveMail={onRemoveMail} />}
+
+        {composeId && <MailCompose
+            composeId={composeId}
+            prefill={getComposePrefill()}
+            onCloseCompose={onCloseCompose} />}
     </section>
 }
