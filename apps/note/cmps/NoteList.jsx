@@ -1,20 +1,7 @@
 import { NotePreview } from "./NotePreview.jsx"
-import { NoteModal } from "./NoteModal.jsx"
 
 const { useState } = React
-export function NoteList({ notes, updateNote, onRemoveNote, onChangeStyle }) {
-    const [isModalOpen, setIsModalOpen] = useState(false)
-    const [editedNoteId, setEditedNoteId] = useState(null)
-
-
-    function onOpenModal(noteId) {
-        setEditedNoteId(noteId)
-        setIsModalOpen(true)
-    }
-
-    function onCloseModal() {
-        setIsModalOpen(false)
-    }
+export function NoteList({ notes, updateNote, onRemoveNote, onChangeStyle,onOpenModal,onChangeInfo }) {
 
     return <ul className="notes">
         {notes.map(note => {
@@ -22,23 +9,19 @@ export function NoteList({ notes, updateNote, onRemoveNote, onChangeStyle }) {
                 <article key={note.id} className="note" style={note.style} >
                     <NotePreview
                         note={note}
-                        updateNote={updateNote} />
+                        updateNote={updateNote}
+                        onChangeInfo={onChangeInfo} />
 
                     <button
                         className="remove-note-btn"
                         onClick={() => onRemoveNote(note.id)}><i className="fa-solid fa-trash-can"></i></button>
 
                     <div className='note-toolbar'>
-                        <button onClick={() => onOpenModal(note.id)} className="toolbar-btn"><i className="fa-solid fa-palette"></i></button>
+                        {/* <button onClick={ev => onChangeStyle(ev,note)} className="toolbar-btn"><i className="fa-solid fa-palette"></i></button> */}
+                        <button onClick={() => onOpenModal(note.id)} className="toolbar-btn"><i class="fa-solid fa-pencil"></i></button>
                     </div>
 
-                    <NoteModal
-                        isOpen={isModalOpen}
-                        editedNoteId={editedNoteId}
-                        onCloseModal={onCloseModal}
-                        note={note}
-                        onChangeStyle={onChangeStyle}
-                    />
+
                 </article>
 
             </li>

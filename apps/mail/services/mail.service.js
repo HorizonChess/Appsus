@@ -81,9 +81,11 @@ function toggleStar(mailId) {
         .then(mail => storageService.put(MAIL_KEY, { ...mail, isStared: !mail.isStared }))
 }
 
-function toggleRead(mailId) {
+// takes the value to set, not a flip - so "opening a mail" can just ask for
+// isRead: true without caring what the current value is
+function toggleRead(mailId, isRead) {
     return storageService.get(MAIL_KEY, mailId)
-        .then(mail => storageService.put(MAIL_KEY, { ...mail, isRead: !mail.isRead }))
+        .then(mail => storageService.put(MAIL_KEY, { ...mail, isRead }))
 }
 
 // Feeds the badges in the folder list: { inbox: { total, unread }, ... }

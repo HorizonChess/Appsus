@@ -1,5 +1,6 @@
 import { mailService } from '../services/mail.service.js'
 import { MailList } from '../cmps/MailList.jsx'
+import { MailDetails } from '../cmps/MailDetails.jsx'
 
 const { useState, useEffect } = React
 const { useSearchParams } = ReactRouterDOM
@@ -21,8 +22,7 @@ export function MailIndex() {
             .catch(err => console.log('Had issues loading mails', err))
     }
 
-    // optimistic - the storage service costs 500ms per call and toggleStar makes
-    // two, so we flip it in state now and restore the old list if the save fails
+    
     function onToggleStar(mailId) {
         const prevMails = mails
 
@@ -42,31 +42,53 @@ export function MailIndex() {
         nextParams.set('mailId', mailId)
         setSearchParams(nextParams)
 
-        markAsRead(mailId)
+        onSetRead(mailId, true)
     }
 
-    function markAsRead(mailId) {
-        const mailToRead = mails.find(mail => mail.id === mailId)
-        if (!mailToRead || mailToRead.isRead) return
-
+    // the service decides trash-vs-destroy, we just drop it from the current view
+    function onRemoveMail(mailId) {
         const prevMails = mails
 
-        setMails(mails.map(mail => (
-            mail.id === mailId ? { ...mail, isRead: true } : mail
-        )))
+        setMails(mails.filter(mail => mail.id !== mailId))
+        if (selectedMailId === mailId) onCloseMail()
 
-        mailService.toggleRead(mailId)
+        mailService.remove(mailId)
             .catch(err => {
-                console.log('Had issues marking mail as read', err)
+                console.log('Had issues removing mail', err)
                 setMails(prevMails)
             })
     }
 
-    if (!mails) return <section className="mail-index">Loading...</section>
+    function onCloseMail() {
+        const nextParams = new URLSearchParams(searchParams)
+        nextParams.delete('mailId')
+        setSearchParams(nextParams)
+    }
+
+    function onSetRead(mailId, isRead) {
+        const prevMails = mails
+
+        setMails(mails.map(mail => (
+            mail.id === mailId ? { ...mail, isRead } : mail
+        )))
+
+        mailService.toggleRead(mailId, isRead)
+            .catch(err => {
+                console.log('Had issues updating read state', err)
+                setMails(prevMails)
+            })
+    }
+
+    if (!mails) return <section className="mail-index"><div className="loader"></div></section>
 
     return <section className="mail-index">
         {selectedMailId
-            ? <p>details placeholder for {selectedMailId}</p>
-            : <MailList mails={mails} onToggleStar={onToggleStar} onSelectMail={onSelectMail} />}
+            ? <MailDetails mailId={selectedMailId} onCloseMail={onCloseMail} onRemoveMail={onRemoveMail} />
+            : <MailList
+                mails={mails}
+                onToggleStar={onToggleStar}
+                onSetRead={onSetRead}
+                onSelectMail={onSelectMail}
+                onRemoveMail={onRemoveMail} />}
     </section>
 }

@@ -1,0 +1,14 @@
+.todo-add{
+
+    background-color: transparent;
+    border: none;
+    align-self: start;
+}
+
+.todo-list{
+border-block-end: 1px solid grey;
+}
+
+.note-title{
+    margin-block-end:0.5em;
+}

@@ -1,37 +1,48 @@
 const { useState, useRef, useEffect } = React
 import { colorOptions } from "../data/note-color-options.js"
 import { NoteToolbar } from "./NoteToolbar.jsx"
+import { NoteInputTxt } from "./NoteInputTxt.jsx"
+import { NoteTodoCheckMark } from "./NoteTodoCheckmark.jsx"
 
-export function NotePreview({ note, updateNote }) {
+export function NotePreview({ note, updateNote, onChangeInfo }) {
 
     return <DynamicNote
+        noteId={note.id}
         key={note.id}
         type={note.type}
-        info={note.info} />
+        info={note.info}
+        onChangeInfo={onChangeInfo} />
 
 }
 
 function NoteTxt({ info, key }) {
-    const { txt,title } = info
+    const { title, txt } = info
 
     return <div className="note-content" key={key}>
-        <h3>{title}</h3>
-        <p>{txt}</p>
+        <h3 className="note-title">{title}</h3>
+        <p className="note-txt">{txt}</p>
     </div>
 }
 
-function NoteTodos({ info, key }) {
+function NoteTodos({ info, key, onChangeInfo,noteId }) {
     const { title, todos } = info
 
-    return <div className="note-content" key={key}>
-        <h3>{title}</h3>
-        {todos.map(todo => {
-            return <div className="todo-list" key={todo.txt}>
-                <label htmlFor={todo.txt}>{todo.txt}</label>
-                <input type="checkbox" id={todo.txt} name={todo.txt} checked={todo.isDone} />
+    function onChangeTodoCheck(todo) {
+        todo.isDone = !todo.isDone
+        onChangeInfo({ ...info },noteId)
+    }
 
+    return <div className="note-content" key={key}>
+
+        <NoteInputTxt txt={title} key={key} className={'note-title'} />
+
+        {todos.map((todo, idx) => {
+            return <div className="todo-list" key={todo.txt}>
+                <NoteInputTxt todo={todo} txt={todo.txt} key={key} className={'note-txt'} />
+                <NoteTodoCheckMark todo={todo} onChangeTodo={onChangeTodoCheck} idx={idx} className={'note-todo-checkbox'} />
             </div>
         })}
+
     </div>
 }
 
@@ -39,8 +50,8 @@ function NoteImg({ info, key }) {
     const { title, url } = info
 
     return <div className="note-content" key={key}>
-        <h3>{title}</h3>
-        <img src={url} alt="" />
+        <h3 className="note-title">{title}</h3>
+        <img src={url} alt="" className="note-media" />
     </div>
 }
 
@@ -48,9 +59,9 @@ function NoteVideo({ info, key }) {
     const { title, url } = info
 
     return <div className="note-content" key={key}>
-        <h3>{title}</h3>
+        <h3 className="note-title">{title}</h3>
 
-        <video controls width="200">
+        <video controls width="200" className="note-media">
             <source src={url} type="video/webm" />
             <source src={url} type="video/mp4" />
         </video>
@@ -61,9 +72,9 @@ function NoteAudio({ info, key }) {
     const { title, url } = info
 
     return <div className="note-content" key={key}>
-        <h3>{title}</h3>
+        <h3 className="note-title">{title}</h3>
 
-        <figure>
+        <figure className="note-media">
             <audio controls src={url}></audio>
         </figure>
     </div>

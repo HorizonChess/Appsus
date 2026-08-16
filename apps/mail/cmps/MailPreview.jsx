@@ -1,12 +1,22 @@
 import { mailService } from '../services/mail.service.js'
 
-export function MailPreview({ mail, onToggleStar, onSelectMail }) {
+export function MailPreview({ mail, onToggleStar, onSetRead, onSelectMail, onRemoveMail }) {
     const { subject, body, from, fromName, isRead, isStared, labels = [] } = mail
     const sentAt = mail.sentAt || mail.createdAt
 
     function onStarClick(ev) {
         ev.stopPropagation()
         onToggleStar(mail.id)
+    }
+
+    function onRemoveClick(ev) {
+        ev.stopPropagation()
+        onRemoveMail(mail.id)
+    }
+
+    function onReadClick(ev) {
+        ev.stopPropagation()
+        onSetRead(mail.id, !isRead)
     }
 
     return <li
@@ -24,13 +34,31 @@ export function MailPreview({ mail, onToggleStar, onSelectMail }) {
 
         <div className="mail-txt">
             {labels.map(label => (
-                <span key={label} className={`label-chip label-${label}`}>{label}</span>
+                <span
+                    key={label}
+                    className="label-chip"
+                    style={{ backgroundColor: `var(--mail-label-${label})` }}>{label}</span>
             ))}
             <span className="mail-subject">{subject}</span>
             <span className="mail-snippet"> - {body}</span>
         </div>
 
-        <span className="mail-date">{mailService.formatMailDate(sentAt)}</span>
+        <div className="mail-end">
+            <span className="mail-date">{mailService.formatMailDate(sentAt)}</span>
+
+            <div className="mail-actions">
+                <button className="mail-icon-btn" title="Delete" onClick={onRemoveClick}>
+                    <i className="fa-solid fa-trash"></i>
+                </button>
+
+                <button
+                    className="mail-icon-btn"
+                    title={isRead ? 'Mark as unread' : 'Mark as read'}
+                    onClick={onReadClick}>
+                    <i className={isRead ? 'fa-solid fa-envelope' : 'fa-solid fa-envelope-open'}></i>
+                </button>
+            </div>
+        </div>
 
     </li>
 }
