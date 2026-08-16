@@ -1,6 +1,6 @@
 import { mailService } from '../services/mail.service.js'
 
-export function MailPreview({ mail, onToggleStar, onSelectMail, onRemoveMail }) {
+export function MailPreview({ mail, onToggleStar, onSetRead, onSelectMail, onRemoveMail }) {
     const { subject, body, from, fromName, isRead, isStared, labels = [] } = mail
     const sentAt = mail.sentAt || mail.createdAt
 
@@ -12,6 +12,11 @@ export function MailPreview({ mail, onToggleStar, onSelectMail, onRemoveMail }) 
     function onRemoveClick(ev) {
         ev.stopPropagation()
         onRemoveMail(mail.id)
+    }
+
+    function onReadClick(ev) {
+        ev.stopPropagation()
+        onSetRead(mail.id, !isRead)
     }
 
     return <li
@@ -44,6 +49,13 @@ export function MailPreview({ mail, onToggleStar, onSelectMail, onRemoveMail }) 
             <div className="mail-actions">
                 <button className="mail-icon-btn" title="Delete" onClick={onRemoveClick}>
                     <i className="fa-solid fa-trash"></i>
+                </button>
+
+                <button
+                    className="mail-icon-btn"
+                    title={isRead ? 'Mark as unread' : 'Mark as read'}
+                    onClick={onReadClick}>
+                    <i className={isRead ? 'fa-solid fa-envelope' : 'fa-solid fa-envelope-open'}></i>
                 </button>
             </div>
         </div>

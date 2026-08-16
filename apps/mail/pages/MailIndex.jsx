@@ -22,8 +22,7 @@ export function MailIndex() {
             .catch(err => console.log('Had issues loading mails', err))
     }
 
-    // optimistic - the storage service costs 500ms per call and toggleStar makes
-    // two, so we flip it in state now and restore the old list if the save fails
+    
     function onToggleStar(mailId) {
         const prevMails = mails
 
@@ -43,7 +42,7 @@ export function MailIndex() {
         nextParams.set('mailId', mailId)
         setSearchParams(nextParams)
 
-        markAsRead(mailId)
+        onSetRead(mailId, true)
     }
 
     // the service decides trash-vs-destroy, we just drop it from the current view
@@ -66,19 +65,16 @@ export function MailIndex() {
         setSearchParams(nextParams)
     }
 
-    function markAsRead(mailId) {
-        const mailToRead = mails.find(mail => mail.id === mailId)
-        if (!mailToRead || mailToRead.isRead) return
-
+    function onSetRead(mailId, isRead) {
         const prevMails = mails
 
         setMails(mails.map(mail => (
-            mail.id === mailId ? { ...mail, isRead: true } : mail
+            mail.id === mailId ? { ...mail, isRead } : mail
         )))
 
-        mailService.toggleRead(mailId)
+        mailService.toggleRead(mailId, isRead)
             .catch(err => {
-                console.log('Had issues marking mail as read', err)
+                console.log('Had issues updating read state', err)
                 setMails(prevMails)
             })
     }
@@ -91,6 +87,7 @@ export function MailIndex() {
             : <MailList
                 mails={mails}
                 onToggleStar={onToggleStar}
+                onSetRead={onSetRead}
                 onSelectMail={onSelectMail}
                 onRemoveMail={onRemoveMail} />}
     </section>
