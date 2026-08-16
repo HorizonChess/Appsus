@@ -15,12 +15,12 @@ export function NoteEdit({ note, updateNote, onChangeInfo }) {
 }
 
 function NoteTxt({ info, key, onChangeInfo }) {
-    const { txt,title } = info
+    const { txt, title } = info
 
     function onChangeTxt(txt) {
         onChangeInfo({ ...info, txt })
     }
-    
+
     function onChangeTitle(txt) {
         onChangeInfo({ ...info, title: txt })
     }
@@ -47,6 +47,12 @@ function NoteTodos({ info, key, onChangeInfo }) {
         onChangeInfo({ ...info })
 
     }
+    function onAddTodo() {
+        const newTodo = { txt: '', isDone: false }
+        info.todos.push(newTodo)
+        onChangeInfo({ ...info })
+
+    }
 
     function onChangeTodoCheck(todo) {
         todo.isDone = !todo.isDone
@@ -63,6 +69,8 @@ function NoteTodos({ info, key, onChangeInfo }) {
                 <NoteTodoCheckMark todo={todo} onChangeTodo={onChangeTodoCheck} idx={idx} className={'note-todo-checkbox'} />
             </div>
         })}
+
+        <button className="todo-add" onClick={ onAddTodo}>+</button>
     </div>
 }
 
