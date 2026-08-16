@@ -4,6 +4,8 @@
 @import './basics/helpers.css';
 @import './basics/layout.css';
 
+@import './setup/typography.css';
+
 @import './cmps/home.css';
 @import './cmps/UserMsg.css';
 @import './cmps/AppHeader.css';

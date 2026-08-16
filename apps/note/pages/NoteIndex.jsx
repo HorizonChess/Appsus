@@ -71,7 +71,7 @@ export function NoteIndex() {
         setEditedNote(null)
     }
 
-    return <section className="container">
+    return <section className="notes-container">
         <h1>Notes app</h1>
         <NoteList
             notes={notes}

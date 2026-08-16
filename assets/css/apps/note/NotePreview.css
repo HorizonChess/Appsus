@@ -122,12 +122,13 @@ input:has(+ .note-todo-checkbox:checked) {
     border: none;
     field-sizing: content;
     resize: none;
+    font-family: roboto;
 
 }
 
 .note-title {
     border: none;
-    font-weight: 700;
+    font-family: roboto-black;
     font-size: 1.25em;
 }
 
@@ -149,6 +150,6 @@ input:has(+ .note-todo-checkbox:checked) {
     justify-self: center;
 }
 
-.note-media{
+.note-media {
     justify-self: center;
 }
