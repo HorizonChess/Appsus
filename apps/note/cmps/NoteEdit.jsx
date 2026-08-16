@@ -17,12 +17,14 @@ export function NoteEdit({ note, updateNote, onChangeInfo }) {
 function NoteTxt({ info, key, onChangeInfo }) {
     const { txt, title } = info
 
-    function onChangeTxt(txt) {
-        onChangeInfo({ ...info, txt })
+    function onChangeTxt(newTxt) {
+        info.txt=newTxt
+        onChangeInfo({ ...info})
     }
 
-    function onChangeTitle(txt) {
-        onChangeInfo({ ...info, title: txt })
+    function onChangeTitle(newTitle) {
+        info.title = newTitle
+        onChangeInfo({ ...info})
     }
 
     return <div className="note-content" key={key}>
