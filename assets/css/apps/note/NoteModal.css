@@ -6,4 +6,10 @@
 
      border-radius: 5px;
      width: 360px;
+     min-height:300px;
+ }
+
+ .note-modal::backdrop{
+    background-color: black;
+    opacity: 0.6;
  }

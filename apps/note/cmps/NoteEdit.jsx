@@ -18,13 +18,13 @@ function NoteTxt({ info, key, onChangeInfo }) {
     const { txt, title } = info
 
     function onChangeTxt(newTxt) {
-        info.txt=newTxt
-        onChangeInfo({ ...info})
+        info.txt = newTxt
+        onChangeInfo({ ...info })
     }
 
     function onChangeTitle(newTitle) {
         info.title = newTitle
-        onChangeInfo({ ...info})
+        onChangeInfo({ ...info })
     }
 
     return <div className="note-content" key={key}>
@@ -37,9 +37,11 @@ function NoteTxt({ info, key, onChangeInfo }) {
 function NoteTodos({ info, key, onChangeInfo }) {
     const { title, todos } = info
 
-    function onChangeTitle(txt) {
-        onChangeInfo({ ...info, title: txt })
+    function onChangeTitle(newTitle) {
+        info.title = newTitle
+        onChangeInfo({ ...info })
     }
+
     function onChangeTxt(txt) {
         onChangeInfo({ ...info, txt })
     }
@@ -72,24 +74,35 @@ function NoteTodos({ info, key, onChangeInfo }) {
             </div>
         })}
 
-        <button className="todo-add" onClick={ onAddTodo}>+</button>
+        <button className="todo-add" onClick={onAddTodo}>+</button>
     </div>
 }
 
-function NoteImg({ info, key }) {
+function NoteImg({ info, key, onChangeInfo }) {
     const { title, url } = info
 
+    function onChangeTitle(newTitle) {
+        info.title = newTitle
+        onChangeInfo({ ...info })
+    }
+
     return <div className="note-content" key={key}>
-        <h3>{title}</h3>
-        <img src={url} alt="" />
+        < NoteInputTxt txt={title} onChangeTxt={onChangeTitle} key={key} className={'note-title'} />
+
+        <img src={url} alt="" className={"note-media"} />
     </div>
 }
 
-function NoteVideo({ info, key }) {
+function NoteVideo({ info, key, onChangeInfo }) {
     const { title, url } = info
 
+    function onChangeTitle(newTitle) {
+        info.title = newTitle
+        onChangeInfo({ ...info })
+    }
+
     return <div className="note-content" key={key}>
-        <h3>{title}</h3>
+        < NoteInputTxt txt={title} onChangeTxt={onChangeTitle} key={key} className={'note-title'} />
 
         <video controls width="200">
             <source src={url} type="video/webm" />
@@ -98,12 +111,16 @@ function NoteVideo({ info, key }) {
     </div>
 }
 
-function NoteAudio({ info, key }) {
+function NoteAudio({ info, key,onChangeInfo }) {
     const { title, url } = info
 
+    function onChangeTitle(newTitle) {
+        info.title = newTitle
+        onChangeInfo({ ...info })
+    }
     return <div className="note-content" key={key}>
-        <h3>{title}</h3>
-
+        < NoteInputTxt txt={title} onChangeTxt={onChangeTitle} key={key} className={'note-title'} />
+        
         <figure>
             <audio controls src={url}></audio>
         </figure>

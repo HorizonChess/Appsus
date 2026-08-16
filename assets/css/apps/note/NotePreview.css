@@ -1,4 +1,7 @@
 .note-content {
+    align-items: start;
+    display: flex;
+    flex-direction: column;
     /* overflow: scroll; */
 }
 

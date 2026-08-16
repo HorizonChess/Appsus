@@ -13,6 +13,7 @@
 @import './apps/note/NotePreview.css';
 @import './apps/note/NoteToolbar.css';
 @import './apps/note/NoteModal.css';
+@import './apps/note/NoteEdit.css';
 @import './apps/mail/mail-vars.css';
 @import './apps/mail/mail-common.css';
 @import './apps/mail/MailIndex.css';
