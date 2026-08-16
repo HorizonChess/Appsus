@@ -8,5 +8,6 @@ export function NoteInputTxt({ txt, onChangeTxt, key, className, todo }) {
         id={`${key}-txt`}
         name={`${key}-txt`}
         onChange={(ev) => onChangeTxt(ev.target.value,todo)}
-        autoFocus={true} />
+        autoFocus={true} 
+       readOnly={onChangeTxt===undefined} />
 }
