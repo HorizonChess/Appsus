@@ -2,6 +2,7 @@
 
 import { utilService } from '../../../services/util.service.js'
 import { storageService } from '../../../services/async-storage.service.js'
+import { eventBusService } from '../../../services/event-bus.service.js'
 import { demoMails } from '../data/demo.data.js'
 
 
@@ -60,13 +61,14 @@ function remove(mailId) {
             if (mail.removedAt) return storageService.remove(MAIL_KEY, mailId)
             return storageService.put(MAIL_KEY, { ...mail, removedAt: Date.now() })
         })
+        .then(_notifyChange)
 }
 
 function save(mail) {
     if (mail.id) {
-        return storageService.put(MAIL_KEY, mail)
+        return storageService.put(MAIL_KEY, mail).then(_notifyChange)
     } else {
-        return storageService.post(MAIL_KEY, mail)
+        return storageService.post(MAIL_KEY, mail).then(_notifyChange)
     }
 }
 
@@ -86,6 +88,7 @@ function send(mail) {
 function toggleStar(mailId, isStared) {
     return storageService.get(MAIL_KEY, mailId)
         .then(mail => storageService.put(MAIL_KEY, { ...mail, isStared }))
+        .then(_notifyChange)
 }
 
 // takes the value to set, not a flip - so "opening a mail" can just ask for
@@ -93,6 +96,14 @@ function toggleStar(mailId, isStared) {
 function toggleRead(mailId, isRead) {
     return storageService.get(MAIL_KEY, mailId)
         .then(mail => storageService.put(MAIL_KEY, { ...mail, isRead }))
+        .then(_notifyChange)
+}
+
+// the folder counts live in the sidebar now, which has no way of knowing a write
+// happened somewhere else in the app
+function _notifyChange(res) {
+    eventBusService.emit('mails-changed')
+    return res
 }
 
 // a mail's folder comes from its fields, it is never stored

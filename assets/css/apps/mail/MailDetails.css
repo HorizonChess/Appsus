@@ -36,11 +36,23 @@
     font-weight: var(--mail-fw-unread);
 }
 
+/* sender and recipient stack, so the header row stays two lines like gmail's */
 .mail-details-from {
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+}
+
+.mail-details-sender-line {
     display: flex;
     align-items: baseline;
     gap: var(--mail-sp-1);
     min-width: 0;
+}
+
+.mail-details-to {
+    font-size: var(--mail-fs-small);
+    color: var(--mail-clr-text-muted);
 }
 
 .mail-details-sender {
