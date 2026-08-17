@@ -80,57 +80,6 @@ export function NoteAdd({ emptyNote, addNote, onChangeInfo, children ,onChangeIn
     </fieldset>
 }
 
-// function AddTodos({ info, emptyNoteToEdit, onInputChange }) {
-//     const { todos } = info
-//     const newTodos = todos ? todos : [{ txt: '', isDone: false }]
-//     info.todos = newTodos
-
-//     function onAddTodo() {
-//         newTodos.push({ txt: '', isDone: false })
-//         const newInfo = { ...info, todos: newTodos }
-//         onInputChange(emptyNoteToEdit, newInfo)
-//     }
-
-//     function onChangeTodos(info, name, newValue, idx) {
-
-//         const newInfo = { ...info }
-//         if (name === 'title') {
-//             newInfo.title = newValue
-//         } else {
-//             const todo = newInfo.todos[idx]
-//             todo[name] = newValue
-//         }
-
-//         onInputChange(emptyNoteToEdit, newInfo)
-//     }
-
-//     return <div className="note-content" >
-//         <NoteTitle
-//             note={emptyNoteToEdit}
-//             info={info}
-//             onInputChange={onInputChange}
-//         />
-
-//         {newTodos.map((todo, idx) => {
-//             return <div className="todo-list" key={`todo-text-${idx}`}>
-//                 <NoteTxt
-//                     onInputChange={ev => onChangeTodos(info, 'txt', ev.target.value, idx)}
-//                     value={todo.txt}
-//                     id={`todo-${idx}`}
-//                     placeholder={'Enter a new task...'}
-//                 />
-
-//                 <NoteTodoCheckMark
-//                     isChecked={todo.isDone}
-//                     onInputChange={ev => onChangeTodos(info, 'isDone', ev.target.value, idx)}
-//                     id={`todo-check-${idx}`} />
-
-//             </div>
-//         })}
-
-//         <button onClick={onAddTodo} className="add-todo">+</button>
-//     </div>
-// }
 
 function AddTodos({ info, key, onChangeInfo }) {
     const { title, todos } = info

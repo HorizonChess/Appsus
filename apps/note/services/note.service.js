@@ -85,7 +85,7 @@ function _createNote(demoNote) {
 
 }
 
-function getEmptyNote(type = null, info = {}, style = { backgroundColor: '#ffffff' }) {
+function getEmptyNote(type = 'NoteTxt', info = {title:'',txt:''}, style = { backgroundColor: '#ffffff' }) {
     return {
         type,
         info,

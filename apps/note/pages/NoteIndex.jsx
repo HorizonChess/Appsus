@@ -6,23 +6,24 @@ import { NoteAdd } from "../cmps/NoteAdd.jsx"
 import { storageService } from "../../../services/async-storage.service.js"
 import { NoteModal } from "../cmps/NoteModal.jsx"
 import { NoteEdit } from "../cmps/NoteEdit.jsx"
-
+import { NoteComposer } from "../cmps/NoteComposer.jsx"
+var index = 1
 const { useState, useRef, useEffect } = React
 
 export function NoteIndex() {
     const [notes, setNotes] = useState([])
     const [isShown, setIsShown] = useState(false)
-    const [editedNote, setEditedNote] = useState(null)
-    const [emptyNote, setEmptyNote] = useState(noteService.getEmptyNote())
+    const [editedNote, setEditedNote] = useState(noteService.getEmptyNote())
 
     useEffect(() => {
         noteService.query({})
             .then(notes => setNotes(notes))
     }, [])
 
+    function onChangeType(type) {
+        const emptyTodo = { txt: '', isDone: false }
 
-    function onChangeInputType(type) {
-        setEmptyNote({ ...emptyNote, type })
+        setEditedNote({ ...editedNote, type, info: type === 'NoteTodos' ? { title:'', todos: [emptyTodo] } : { title: '', txt: '' } })
 
     }
 
@@ -51,17 +52,21 @@ export function NoteIndex() {
     }
 
     function addNote() {
-        const newNotes = [...notes]
-        newNotes.push(emptyNote)
-        const noteIdx = newNotes.length - 1
-        noteService.save(emptyNote)
-            .then(savedNote => {
-                const updatedNotes = [...notes]
-                updatedNotes.splice(noteIdx, 1, savedNote)
-                setNotes(updatedNotes)
-            })
-        setNotes([...newNotes])
+        notes.push(editedNote)
         setEditedNote(noteService.getEmptyNote())
+
+        const noteIdx = notes.length - 1
+
+        setNotes([...notes])
+
+        noteService.save(editedNote)
+            .then(note => {
+                const newNotes = [...notes]
+                newNotes.splice(noteIdx, 1, note)
+                setNotes(newNotes)
+            })
+
+
     }
 
     function onChangeStyle(ev, note) {
@@ -106,14 +111,15 @@ export function NoteIndex() {
 
     return <section className="notes-container">
         <h1>Notes app</h1>
-        <NoteAdd
+        {/* <NoteAdd
             addNote={addNote}
             emptyNote={emptyNote}
             onChangeInputType={onChangeInputType}
 
         >
             <NoteEdit note={emptyNote} onChangeInfo={onChangeInfo} />
-        </NoteAdd>
+        </NoteAdd> */}
+        <NoteComposer note={editedNote} onChangeInfo={onChangeInfo} onChangeType={onChangeType} addNote={addNote} />
         <NoteList
             notes={notes}
             updateNote={updateNote}
