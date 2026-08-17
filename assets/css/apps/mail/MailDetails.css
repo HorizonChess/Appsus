@@ -8,6 +8,89 @@
     display: flex;
     align-items: center;
     gap: var(--mail-sp-1);
+    block-size: var(--mail-toolbar-h);
     margin-block-end: var(--mail-sp-4);
 }
 
+.mail-details-subject {
+    font-size: var(--mail-fs-title);
+    font-weight: var(--mail-fw-read);
+    line-height: var(--mail-lh-title);
+}
+
+.mail-details-header {
+    display: flex;
+    align-items: center;
+    gap: var(--mail-sp-3);
+    margin-block: var(--mail-sp-3);
+}
+
+.mail-details-avatar {
+    display: grid;
+    place-items: center;
+    flex: 0 0 auto;
+    inline-size: var(--mail-avatar-size);
+    block-size: var(--mail-avatar-size);
+    border-radius: 50%;
+    background-color: var(--mail-clr-nav-active);
+    font-weight: var(--mail-fw-unread);
+}
+
+.mail-details-from {
+    display: flex;
+    align-items: baseline;
+    gap: var(--mail-sp-1);
+    min-width: 0;
+}
+
+.mail-details-sender {
+    font-weight: var(--mail-fw-unread);
+}
+
+.mail-details-address,
+.mail-details-date {
+    font-size: var(--mail-fs-small);
+    color: var(--mail-clr-text-muted);
+}
+
+.mail-details-date {
+    margin-inline-start: auto;
+}
+
+.mail-details-reply {
+    display: flex;
+    gap: var(--mail-sp-2);
+    margin-block-start: var(--mail-sp-5);
+}
+
+
+.mail-reply-btn {
+    display: flex;
+    align-items: center;
+    gap: var(--mail-sp-2);
+    block-size: var(--mail-btn-h);
+    padding-inline: var(--mail-sp-4);
+    border: 1px solid var(--mail-clr-row-edge);
+    border-radius: var(--mail-radius-pill);
+    background: none;
+    font-family: inherit;
+    font-size: var(--mail-fs-body);
+    color: var(--mail-clr-text);
+    cursor: pointer;
+}
+
+.mail-reply-btn:hover {
+    background-color: var(--mail-clr-hover);
+}
+
+.mail-reply-btn .material-symbols-outlined {
+    font-size: var(--mail-icon-size);
+}
+
+/* email content rather than app chrome, so it keeps gmail's arial instead of
+   inheriting the ui font */
+.mail-details-body {
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: var(--mail-fs-message);
+    line-height: 1.5;
+}

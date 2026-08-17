@@ -151,7 +151,12 @@ export function MailIndex() {
             {!mails && <div className="loader"></div>}
 
             {mails && (selectedMailId
-                ? <MailDetails mailId={selectedMailId} onCloseMail={onCloseMail} onRemoveMail={onRemoveMail} />
+                ? <MailDetails
+                    mailId={selectedMailId}
+                    onCloseMail={onCloseMail}
+                    onRemoveMail={onRemoveMail}
+                    onToggleStar={onToggleStar}
+                    onSetRead={onSetRead} />
                 : <MailList
                     mails={mails}
                     onToggleStar={onToggleStar}

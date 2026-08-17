@@ -4,7 +4,10 @@
     --mail-fs-body: 14px;
     --mail-fs-small: 12px;
     --mail-fs-subject: 14px;
+    --mail-fs-title: 22px;
+    --mail-fs-message: 13px;
     --mail-lh-body: 20px;
+    --mail-lh-title: 28px;
     --mail-fw-read: 400;
     --mail-fw-unread: 700;
     /* gmail renders in google sans, which is proprietary - we fall back to
@@ -65,7 +68,8 @@
     /* must fit inside --mail-row-h - the list rows swap the date for these on
        hover, so anything taller makes the row grow */
     --mail-icon-btn-size: 40px;
-    --mail-avatar-size: ;
+    --mail-avatar-size: 40px;
+    --mail-toolbar-h: 48px;
     --mail-compose-w: 600px;
     --mail-compose-h: 616px;
     --mail-compose-header-h: 40px;

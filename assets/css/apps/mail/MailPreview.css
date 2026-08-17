@@ -53,12 +53,6 @@
     font-size: var(--mail-star-size);
 }
 
-/* one glyph for both states - starring fills it rather than swapping the icon */
-.mail-preview .star-btn .is-stared {
-    font-variation-settings: 'FILL' 1;
-    color: var(--mail-clr-star-on);
-}
-
 .mail-preview .mail-sender,
 .mail-preview .mail-subject,
 .mail-preview .mail-snippet {
