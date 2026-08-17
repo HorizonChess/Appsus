@@ -4,7 +4,9 @@
         var(--mail-star-size) calc(var(--mail-col-sender-w) + var(--mail-col-sender-indent)) minmax(0, 1fr) auto;
     align-items: center;
     min-height: var(--mail-row-h);
-    padding-inline: var(--mail-sp-2);
+    /* the star halo spills 8px past its column, so the start padding has to
+       clear that before the row edge shows any gap */
+    padding-inline: var(--mail-sp-4) var(--mail-sp-2);
     box-shadow: var(--mail-shadow-row-line);
     white-space: nowrap;
     cursor: pointer;
@@ -25,18 +27,25 @@
     z-index: 1;
 }
 
+/* overflows its grid column rather than widening it */
 .mail-preview .star-btn {
     display: grid;
     place-items: center;
-    inline-size: var(--mail-star-size);
-    block-size: var(--mail-star-size);
+    justify-self: center;
+    inline-size: calc(var(--mail-icon-btn-size) - var(--mail-sp-1));
+    block-size: calc(var(--mail-icon-btn-size) - var(--mail-sp-1));
     padding: 0;
     border: none;
+    border-radius: 50%;
     background: none;
     font-size: var(--mail-star-size);
     line-height: 1;
     color: var(--mail-clr-star-off);
     cursor: pointer;
+}
+
+.mail-preview .star-btn:hover {
+    background-color: var(--mail-clr-hover);
 }
 
 /* the class rule sets 24px, so the star has to be sized back down here */

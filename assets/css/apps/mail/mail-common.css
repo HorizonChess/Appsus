@@ -22,6 +22,10 @@
     background-color: var(--mail-clr-hover);
 }
 
+.mail-icon-btn .material-symbols-outlined {
+    font-size: var(--mail-icon-size);
+}
+
 /* the ua font shorthand on form controls also resets font-size-adjust, so the
    nav buttons stay unscaled while the list rows around them scale */
 .mail-index button,

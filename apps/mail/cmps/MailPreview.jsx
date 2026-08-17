@@ -48,14 +48,14 @@ export function MailPreview({ mail, onToggleStar, onSetRead, onSelectMail, onRem
 
             <div className="mail-actions">
                 <button className="mail-icon-btn" title="Delete" onClick={onRemoveClick}>
-                    <i className="fa-solid fa-trash"></i>
+                    <span className="material-symbols-outlined">delete</span>
                 </button>
 
                 <button
                     className="mail-icon-btn"
                     title={isRead ? 'Mark as unread' : 'Mark as read'}
                     onClick={onReadClick}>
-                    <i className={isRead ? 'fa-solid fa-envelope' : 'fa-solid fa-envelope-open'}></i>
+                    <span className="material-symbols-outlined">{isRead ? 'mark_email_unread' : 'mark_email_read'}</span>
                 </button>
             </div>
         </div>

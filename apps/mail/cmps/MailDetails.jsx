@@ -24,11 +24,11 @@ export function MailDetails({ mailId, onCloseMail, onRemoveMail }) {
 
         <div className="mail-details-toolbar">
             <button className="mail-icon-btn" title="Back to list" onClick={onCloseMail}>
-                <i className="fa-solid fa-arrow-left"></i>
+                <span className="material-symbols-outlined">arrow_back</span>
             </button>
 
             <button className="mail-icon-btn" title="Delete" onClick={() => onRemoveMail(mailId)}>
-                <i className="fa-solid fa-trash"></i>
+                <span className="material-symbols-outlined">delete</span>
             </button>
         </div>
 
