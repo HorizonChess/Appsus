@@ -4,3 +4,8 @@
     align-items: center;
     justify-content: start;
 }
+
+.note-txt:focus,
+.note-todo-txt:focus {
+    outline: none;
+}

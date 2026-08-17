@@ -1,5 +1,6 @@
 
 import { noteService } from "../services/note.service.js"
+import { eventBusService } from "../../../services/event-bus.service.js"
 
 import { NoteList } from "../cmps/NoteList.jsx"
 import { NoteAdd } from "../cmps/NoteAdd.jsx"
@@ -15,6 +16,7 @@ export function NoteIndex() {
     const [isShown, setIsShown] = useState(false)
     const [editedNote, setEditedNote] = useState(noteService.getEmptyNote())
 
+    console.log('editedNote',editedNote)
     useEffect(() => {
         noteService.query({})
             .then(notes => setNotes(notes))
@@ -103,24 +105,18 @@ export function NoteIndex() {
         setEditedNote(notes.find(note => note.id === noteId))
         console.log('Modal has opened...')
         setIsShown(true)
+        eventBusService.emit('note-edit')
     }
 
     function onCloseModal() {
         console.log('Modal has closed...')
-        setEditedNote(null)
+        setEditedNote(noteService.getEmptyNote())
         setIsShown(false)
     }
 
     return <section className="notes-container">
         <h1>Notes app</h1>
-        {/* <NoteAdd
-            addNote={addNote}
-            emptyNote={emptyNote}
-            onChangeInputType={onChangeInputType}
 
-        >
-            <NoteEdit note={emptyNote} onChangeInfo={onChangeInfo} />
-        </NoteAdd> */}
         <NoteComposer note={editedNote} onChangeInfo={onChangeInfo} onChangeType={onChangeType} addNote={addNote} />
         <NoteList
             notes={notes}
@@ -135,7 +131,7 @@ export function NoteIndex() {
             onClose={onCloseModal}
             editedNote={editedNote}
         >
-            {editedNote ? <NoteEdit note={editedNote} onChangeInfo={onChangeInfo} /> : <span></span>}
+            {editedNote && editedNote.id ? <NoteEdit note={editedNote} onChangeInfo={onChangeInfo} /> : <span></span>}
         </NoteModal>
 
     </section>
