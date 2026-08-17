@@ -10,9 +10,17 @@
     flex-grow: 1;
     font-family: var(--mail-font-main);
     font-size: var(--mail-fs-body);
+    font-size-adjust: var(--mail-x-height-adjust);
     line-height: var(--mail-lh-body);
     color: var(--mail-clr-text);
     background-color: var(--mail-clr-bg-app);
+}
+
+/* icon fonts inherit the adjust and get resized against their own metrics, so
+   both icon sets opt out */
+.mail-index i,
+.mail-index .material-symbols-outlined {
+    font-size-adjust: none;
 }
 
 /* the list is a surface floating on the app background - gmail rounds only the

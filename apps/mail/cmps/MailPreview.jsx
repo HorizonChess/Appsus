@@ -27,7 +27,7 @@ export function MailPreview({ mail, onToggleStar, onSetRead, onSelectMail, onRem
             className="star-btn"
             title={isStared ? 'Starred' : 'Not starred'}
             onClick={onStarClick}>
-            <i className={isStared ? 'fa-solid fa-star is-stared' : 'fa-regular fa-star'}></i>
+            <span className={`material-symbols-outlined ${isStared ? 'is-stared' : ''}`}>star</span>
         </button>
 
         <span className="mail-sender">{fromName || from}</span>

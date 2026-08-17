@@ -1,12 +1,13 @@
 import { MAIL_FOLDERS } from '../services/mail.service.js'
 
 // the service owns which folders exist, this owns only how they look
+// icon names are material symbols ligatures - the same set gmail draws from
 const FOLDER_DISPLAY = {
-    inbox: { label: 'Inbox', icon: 'fa-inbox' },
-    starred: { label: 'Starred', icon: 'fa-star' },
-    sent: { label: 'Sent', icon: 'fa-paper-plane' },
-    draft: { label: 'Drafts', icon: 'fa-file-lines' },
-    trash: { label: 'Trash', icon: 'fa-trash' },
+    inbox: { label: 'Inbox', icon: 'inbox' },
+    starred: { label: 'Starred', icon: 'star' },
+    sent: { label: 'Sent', icon: 'send' },
+    draft: { label: 'Drafts', icon: 'draft' },
+    trash: { label: 'Trash', icon: 'delete' },
 }
 
 // gmail badges unread on inbox but total on drafts, and nothing anywhere else.
@@ -21,7 +22,7 @@ export function MailFolderList({ activeStatus, counts = {}, onSetStatus, onOpenC
     return <nav className="mail-folder-list">
 
         <button className="mail-compose-btn" onClick={onOpenCompose}>
-            <i className="fa-solid fa-pen"></i>
+            <span className="material-symbols-outlined">edit</span>
             <span>Compose</span>
         </button>
 
@@ -35,7 +36,7 @@ export function MailFolderList({ activeStatus, counts = {}, onSetStatus, onOpenC
                     className={`mail-folder ${status === activeStatus ? 'is-active' : ''}`}
                     onClick={() => onSetStatus(status)}>
 
-                    <i className={`fa-solid ${icon}`}></i>
+                    <span className="material-symbols-outlined">{icon}</span>
                     <span className="mail-folder-label">{label}</span>
                     {badge > 0 && <span className="mail-folder-count">{badge}</span>}
 

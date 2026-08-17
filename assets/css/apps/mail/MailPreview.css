@@ -39,7 +39,14 @@
     cursor: pointer;
 }
 
+/* the class rule sets 24px, so the star has to be sized back down here */
+.mail-preview .star-btn .material-symbols-outlined {
+    font-size: var(--mail-star-size);
+}
+
+/* one glyph for both states - starring fills it rather than swapping the icon */
 .mail-preview .star-btn .is-stared {
+    font-variation-settings: 'FILL' 1;
     color: var(--mail-clr-star-on);
 }
 

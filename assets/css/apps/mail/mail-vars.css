@@ -7,6 +7,10 @@
     --mail-lh-body: 20px;
     --mail-fw-read: 400;
     --mail-fw-unread: 700;
+    /* gmail renders in google sans, which is proprietary - we fall back to
+       roboto, whose smaller x-height is why the same 14px reads smaller. this
+       scales roboto up to match. tune by eye, it is not a measured value */
+    --mail-x-height-adjust: .52;
 
     --mail-clr-bg-app: rgb(248, 250, 253);
     --mail-clr-surface: rgb(255, 255, 255);
@@ -27,9 +31,10 @@
     --mail-clr-placeholder: rgb(116, 119, 117);
 
     --mail-clr-accent: rgb(11, 87, 208);
-    --mail-clr-star-on: ;
-    --mail-clr-star-off: ;
-    --mail-clr-danger: ;
+    /* gmail's star is a sprite image, so this cannot be snapped from css - pick
+       it off a starred row with the devtools eyedropper. UNVERIFIED */
+    --mail-clr-star-on: rgb(244, 180, 0);
+    --mail-clr-star-off: var(--mail-clr-text-secondary);
 
     --mail-clr-border: ;
     --mail-clr-row-line: rgba(100, 121, 143, .12);
@@ -66,6 +71,8 @@
     --mail-compose-header-h: 40px;
     --mail-btn-h: 36px;
     --mail-star-size: 20px;
+    --mail-icon-size: 20px;
+    --mail-compose-icon-size: 24px;
     --mail-col-sender-w: 168px;
     --mail-col-sender-indent: 32px;
     --mail-col-date-w: 56px;

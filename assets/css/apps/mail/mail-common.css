@@ -22,6 +22,14 @@
     background-color: var(--mail-clr-hover);
 }
 
+/* the ua font shorthand on form controls also resets font-size-adjust, so the
+   nav buttons stay unscaled while the list rows around them scale */
+.mail-index button,
+.mail-index input,
+.mail-index textarea {
+    font-size-adjust: inherit;
+}
+
 /* form controls never inherit font-family, so without this the editor renders
    in the browser default while everything around it is Google Sans */
 .mail-editor-field,
