@@ -22,6 +22,25 @@
     background-color: var(--mail-clr-hover);
 }
 
+.mail-icon-btn .material-symbols-outlined {
+    font-size: var(--mail-icon-size);
+}
+
+/* starring fills the glyph rather than swapping the icon - shared by the list
+   row and the open mail */
+.mail-index .is-stared {
+    font-variation-settings: 'FILL' 1;
+    color: var(--mail-clr-star-on);
+}
+
+/* the ua font shorthand on form controls also resets font-size-adjust, so the
+   nav buttons stay unscaled while the list rows around them scale */
+.mail-index button,
+.mail-index input,
+.mail-index textarea {
+    font-size-adjust: inherit;
+}
+
 /* form controls never inherit font-family, so without this the editor renders
    in the browser default while everything around it is Google Sans */
 .mail-editor-field,
@@ -31,6 +50,18 @@
     font-family: inherit;
     font-size: var(--mail-fs-body);
     color: var(--mail-clr-text);
+}
+
+/* chrome paints its default black focus ring here otherwise - gmail's fields
+   show nothing on focus */
+.mail-editor-field:focus,
+.mail-editor-body:focus {
+    outline: none;
+}
+
+.mail-editor-field::placeholder,
+.mail-editor-body::placeholder {
+    color: var(--mail-clr-placeholder);
 }
 
 .mail-editor-body {

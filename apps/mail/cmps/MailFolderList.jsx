@@ -1,12 +1,16 @@
-import { MAIL_FOLDERS } from '../services/mail.service.js'
+import { MAIL_FOLDERS, mailService } from '../services/mail.service.js'
+import { eventBusService } from '../../../services/event-bus.service.js'
 
-// the service owns which folders exist, this owns only how they look
+const { useState, useEffect } = React
+const { useSearchParams, useNavigate } = ReactRouterDOM
+
+// icon names are material symbols ligatures - the same set gmail draws from
 const FOLDER_DISPLAY = {
-    inbox: { label: 'Inbox', icon: 'fa-inbox' },
-    starred: { label: 'Starred', icon: 'fa-star' },
-    sent: { label: 'Sent', icon: 'fa-paper-plane' },
-    draft: { label: 'Drafts', icon: 'fa-file-lines' },
-    trash: { label: 'Trash', icon: 'fa-trash' },
+    inbox: { label: 'Inbox', icon: 'inbox' },
+    starred: { label: 'Starred', icon: 'star' },
+    sent: { label: 'Sent', icon: 'send' },
+    draft: { label: 'Drafts', icon: 'draft' },
+    trash: { label: 'Trash', icon: 'delete' },
 }
 
 // gmail badges unread on inbox but total on drafts, and nothing anywhere else.
@@ -17,11 +21,41 @@ function getBadge(status, { total = 0, unread = 0 } = {}) {
     return 0
 }
 
-export function MailFolderList({ activeStatus, counts = {}, onSetStatus, onOpenCompose }) {
+// takes no props - the sidebar shows on both the list and the open mail, and
+// passing it down from each of them was the whole reason details had to nest
+export function MailFolderList() {
+    const [counts, setCounts] = useState({})
+    const [searchParams] = useSearchParams()
+    const navigate = useNavigate()
+
+    const activeStatus = searchParams.get('status') || 'inbox'
+
+    useEffect(() => {
+        loadCounts()
+        return eventBusService.on('mails-changed', loadCounts)
+    }, [])
+
+    function loadCounts() {
+        mailService.getFolderCounts()
+            .then(setCounts)
+            .catch(err => console.log('Had issues loading folder counts', err))
+    }
+
+    // switching folder always lands on the list, even from an open mail
+    function onSetStatus(status) {
+        navigate(`/mail?status=${status}`)
+    }
+
+    function onOpenCompose() {
+        const nextParams = new URLSearchParams(searchParams)
+        nextParams.set('compose', 'new')
+        navigate({ search: `?${nextParams}` })
+    }
+
     return <nav className="mail-folder-list">
 
         <button className="mail-compose-btn" onClick={onOpenCompose}>
-            <i className="fa-solid fa-pen"></i>
+            <span className="material-symbols-outlined">edit</span>
             <span>Compose</span>
         </button>
 
@@ -35,7 +69,7 @@ export function MailFolderList({ activeStatus, counts = {}, onSetStatus, onOpenC
                     className={`mail-folder ${status === activeStatus ? 'is-active' : ''}`}
                     onClick={() => onSetStatus(status)}>
 
-                    <i className={`fa-solid ${icon}`}></i>
+                    <span className="material-symbols-outlined">{icon}</span>
                     <span className="mail-folder-label">{label}</span>
                     {badge > 0 && <span className="mail-folder-count">{badge}</span>}
 

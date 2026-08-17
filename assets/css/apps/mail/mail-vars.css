@@ -3,50 +3,80 @@
     --mail-font-main: 'Google Sans', Roboto, RobotoDraft, Helvetica, Arial, sans-serif;
     --mail-fs-body: 14px;
     --mail-fs-small: 12px;
-    --mail-fs-subject: ;
+    --mail-fs-subject: 14px;
+    --mail-fs-title: 22px;
+    --mail-fs-message: 13px;
     --mail-lh-body: 20px;
+    --mail-lh-title: 28px;
     --mail-fw-read: 400;
     --mail-fw-unread: 700;
+    /* gmail renders in google sans, which is proprietary - we fall back to
+       roboto, whose smaller x-height is why the same 14px reads smaller. this
+       scales roboto up to match. tune by eye, it is not a measured value */
+    --mail-x-height-adjust: .52;
 
     --mail-clr-bg-app: rgb(248, 250, 253);
     --mail-clr-surface: rgb(255, 255, 255);
     --mail-clr-surface-read: rgb(242, 246, 252);
-    --mail-clr-hover: ;
-    --mail-clr-search-bg: ;
-    --mail-clr-nav-active: ;
-    --mail-clr-compose-bg: ;
+    /* measured off gmail's div.TO row wrapper - stays translucent so it can sit
+       over both the nav background and the active row */
+    --mail-clr-hover: rgba(32, 33, 36, .06);
+    --mail-clr-search-bg: rgb(233, 238, 246);
+    --mail-clr-nav-active: rgb(211, 227, 253);
+    --mail-clr-compose-bg: rgb(194, 231, 255);
     --mail-clr-compose-header: rgb(242, 246, 252);
 
     --mail-clr-text: rgb(32, 33, 36);
-    --mail-clr-text-secondary: ;
+    /* gmail uses one grey for both the date and the snippet - same value as
+       --mail-clr-text-muted, kept separate only so the names stay meaningful */
+    --mail-clr-text-secondary: rgb(95, 99, 104);
     --mail-clr-text-muted: rgb(95, 99, 104);
+    --mail-clr-placeholder: rgb(116, 119, 117);
 
     --mail-clr-accent: rgb(11, 87, 208);
-    --mail-clr-star-on: ;
-    --mail-clr-star-off: ;
-    --mail-clr-danger: ;
+    /* gmail's star is a sprite image, so this cannot be snapped from css - pick
+       it off a starred row with the devtools eyedropper. UNVERIFIED */
+    --mail-clr-star-on: rgb(244, 180, 0);
+    --mail-clr-star-off: var(--mail-clr-text-secondary);
 
     --mail-clr-border: ;
     --mail-clr-row-line: rgba(100, 121, 143, .12);
+    --mail-clr-row-edge: rgb(218, 220, 224); /* UNVERIFIED - snap it */
     --mail-shadow-row-line: inset 0 -1px 0 0 var(--mail-clr-row-line);
-    --mail-shadow-row-hover: ;
+    --mail-shadow-row-hover:
+        inset 1px 0 0 var(--mail-clr-row-edge),
+        inset -1px 0 0 var(--mail-clr-row-edge),
+        0 1px 2px 0 rgba(60, 64, 67, .3),
+        0 1px 3px 1px rgba(60, 64, 67, .15);
+    --mail-shadow-btn-rest: 0 1px 2px 0 rgba(0, 0, 0, 0), 0 1px 3px 1px rgba(0, 0, 0, 0);
+    --mail-shadow-btn-hover: 0 1px 2px 0 rgba(60, 64, 67, .3), 0 1px 3px 1px rgba(60, 64, 67, .15); /* UNVERIFIED - snap it */
     --mail-shadow-modal: rgba(0, 0, 0, .14) 0 8px 10px 1px, rgba(0, 0, 0, .12) 0 3px 14px 2px, rgba(0, 0, 0, .2) 0 5px 5px -3px;
+    --mail-transition-btn: box-shadow .08s linear;
 
     --mail-radius-sm: ;
     --mail-radius-md: 8px;
     --mail-radius-lg: ;
     --mail-radius-pill: 18px;
-    --mail-radius-nav: ;
-    --mail-sidebar-w: ;
+    --mail-radius-btn: 16px;
+    --mail-radius-nav: 0 16px 16px 0;
+    --mail-sidebar-w: 256px;
     --mail-row-h: 40px;
-    --mail-nav-item-h: ;
-    --mail-icon-btn-size: ;
-    --mail-avatar-size: ;
+    --mail-nav-item-h: 32px;
+    /* the pill stops short of the sidebar edge - 240 wide in a 256 nav */
+    --mail-nav-pill-inset: 16px;
+    --mail-compose-btn-h: 56px;
+    /* must fit inside --mail-row-h - the list rows swap the date for these on
+       hover, so anything taller makes the row grow */
+    --mail-icon-btn-size: 40px;
+    --mail-avatar-size: 40px;
+    --mail-toolbar-h: 48px;
     --mail-compose-w: 600px;
     --mail-compose-h: 616px;
     --mail-compose-header-h: 40px;
     --mail-btn-h: 36px;
     --mail-star-size: 20px;
+    --mail-icon-size: 20px;
+    --mail-compose-icon-size: 24px;
     --mail-col-sender-w: 168px;
     --mail-col-sender-indent: 32px;
     --mail-col-date-w: 56px;

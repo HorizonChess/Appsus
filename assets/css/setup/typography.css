@@ -1,10 +1,41 @@
 /* ROBOTO */
 @font-face {
     font-family: roboto;
+    font-weight: 400;
     src: url('../../fonts/roboto/Roboto-Regular.ttf');
+}
+/* without these the browser fakes 500 and 700 by smearing the regular cut */
+@font-face {
+    font-family: roboto;
+    font-weight: 500;
+    src: url('../../fonts/roboto/roboto-latin-500-normal.woff2') format('woff2');
+}
+@font-face {
+    font-family: roboto;
+    font-weight: 700;
+    src: url('../../fonts/roboto/roboto-latin-700-normal.woff2') format('woff2');
 }
 @font-face {
     font-family: roboto-black;
     src: url('../../fonts/roboto/Roboto-Black.ttf');
+}
+
+/* MATERIAL SYMBOLS - self hosted, subset to the icons we use. adding a new icon
+   means re-downloading the subset */
+@font-face {
+    font-family: 'Material Symbols Outlined';
+    font-weight: 100 700;
+    /* block, not swap - swap flashes the ligature name as literal text */
+    font-display: block;
+    src: url('../../fonts/material-symbols/MaterialSymbolsOutlined-subset.woff2') format('woff2');
+}
+
+/* weight and line-height are inherited properties the mail app overrides, so
+   the icons have to opt back out of them */
+.material-symbols-outlined {
+    font-family: 'Material Symbols Outlined';
+    font-weight: normal;
+    font-size: 24px;
+    line-height: 1;
 }
 

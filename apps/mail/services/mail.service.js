@@ -2,6 +2,7 @@
 
 import { utilService } from '../../../services/util.service.js'
 import { storageService } from '../../../services/async-storage.service.js'
+import { eventBusService } from '../../../services/event-bus.service.js'
 import { demoMails } from '../data/demo.data.js'
 
 
@@ -29,6 +30,7 @@ export const mailService = {
     getEmptyMail,
     getDefaultFilter,
     getFolderCounts,
+    isInFolder,
     formatMailDate,
     loggedinUser,
     MAIL_LABELS,
@@ -59,13 +61,14 @@ function remove(mailId) {
             if (mail.removedAt) return storageService.remove(MAIL_KEY, mailId)
             return storageService.put(MAIL_KEY, { ...mail, removedAt: Date.now() })
         })
+        .then(_notifyChange)
 }
 
 function save(mail) {
     if (mail.id) {
-        return storageService.put(MAIL_KEY, mail)
+        return storageService.put(MAIL_KEY, mail).then(_notifyChange)
     } else {
-        return storageService.post(MAIL_KEY, mail)
+        return storageService.post(MAIL_KEY, mail).then(_notifyChange)
     }
 }
 
@@ -80,9 +83,12 @@ function send(mail) {
     })
 }
 
-function toggleStar(mailId) {
+// takes the value to set, not a flip - a blind flip reads storage while the ui
+// flips local state, so two fast clicks drift the two apart
+function toggleStar(mailId, isStared) {
     return storageService.get(MAIL_KEY, mailId)
-        .then(mail => storageService.put(MAIL_KEY, { ...mail, isStared: !mail.isStared }))
+        .then(mail => storageService.put(MAIL_KEY, { ...mail, isStared }))
+        .then(_notifyChange)
 }
 
 // takes the value to set, not a flip - so "opening a mail" can just ask for
@@ -90,6 +96,31 @@ function toggleStar(mailId) {
 function toggleRead(mailId, isRead) {
     return storageService.get(MAIL_KEY, mailId)
         .then(mail => storageService.put(MAIL_KEY, { ...mail, isRead }))
+        .then(_notifyChange)
+}
+
+// the folder counts live in the sidebar now, which has no way of knowing a write
+// happened somewhere else in the app
+function _notifyChange(res) {
+    eventBusService.emit('mails-changed')
+    return res
+}
+
+// a mail's folder comes from its fields, it is never stored
+function isInFolder(mail, status) {
+    const isTrashed = mail.removedAt !== null
+    if (status === 'trash') return isTrashed
+    if (isTrashed) return false
+
+    const isSent = Boolean(mail.sentAt)
+
+    switch (status) {
+        case 'draft': return !isSent
+        case 'sent': return isSent && mail.from === loggedinUser.email
+        case 'inbox': return isSent && mail.to === loggedinUser.email
+        case 'starred': return mail.isStared
+        default: return true
+    }
 }
 
 // Feeds the badges in the folder list: { inbox: { total, unread }, ... }
@@ -99,7 +130,7 @@ function getFolderCounts() {
             const counts = {}
 
             MAIL_FOLDERS.forEach(status => {
-                const folderMails = mails.filter(mail => _isInFolder(mail, status))
+                const folderMails = mails.filter(mail => isInFolder(mail,status))
                 counts[status] = {
                     total: folderMails.length,
                     unread: folderMails.filter(mail => !mail.isRead).length,
@@ -110,8 +141,7 @@ function getFolderCounts() {
         })
 }
 
-// no sentAt is what puts it in the Draft folder, and the nulls are load bearing -
-// _isInFolder reads missing fields as "not null", which would file it under trash
+// no sentAt puts it in Draft; removedAt must be null, not missing
 function getEmptyMail({ to = '', subject = '', body = '' } = {}) {
     return {
         to,
@@ -162,23 +192,8 @@ function formatMailDate(timestamp) {
 
 // ---------------------------------------------------------------- privates
 
-// inbox / sent / draft / trash are exclusive - a mail is in exactly one of them,
-// starred is not exclusive, it is a view over the others, so a starred inbox
-// mail correctly shows up in both.
-function _isInFolder(mail, status) {
-    switch (status) {
-        case 'trash': return mail.removedAt !== null
-        case 'draft': return mail.removedAt === null && !mail.sentAt
-        case 'sent': return mail.removedAt === null && !!mail.sentAt && mail.from === loggedinUser.email
-        case 'inbox': return mail.removedAt === null && !!mail.sentAt && mail.to === loggedinUser.email
-        case 'starred': return mail.removedAt === null && mail.isStared
-        case 'all': return mail.removedAt === null
-        default: return true
-    }
-}
-
 function _filterMails(mails, criteria) {
-    mails = mails.filter(mail => _isInFolder(mail, criteria.status))
+    mails = mails.filter(mail => isInFolder(mail,criteria.status))
 
     if (criteria.txt) {
         const txt = criteria.txt.toLowerCase()
