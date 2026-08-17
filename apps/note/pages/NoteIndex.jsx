@@ -16,7 +16,7 @@ export function NoteIndex() {
     const [isShown, setIsShown] = useState(false)
     const [editedNote, setEditedNote] = useState(noteService.getEmptyNote())
 
-    console.log('editedNote',editedNote)
+    console.log('editedNote', editedNote)
     useEffect(() => {
         noteService.query({})
             .then(notes => setNotes(notes))
@@ -25,7 +25,7 @@ export function NoteIndex() {
     function onChangeType(type) {
         const emptyTodo = { txt: '', isDone: false }
 
-        setEditedNote({ ...editedNote, type, info: type === 'NoteTodos' ? ({ title:'', todos: [emptyTodo] }) :( { title: '', txt: '' } )})
+        setEditedNote({ ...editedNote, type, info: type === 'NoteTodos' ? ({ title: '', todos: [emptyTodo] }) : ({ title: '', txt: '' }) })
 
     }
 
@@ -36,7 +36,7 @@ export function NoteIndex() {
             setEditedNote(prev => ({ ...prev, info: newInfo }))
         } else {
             const note = notes.find(note => note.id === noteId)
-            console.log('note',note)
+            console.log('note', note)
             updateNote({ ...note, info: newInfo })
 
         }
@@ -101,11 +101,12 @@ export function NoteIndex() {
 
 
     function onOpenModal(noteId) {
-        noteService.get(noteId)
         setEditedNote(notes.find(note => note.id === noteId))
+        eventBusService.emit('note-edit')
+        noteService.get(noteId)
         console.log('Modal has opened...')
         setIsShown(true)
-        eventBusService.emit('note-edit')
+
     }
 
     function onCloseModal() {

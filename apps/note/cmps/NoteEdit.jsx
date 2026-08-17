@@ -10,6 +10,7 @@ import { TitleEditor } from "./TitleEditor.jsx"
 
 export function NoteEdit({ note, updateNote, onChangeInfo }) {
 
+    console.log('note',note)
     function handleChange(info,noteId) {
         onChangeInfo(info,noteId)
     }

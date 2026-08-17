@@ -12,15 +12,16 @@ export function NoteComposer({ note, onChangeInfo, onChangeType, addNote }) {
 
     console.log('isExpanded', isExpanded)
 
-    useEffect(() => {
-        onChangeType(noteType)
-    }, [noteType])
+    // useEffect(() => {
+    //     onChangeType(noteType)
+    // }, [noteType])
 
     useEffect(() => {
         eventBusService.on('note-edit', collapseComposer)
     }, [])
 
     function collapseComposer(msg) {
+        setNoteType('NoteTxt')
         setIsExpanded(false)
 
     }
@@ -31,6 +32,7 @@ export function NoteComposer({ note, onChangeInfo, onChangeType, addNote }) {
 
     function onChangeNoteType(type) {
         setNoteType(type)
+        onChangeType(type)
     }
 
     function onSubmit() {
