@@ -1,9 +1,17 @@
-export function TitleEditor({ info, onChangeTitle }) {
-    console.log('info',info)
-    return <input
+export function TitleEditor({ info, onChangeTitle, isEditMode }) {
+
+    if (!isEditMode) return <input
         type="text"
-        placeholder="Enter title..."
+        contentEditable={false}
         className="note-title"
         value={info.title}
-        onChange={ev => onChangeTitle({ ...info, title: ev.target.value })} />
+        readOnly={true} />
+
+    return <input
+        type="text"
+        contentEditable={isEditMode}
+        placeholder={"Enter title..."}
+        className="note-title"
+        value={info.title}
+        onChange={isEditMode ? ev => onChangeTitle({ ...info, title: ev.target.value }) : ''} />
 }

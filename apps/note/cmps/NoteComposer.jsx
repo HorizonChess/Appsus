@@ -37,19 +37,20 @@ export function NoteComposer({ note, onChangeInfo, onChangeType, addNote }) {
     }
 
     return < section onClick={onExpandComposer} className="note-composer">
-        <TitleEditor info={note.info} onChangeTitle={handleChange} />
+        <TitleEditor info={note.info} onChangeTitle={handleChange} isEditMode={true} />
 
 
         <DynamicEditor
             key={`note#${note.id}-editor`}
             cmpType={noteType}
             info={note.info}
+            isEditMode={true}
             onChangeVal={handleChange} />
 
 
         <ComposerToolbar onChangeNoteType={onChangeNoteType} />
 
-        <button  onClick={onSubmit}>
+        <button onClick={onSubmit}>
             <i className="fa-solid fa-arrow-right-to-bracket"></i>
         </button>
 

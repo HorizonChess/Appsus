@@ -106,6 +106,7 @@ figure {
     align-items: center;
 }
 
+.note-todo-txt:has(+ .note-todo-checkbox:checked)
 .note-txt:has(+ .note-todo-checkbox:checked),
 input:has(+ .note-todo-checkbox:checked) {
     text-decoration: line-through;
@@ -152,4 +153,9 @@ input:has(+ .note-todo-checkbox:checked) {
 
 .note-media {
     justify-self: center;
+}
+
+.note-todo-txt{
+    border: none;
+    background-color: transparent;
 }

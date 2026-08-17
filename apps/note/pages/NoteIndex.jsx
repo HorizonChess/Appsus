@@ -14,7 +14,7 @@ export function NoteIndex() {
     const [notes, setNotes] = useState([])
     const [isShown, setIsShown] = useState(false)
     const [editedNote, setEditedNote] = useState(noteService.getEmptyNote())
-    console.log('NoteIndex --> editedNote',editedNote)
+
     useEffect(() => {
         noteService.query({})
             .then(notes => setNotes(notes))
@@ -34,6 +34,7 @@ export function NoteIndex() {
             setEditedNote(prev => ({ ...prev, info: newInfo }))
         } else {
             const note = notes.find(note => note.id === noteId)
+            console.log('note',note)
             updateNote({ ...note, info: newInfo })
 
         }

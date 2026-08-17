@@ -14,7 +14,7 @@ export function NoteList({ notes, updateNote, onRemoveNote, onChangeStyle,onOpen
 
                     <button
                         className="remove-note-btn"
-                        onClick={() => onRemoveNote(note.id)}><i className="fa-solid fa-trash-can"></i></button>
+                        onClick={() => onRemoveNote(note.id)}>X</button>
 
                     <div className='note-toolbar'>
                         {/* <button onClick={ev => onChangeStyle(ev,note)} className="toolbar-btn"><i className="fa-solid fa-palette"></i></button> */}
