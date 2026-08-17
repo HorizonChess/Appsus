@@ -1,4 +1,5 @@
 export function TitleEditor({ info, onChangeTitle }) {
+    console.log('info',info)
     return <input
         type="text"
         placeholder="Enter title..."

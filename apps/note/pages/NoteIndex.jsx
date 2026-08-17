@@ -14,7 +14,7 @@ export function NoteIndex() {
     const [notes, setNotes] = useState([])
     const [isShown, setIsShown] = useState(false)
     const [editedNote, setEditedNote] = useState(noteService.getEmptyNote())
-
+    console.log('NoteIndex --> editedNote',editedNote)
     useEffect(() => {
         noteService.query({})
             .then(notes => setNotes(notes))
@@ -23,13 +23,14 @@ export function NoteIndex() {
     function onChangeType(type) {
         const emptyTodo = { txt: '', isDone: false }
 
-        setEditedNote({ ...editedNote, type, info: type === 'NoteTodos' ? { title:'', todos: [emptyTodo] } : { title: '', txt: '' } })
+        setEditedNote({ ...editedNote, type, info: type === 'NoteTodos' ? ({ title:'', todos: [emptyTodo] }) :( { title: '', txt: '' } )})
 
     }
 
     function onChangeInfo(newInfo, noteId) {
         if (!noteId) {
             updateNote({ ...editedNote, info: newInfo })
+            console.log('hi')
             setEditedNote(prev => ({ ...prev, info: newInfo }))
         } else {
             const note = notes.find(note => note.id === noteId)

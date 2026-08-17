@@ -6,6 +6,7 @@ import { ComposerToolbar } from "./ComposerToolbar.jsx"
 
 export function NoteComposer({ note, onChangeInfo, onChangeType, addNote }) {
     const [noteType, setNoteType] = useState('NoteTxt')
+    const [isExpanded, setIsExpanded] = useState(false)
 
     useEffect(() => {
         onChangeType(noteType)
@@ -16,7 +17,6 @@ export function NoteComposer({ note, onChangeInfo, onChangeType, addNote }) {
     }
 
     function onChangeNoteType(type) {
-        onChangeInfo({})
         setNoteType(type)
     }
 
@@ -26,8 +26,19 @@ export function NoteComposer({ note, onChangeInfo, onChangeType, addNote }) {
 
     }
 
-    return <section className="note-composer">
+    function onExpandComposer() {
+        setIsExpanded(true)
+    }
+
+    if (!isExpanded) {
+        return < section onClick={onExpandComposer} className="note-composer">
+            <h3>Write a note...</h3>
+        </section>
+    }
+
+    return < section onClick={onExpandComposer} className="note-composer">
         <TitleEditor info={note.info} onChangeTitle={handleChange} />
+
 
         <DynamicEditor
             key={`note#${note.id}-editor`}
@@ -35,9 +46,12 @@ export function NoteComposer({ note, onChangeInfo, onChangeType, addNote }) {
             info={note.info}
             onChangeVal={handleChange} />
 
+
         <ComposerToolbar onChangeNoteType={onChangeNoteType} />
 
-        <button onClick={onSubmit}>Submit</button>
+        <button  onClick={onSubmit}>
+            <i className="fa-solid fa-arrow-right-to-bracket"></i>
+        </button>
 
     </section>
 }

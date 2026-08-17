@@ -18,7 +18,7 @@ export function NoteList({ notes, updateNote, onRemoveNote, onChangeStyle,onOpen
 
                     <div className='note-toolbar'>
                         {/* <button onClick={ev => onChangeStyle(ev,note)} className="toolbar-btn"><i className="fa-solid fa-palette"></i></button> */}
-                        <button onClick={() => onOpenModal(note.id)} className="toolbar-btn"><i class="fa-solid fa-pencil"></i></button>
+                        <button onClick={() => onOpenModal(note.id)} className="toolbar-btn"><i className="fa-solid fa-pencil"></i></button>
                     </div>
 
 

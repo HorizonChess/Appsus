@@ -37,7 +37,7 @@ function NoteTodos({ info, key, onChangeInfo,noteId }) {
         <NoteInputTxt txt={title} key={key} className={'note-title'} />
 
         {todos.map((todo, idx) => {
-            return <div className="todo-list" key={todo.txt}>
+            return <div className="prevew-todo-list" key={`preview-todo-${idx}`}>
                 <NoteInputTxt todo={todo} txt={todo.txt} key={key} className={'note-txt'} />
                 <NoteTodoCheckMark todo={todo} onChangeTodo={onChangeTodoCheck} idx={idx} className={'note-todo-checkbox'} />
             </div>
