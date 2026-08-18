@@ -16,7 +16,7 @@ export function NoteEdit({ note, updateNote, onChangeInfo }) {
     }
     
 
-    return <section>
+    return <section >
         <TitleEditor info={note.info} isEditMode={true} onChangeTitle={handleChange} />
 
         <DynamicNoteEdit

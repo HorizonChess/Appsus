@@ -1,29 +1,30 @@
 const { useRef, useEffect } = React
 
-export function NoteModal({ isShown, children, onClose = null }) {
-	const dialogRef = useRef(null)
+export function NoteModal({ isShown, children, onClose = null ,style}) {
+    const dialogRef = useRef(null)
 
     useEffect(() => {
-		if (isShown && dialogRef.current) dialogRef.current.showModal()
-		else if (dialogRef.current) dialogRef.current.close()
-	}, [isShown])
-    
+        if (isShown && dialogRef.current) dialogRef.current.showModal()
+        else if (dialogRef.current) dialogRef.current.close()
+    }, [isShown])
+
     function onCloseModal() {
         if (onClose) onClose()
-	}
+    }
 
-	return (
-		<dialog 
+    return (
+        <dialog
+            style={style}
             closedby="any"
             ref={dialogRef}
-            onCancel={onCloseModal} 
+            onCancel={onCloseModal}
             className="note-modal">
 
-                {/* <button 
+            {/* <button 
                     className="btn-close"
                     onClick={onCloseModal}>x</button> */}
 
-                { children }
-		</dialog>
-	)
+            {children}
+        </dialog>
+    )
 }

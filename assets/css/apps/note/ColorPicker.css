@@ -26,12 +26,6 @@
     display: none;
 }
 
-.color-picker form {
-    display: flex;
-
-    gap: 0.2em
-}
-
 .color-picker-label {
     position: relative;
     display: grid;
@@ -46,14 +40,6 @@
 }
 
 .color-picker-label.empty {
-    display: grid;
-    align-items: center;
-    justify-content: center;
-    text-align: center;
-    padding: 0.1em;
-    width: 25px;
-    height: 25px;
-    border-radius: 50%;
     outline: 2px solid rgb(169, 165, 165);
 }
 
@@ -77,17 +63,6 @@
     text-align: center;
     color: white;
     display: none;
-}
-
-
-
-
-.color-picker-label:has(+ .note-todo-checkbox:checked) {
-    outline: solid 2px rgb(161, 66, 244);
-}
-
-.color-picker label:has(+ .note-todo-checkbox:checked) .picker-option:not(.empty) {
-    display: unset;
 }
 
 
