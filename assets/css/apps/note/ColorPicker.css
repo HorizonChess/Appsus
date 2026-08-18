@@ -12,15 +12,23 @@
 .note-color-picker {
     position: absolute;
     z-index: 1000;
+
+    display: flex;
+    gap: 0.7em;
+
+    border: 1px solid rgb(221, 220, 220);
+    border-radius: 5px;
+    padding: 1em;
     background-color: white;
 }
 
-.color-picker note-todo-checkbox {
+.picker-option {
     display: none;
 }
 
 .color-picker form {
     display: flex;
+
     gap: 0.2em
 }
 
@@ -37,23 +45,23 @@
     outline: solid 2px rgb(178, 178, 178);
 }
 
-.color-picker-label .picker-option.empty {
+.color-picker-label.empty {
     display: grid;
     align-items: center;
     justify-content: center;
     text-align: center;
     padding: 0.1em;
-    width: 1em;
-    height: 1em;
+    width: 25px;
+    height: 25px;
     border-radius: 50%;
-    color: black;
+    outline: 2px solid rgb(169, 165, 165);
 }
 
-.color-picker-label:has(.picker-option):hover {
+.color-picker-label:hover {
     outline: solid 2px black;
 }
 
-.color-picker-label:has(.picker-option):has(+ .note-todo-checkbox:checked) {
+.color-picker-label:has(+ .picker-option:checked) {
     outline: solid 2px rgb(161, 66, 244);
 }
 

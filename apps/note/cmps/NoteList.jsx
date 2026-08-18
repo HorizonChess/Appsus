@@ -22,6 +22,7 @@ export function NoteList({ notes, updateNote, onRemoveNote, onChangeStyle, onOpe
 
     return <ul className="notes" >
         {notes.map(note => {
+            console.log('note.id',note.id)
             return <li key={note.id}>
                 <article key={note.id} className="note" style={note.style} >
                     <NotePreview
@@ -38,7 +39,7 @@ export function NoteList({ notes, updateNote, onRemoveNote, onChangeStyle, onOpe
                         <button onClick={() => onOpenModal(note.id)} className="toolbar-btn"><i className="fa-solid fa-pencil"></i></button>
                     </div>
 
-                    <ColorPicker isPickerShown={note.id === colorPickerId} key={`${note.id}-colorpicker`} onChangeStyle={ev => onChangeStyle(ev, note)} />
+                    <ColorPicker isPickerShown={note.id === colorPickerId} key={`${note.id}-colorpicker`} style={note.style} onChangeStyle={ev => onChangeStyle(ev, note)} />
                 </article>
 
             </li>
