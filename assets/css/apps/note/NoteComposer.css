@@ -39,7 +39,7 @@
 .submit-note-btn {
     border: none;
     background-color: transparent;
-    justify-self: end;
+    align-self: end;
     transition: 0.2s ease-in;
     opacity: 0.3
 }

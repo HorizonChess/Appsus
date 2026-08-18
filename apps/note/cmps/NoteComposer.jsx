@@ -66,8 +66,8 @@ export function NoteComposer({ note, onChangeInfo, onChangeType, addNote }) {
 
         <ComposerToolbar onChangeNoteType={onChangeNoteType} />
 
-        <button onClick={onSubmit}>
-            <i className="fa-solid fa-arrow-right-to-bracket"></i>
+        <button className="note-submit-btn" onClick={onSubmit}>
+            <i class="fa-solid fa-play"></i>
         </button>
 
     </section>

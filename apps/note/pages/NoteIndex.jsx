@@ -121,11 +121,13 @@ export function NoteIndex() {
         <NoteComposer note={editedNote} onChangeInfo={onChangeInfo} onChangeType={onChangeType} addNote={addNote} />
         <NoteList
             notes={notes}
+            editedNote={editedNote}
             updateNote={updateNote}
             onRemoveNote={removeNote}
             onChangeStyle={onChangeStyle}
             onOpenModal={onOpenModal}
-            onChangeInfo={onChangeInfo} />
+            onChangeInfo={onChangeInfo}
+/>
 
         <NoteModal
             isShown={isShown}
