@@ -14,3 +14,78 @@
     z-index: 1000;
     background-color: white;
 }
+
+.color-picker note-todo-checkbox {
+    display: none;
+}
+
+.color-picker form {
+    display: flex;
+    gap: 0.2em
+}
+
+.color-picker-label {
+    position: relative;
+    display: grid;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    font-size: 0.7em;
+}
+
+.color-picker-label:has(.picker-option.empty) {
+    outline: solid 2px rgb(178, 178, 178);
+}
+
+.color-picker-label .picker-option.empty {
+    display: grid;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 0.1em;
+    width: 1em;
+    height: 1em;
+    border-radius: 50%;
+    color: black;
+}
+
+.color-picker-label:has(.picker-option):hover {
+    outline: solid 2px black;
+}
+
+.color-picker-label:has(.picker-option):has(+ .note-todo-checkbox:checked) {
+    outline: solid 2px rgb(161, 66, 244);
+}
+
+.color-picker-label .picker-option:not(.empty) {
+    position: absolute;
+    top: -0.2em;
+    left: -0.2em;
+    background-color: rgb(161, 66, 244);
+    padding: 0.1em;
+    width: 1em;
+    height: 1em;
+    border-radius: 50%;
+    text-align: center;
+    color: white;
+    display: none;
+}
+
+
+
+
+.color-picker-label:has(+ .note-todo-checkbox:checked) {
+    outline: solid 2px rgb(161, 66, 244);
+}
+
+.color-picker label:has(+ .note-todo-checkbox:checked) .picker-option:not(.empty) {
+    display: unset;
+}
+
+
+.color-picker-label {
+    display: grid;
+    width: 25px;
+    height: 25px;
+    border-radius: 50%;
+}

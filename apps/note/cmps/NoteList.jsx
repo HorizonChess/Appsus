@@ -7,13 +7,10 @@ const { useState, useRef } = React
 export function NoteList({ notes, updateNote, onRemoveNote, onChangeStyle, onOpenModal, onChangeInfo }) {
     const [colorPickerId, setColoPickerId] = useState(null)
     const backdropRef = useRef()
-    console.log('colorPickerId', colorPickerId)
 
     function handleColorPickerOpen(ev, colorPickerId) {
-        console.log('ev', ev)
         ev.stopPropagation()
         setColoPickerId(colorPickerId)
-        console.log('backdropRef.current.styl.display', backdropRef.current.style.display)
         backdropRef.current.style.display = 'unset'
     }
 
@@ -22,16 +19,6 @@ export function NoteList({ notes, updateNote, onRemoveNote, onChangeStyle, onOpe
         backdropRef.current.style.display = 'none'
 
     }
-
-    // function handleClick(ev, noteId) {
-    //     ev.stopPropagation()
-    //     if (noteId) {
-    //         console.log('hi')
-    //         setColoPickerId(noteId)
-    //     }
-    //     else if (colorPickerId) setColoPickerId(null)
-    // }
-
 
     return <ul className="notes" >
         {notes.map(note => {
@@ -51,7 +38,7 @@ export function NoteList({ notes, updateNote, onRemoveNote, onChangeStyle, onOpe
                         <button onClick={() => onOpenModal(note.id)} className="toolbar-btn"><i className="fa-solid fa-pencil"></i></button>
                     </div>
 
-                    <ColorPicker isPickerShown={note.id === colorPickerId} key={`${note.id}-colorpicker`} />
+                    <ColorPicker isPickerShown={note.id === colorPickerId} key={`${note.id}-colorpicker`} onChangeStyle={ev => onChangeStyle(ev, note)} />
                 </article>
 
             </li>

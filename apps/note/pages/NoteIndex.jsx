@@ -74,6 +74,8 @@ export function NoteIndex() {
     }
 
     function onChangeStyle(ev, note) {
+        console.log('ev',ev)
+        console.log('note',note)
         const { target } = ev
         const { style } = note
         const newStyle = { ...style, backgroundColor: target.value }
