@@ -1,22 +1,38 @@
 const { useState, useRef, useEffect } = React
 import { colorOptions } from "../data/note-color-options.js"
-import { NoteToolbar } from "./NoteToolbar.jsx"
-import { NoteTodoCheckMark } from "./NoteTodoCheckmark.jsx"
-import { NoteInputTxt } from "./NoteInputTxt.jsx"
 
+import { ColorPicker } from "./ColorPicker.jsx"
 import { TxtEditor } from "./TxtEditor.jsx"
 import { TodosEditor } from "./TodosEditor.jsx"
 import { TitleEditor } from "./TitleEditor.jsx"
 
-export function NoteEdit({ note, updateNote, onChangeInfo }) {
+export function NoteEdit({ note, updateNote, onChangeInfo, onChangeStyle }) {
+    const [isColorPickerShown, setIsColorPickerShown] = useState(null)
+    const [noteEditStyle, setNoteEditStyle] = useState(note.style)
+    const backdropRef = useRef()
 
-    console.log('note',note)
-    function handleChange(info,noteId) {
-        onChangeInfo(info,noteId)
+    function handleChange(info, noteId) {
+        onChangeInfo(info, noteId)
     }
-    
 
-    return <section >
+    function handleColorPickerOpen(ev) {
+        ev.stopPropagation()
+        setIsColorPickerShown(true)
+        backdropRef.current.style.display = 'unset'
+    }
+
+    function handleColorPickerClose() {
+        setIsColorPickerShown(false)
+        backdropRef.current.style.display = 'none'
+
+    }
+
+    function handleColorChange(ev) {
+        setNoteEditStyle({ backgroundColor: ev.target.value })
+        onChangeStyle(ev, note)
+    }
+
+    return <section className="note-edit" style={noteEditStyle}>
         <TitleEditor info={note.info} isEditMode={true} onChangeTitle={handleChange} />
 
         <DynamicNoteEdit
@@ -28,9 +44,15 @@ export function NoteEdit({ note, updateNote, onChangeInfo }) {
             noteId={note.id}
         />
 
+        <div className='note-edit-toolbar'>
+            <button onClick={ev => handleColorPickerOpen(ev, note.id)} className="toolbar-btn"><i className="fa-solid fa-palette"></i></button>
+        </div>
+
+        <ColorPicker isPickerShown={isColorPickerShown} key={`${note.id}-colorpicker`} style={note.style} onChangeStyle={handleColorChange} />
+
+        <div className="color-picker-backdrop" onClick={handleColorPickerClose} ref={backdropRef}></div>
+
     </section>
-
-
 }
 
 function DynamicNoteEdit(props) {

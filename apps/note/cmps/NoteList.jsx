@@ -32,7 +32,7 @@ export function NoteList({ notes, updateNote, onRemoveNote, onChangeStyle, onOpe
 
                     <button
                         className="remove-note-btn"
-                        onClick={() => onRemoveNote(note.id)}><i class="fa-solid fa-circle-xmark"></i></button>
+                        onClick={() => onRemoveNote(note.id)}><i className="fa-solid fa-circle-xmark"></i></button>
 
                     <div className='note-toolbar'>
                         <button onClick={ev => handleColorPickerOpen(ev, note.id)} className="toolbar-btn"><i className="fa-solid fa-palette"></i></button>

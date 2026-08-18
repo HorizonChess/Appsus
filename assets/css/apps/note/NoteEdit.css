@@ -10,5 +10,27 @@ border-block-end: 1px solid grey;
 }
 
 .note-title{
+    align-self: start;
     margin-block-end:0.5em;
+}
+
+.note-edit{
+    position: relative;
+    box-sizing: border-box;
+    display: grid;
+    grid-template-rows: min-content min-content;
+    width: 100%;
+    min-height: 300px;
+    padding: 1em;
+}
+
+.note-edit-toolbar{
+    grid-row:4;
+    align-self: end;
+
+}
+
+.note-edit .note-color-picker{
+    bottom:20px;
+
 }

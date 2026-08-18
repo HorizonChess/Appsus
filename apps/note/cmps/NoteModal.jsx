@@ -1,6 +1,6 @@
 const { useRef, useEffect } = React
 
-export function NoteModal({ isShown, children, onClose = null ,style}) {
+export function NoteModal({ isShown, children, onClose = null }) {
     const dialogRef = useRef(null)
 
     useEffect(() => {
@@ -14,15 +14,10 @@ export function NoteModal({ isShown, children, onClose = null ,style}) {
 
     return (
         <dialog
-            style={style}
             closedby="any"
             ref={dialogRef}
             onCancel={onCloseModal}
             className="note-modal">
-
-            {/* <button 
-                    className="btn-close"
-                    onClick={onCloseModal}>x</button> */}
 
             {children}
         </dialog>

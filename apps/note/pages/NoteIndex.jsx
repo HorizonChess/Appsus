@@ -136,7 +136,7 @@ export function NoteIndex() {
             onClose={onCloseModal}
             style={editedNote.style}
         >
-            {editedNote && editedNote.id ? <NoteEdit note={editedNote} onChangeInfo={onChangeInfo} /> : <span></span>}
+            {editedNote && editedNote.id ? <NoteEdit note={{...editedNote}} onChangeInfo={onChangeInfo} onChangeStyle={onChangeStyle}/> : <span></span>}
         </NoteModal>
 
     </section>
