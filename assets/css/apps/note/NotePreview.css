@@ -59,7 +59,9 @@ input:has(+ .note-todo-checkbox:checked) {
     font-family: roboto-black;
     font-size: 1.25em;
 }
-
+.note-todo-checkbox{
+    display: none;
+}
 .note-todo-checkbox {
     appearance: none;
     background-color: transparent;

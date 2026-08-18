@@ -1,4 +1,4 @@
-export function TodosEditor({ info, onChangeVal, isEditMode,noteId }) {
+export function TodosEditor({ info, onChangeVal, isEditMode, noteId }) {
     const { todos } = info
 
     if (!todos) return
@@ -17,11 +17,31 @@ export function TodosEditor({ info, onChangeVal, isEditMode,noteId }) {
                     <input
                         type="checkbox"
                         checked={todo.isDone}
+                        id={`${noteId}-${idx}-checkbox`}
                         className="note-todo-checkbox"
                         onChange={ev => {
                             todo.isDone = !todo.isDone
-                            onChangeVal({ ...info },noteId)
+                            onChangeVal({ ...info }, noteId)
                         }} />
+
+                    <label
+                        htmlFor={`${noteId}-${idx}-checkbox`}
+                        style={{ display: `${ todo.isDone ? 'none':'block' }` }}>
+                        {/* {todo.isDone ?
+                            <i class="fa-regular fa-square-check"></i> :
+                            <i class="fa-regular fa-square"></i>} */}
+                        {<i class="fa-regular fa-square"></i>}
+                    </label>
+
+                    <label
+                        htmlFor={`${noteId}-${idx}-checkbox`}
+                        style={{ display: `${ todo.isDone ? 'block':'none' }` }}>
+                        {/* {todo.isDone ?
+                            <i class="fa-regular fa-square-check"></i> :
+                            <i class="fa-regular fa-square"></i>} */}
+                        { <i class="fa-regular fa-square-check"></i>}
+                    </label>
+
 
                 </li>
             })}
@@ -46,11 +66,12 @@ export function TodosEditor({ info, onChangeVal, isEditMode,noteId }) {
                         type="checkbox"
                         checked={todo.isDone}
                         className="note-todo-checkbox"
-                        onChange={ ev => {
+                        id={`${noteId}-${idx}-checkbox`}
+                        onChange={ev => {
                             todo.isDone = !todo.isDone
                             onChangeVal({ ...info })
-                        } } />
-
+                        }} />
+                    <label htmlFor={`${noteId}-${idx}-checkbox`}><i class="fa-regular fa-square-check"></i></label>
                 </li>
             })}
         </ul>

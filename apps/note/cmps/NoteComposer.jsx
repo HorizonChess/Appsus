@@ -39,7 +39,7 @@ export function NoteComposer({ note, onChangeInfo, onChangeType, addNote }) {
         setIsExpanded(!isExpanded)
         addNote()
         console.log('onSubmit')
-        // setNoteType('NoteTxt')
+        setNoteType('NoteTxt')
     }
 
     function onExpandComposer() {
@@ -47,12 +47,14 @@ export function NoteComposer({ note, onChangeInfo, onChangeType, addNote }) {
     }
 
     if (!isExpanded || note.id) {
-        return < section onClick={onExpandComposer} className="note-composer">
+        return < section onClick={onExpandComposer} className="note-composer collapsed">
             <h3>Write a note...</h3>
+            <ComposerToolbar onChangeNoteType={onChangeNoteType} />
+
         </section>
     }
 
-    return < section className="note-composer">
+    return < section className="note-composer expanded">
         <TitleEditor info={note.info} onChangeTitle={handleChange} isEditMode={true} />
 
 
@@ -64,7 +66,6 @@ export function NoteComposer({ note, onChangeInfo, onChangeType, addNote }) {
             onChangeVal={handleChange} />
 
 
-        <ComposerToolbar onChangeNoteType={onChangeNoteType} />
 
         <button className="note-submit-btn" onClick={onSubmit}>
             <i class="fa-solid fa-play"></i>

@@ -1,0 +1,9 @@
+.composer-toolbar{
+    background-color: transparent;
+    border: none;
+    justify-self: end;
+}
+
+.composer-toolbar .toolbar-btn{
+    font-size: 1em;
+}

@@ -21,6 +21,7 @@
 @import './apps/note/NoteComposer.css';
 @import './apps/note/ColorPicker.css';
 @import './apps/note/TodosEditor.css';
+@import './apps/note/ComposerToolbar.css';
 @import './apps/mail/mail-vars.css';
 @import './apps/mail/mail-common.css';
 @import './apps/mail/MailIndex.css';

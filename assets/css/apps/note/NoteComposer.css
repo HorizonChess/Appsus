@@ -9,6 +9,13 @@
     padding: 1em;
 }
 
+.note-composer.collapsed {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+
+}
+
 
 .add-txt {
     display: grid;
@@ -19,7 +26,7 @@
 }
 
 .add-input.title {
-        grid-row: 1;
+    grid-row: 1;
 
     font-size: 20px;
 }
@@ -56,15 +63,15 @@
     border: none;
     background-color: transparent;
     align-self: center;
-        transition: 0.2s ease-in;
+    transition: 0.2s ease-in;
     opacity: 0.3
 }
 
-input[type="file"]{
+input[type="file"] {
     display: none;
 }
 
-.note-add-toolbar{
-    grid-row:1;
+.note-add-toolbar {
+    grid-row: 1;
     justify-self: end;
 }
