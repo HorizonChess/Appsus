@@ -1,6 +1,7 @@
 import { mailService } from '../services/mail.service.js'
 import { MailCompose } from '../cmps/MailCompose.jsx'
 import { MailFolderList } from '../cmps/MailFolderList.jsx'
+import { MailFilter } from '../cmps/MailFilter.jsx'
 
 const { useState, useEffect } = React
 const { useParams, useNavigate, useSearchParams } = ReactRouterDOM
@@ -61,6 +62,7 @@ export function MailDetails() {
 
     // the sidebar renders either way, so it does not blink out while the mail loads
     if (!mail) return <section className="mail-index">
+        <MailFilter />
         <MailFolderList />
         <main className="mail-content"><div className="loader"></div></main>
     </section>
@@ -72,6 +74,8 @@ export function MailDetails() {
     const recipient = to === mailService.loggedinUser.email ? 'me' : to
 
     return <section className="mail-index">
+
+        <MailFilter />
 
         <MailFolderList />
 

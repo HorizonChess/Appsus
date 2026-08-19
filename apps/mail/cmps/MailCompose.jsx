@@ -56,8 +56,7 @@ export function MailCompose() {
         setMailToEdit(prevMail => ({ ...prevMail, [name]: value }))
     }
 
-    // closing only on success, so a failed send leaves the typed mail on screen.
-    // send() stamps sentAt, which is what moves it out of drafts and into sent
+    // close only on success, so a failed send keeps the typed mail
     function onSend(ev) {
         ev.preventDefault()
 

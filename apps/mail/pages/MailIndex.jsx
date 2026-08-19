@@ -3,6 +3,7 @@ import { eventBusService } from '../../../services/event-bus.service.js'
 import { MailList } from '../cmps/MailList.jsx'
 import { MailCompose } from '../cmps/MailCompose.jsx'
 import { MailFolderList } from '../cmps/MailFolderList.jsx'
+import { MailFilter } from '../cmps/MailFilter.jsx'
 
 const { useState, useEffect } = React
 const { useSearchParams, useNavigate } = ReactRouterDOM
@@ -13,18 +14,16 @@ export function MailIndex() {
     const navigate = useNavigate()
 
     const status = searchParams.get('status') || 'inbox'
+    const txt = searchParams.get('txt') || ''
 
     useEffect(() => {
         loadMails()
-        return eventBusService.on('mails-changed', () => loadMails(false))
-    }, [status])
+        return eventBusService.on('mails-changed', loadMails)
+    }, [status, txt])
 
-    // the loader is only for a folder switch - a refresh keeps the old rows up
-    // until the new ones arrive, so the list never blinks mid-action
-    function loadMails(isFolderSwitch = true) {
-        if (isFolderSwitch) setMails(null)
-
-        mailService.query({ status })
+    // never blanks - mails starts null, so the loader still covers the first load
+    function loadMails() {
+        mailService.query({ status, txt })
             .then(setMails)
             .catch(err => console.log('Had issues loading mails', err))
     }
@@ -79,6 +78,8 @@ export function MailIndex() {
     }
 
     return <section className="mail-index">
+
+        <MailFilter />
 
         <MailFolderList />
 
