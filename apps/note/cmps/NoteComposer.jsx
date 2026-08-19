@@ -24,9 +24,36 @@ export function NoteComposer({ note, onChangeInfo, onChangeType, addNote }) {
         onChangeInfo(info)
     }
 
-    function onChangeNoteType(type) {
-        setNoteType(type)
-        onChangeType(type)
+    function onChangeNoteType(type, ev) {
+        console.log(type)
+        if ((type) === 'NoteImg') {
+
+            const reader = new FileReader()
+
+            // Read and encode the file...
+            reader.readAsDataURL(ev.target.files[0])
+
+            // ...when finished encoding, create an <img /> from it...
+            reader.onload = function (event) {
+
+                // ...and when the img is ready, run the callback
+                img.onload = () => {
+                    setNoteType(type)
+                    handleChange({ ...info, url: event.target.result })
+                }
+
+            }
+
+        } else {
+            setNoteType(type)
+            onChangeType(type)
+            setIsExpanded(true)
+        }
+
+    }
+
+    function onImageUpload() {
+
     }
 
     function onSubmit() {
@@ -35,13 +62,15 @@ export function NoteComposer({ note, onChangeInfo, onChangeType, addNote }) {
         setNoteType('NoteTxt')
     }
 
-    function onExpandComposer() {
+    function onExpandComposer(ev) {
+        ev.preventDefault()
         setIsExpanded(true)
     }
 
     if (!isExpanded || note.id) {
-        return < section onClick={onExpandComposer} className="note-composer collapsed">
-            <h3 className="composer-placeholder">Write a note...</h3>
+        return < section className="note-composer collapsed">
+            <h3 className="composer-placeholder"
+                onClick={onExpandComposer}>Write a note...</h3>
             <ComposerToolbar onChangeNoteType={onChangeNoteType} />
 
         </section>
