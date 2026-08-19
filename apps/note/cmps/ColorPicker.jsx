@@ -3,7 +3,6 @@ const { useState } = React
 import { colorOptions } from "../data/note-color-options.js"
 
 export function ColorPicker({ isPickerShown, key, onChangeStyle, style }) {
-    console.log('key', key)
     if (!isPickerShown) return <span key={key}></span>
 
     return <div className="note-color-picker" key={key}>

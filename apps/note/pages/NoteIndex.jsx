@@ -30,12 +30,8 @@ export function NoteIndex() {
 
     function onTogglePinNote(note) {
         const updatedNote = { ...note, isPinned: !note.isPinned }
-
+        if (editedNote.id) setEditedNote(updatedNote)
         updateNote(updatedNote)
-        const updatedNotes = [...notes]
-        const updatedNoteIsx = notes.findIndex(note => note.id === updatedNote.id)
-        updatedNotes.splice(updatedNoteIsx, 1, updatedNote)
-        setNotes(updatedNotes)
     }
 
     function onChangeInfo(newInfo, noteId) {
@@ -127,7 +123,12 @@ export function NoteIndex() {
     return <section className="notes-container">
         <h1>Notes app</h1>
 
-        <NoteComposer note={editedNote} onChangeInfo={onChangeInfo} onChangeType={onChangeType} addNote={addNote} />
+        <NoteComposer
+            note={editedNote}
+            onChangeInfo={onChangeInfo}
+            onChangeType={onChangeType}
+            addNote={addNote} />
+
         <NoteList
             notes={notes}
             onTogglePinNote={onTogglePinNote}
@@ -144,7 +145,15 @@ export function NoteIndex() {
             onClose={onCloseModal}
             style={editedNote.style}
         >
-            {editedNote && editedNote.id ? <NoteEdit note={{ ...editedNote }} onChangeInfo={onChangeInfo} onChangeStyle={onChangeStyle} /> : <span></span>}
+            {editedNote && editedNote.id ?
+
+                <NoteEdit
+                    note={{ ...editedNote }}
+                    onChangeInfo={onChangeInfo}
+                    onChangeStyle={onChangeStyle}
+                    onTogglePinNote={onTogglePinNote} />
+                :
+                <span></span>}
         </NoteModal>
 
     </section>

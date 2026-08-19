@@ -6,9 +6,12 @@ import { TxtEditor } from "./TxtEditor.jsx"
 import { TodosEditor } from "./TodosEditor.jsx"
 import { TitleEditor } from "./TitleEditor.jsx"
 
-export function NoteEdit({ note, updateNote, onChangeInfo, onChangeStyle }) {
+export function NoteEdit({ note, updateNote, onChangeInfo, onChangeStyle, onTogglePinNote }) {
     const [isColorPickerShown, setIsColorPickerShown] = useState(null)
     const [noteEditStyle, setNoteEditStyle] = useState(note.style)
+    const [isPinned, setIsPinned] = useState(note.isPinned)
+    
+    console.log('isPinned',isPinned)
     const backdropRef = useRef()
 
     function handleChange(info, noteId) {
@@ -25,6 +28,11 @@ export function NoteEdit({ note, updateNote, onChangeInfo, onChangeStyle }) {
         setIsColorPickerShown(false)
         backdropRef.current.style.display = 'none'
 
+    }
+
+    function handleTogglePinChange() {
+        onTogglePinNote(note)
+        setIsPinned(prev=>!prev)
     }
 
     function handleColorChange(ev) {
@@ -50,6 +58,12 @@ export function NoteEdit({ note, updateNote, onChangeInfo, onChangeStyle }) {
 
         <ColorPicker isPickerShown={isColorPickerShown} key={`${note.id}-colorpicker`} style={note.style} onChangeStyle={handleColorChange} />
 
+
+        <button onClick={handleTogglePinChange} className="note-pin pinned">
+            {isPinned ? <i class="fa-solid fa-thumbtack"></i> :
+                <i className="fa-solid fa-thumbtack-slash"></i>
+            }
+        </button>
         <div className="color-picker-backdrop" onClick={handleColorPickerClose} ref={backdropRef}></div>
 
     </section>
