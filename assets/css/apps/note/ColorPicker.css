@@ -11,6 +11,7 @@
 
 .note-color-picker {
     position: absolute;
+    bottom: 0;
     z-index: 1000;
 
     display: flex;
@@ -20,6 +21,11 @@
     border-radius: 5px;
     padding: 1em;
     background-color: white;
+}
+
+.note .note-color-picker{
+        transform: translateY(50px);
+
 }
 
 .picker-option {

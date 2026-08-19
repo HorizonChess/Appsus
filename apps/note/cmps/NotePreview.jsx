@@ -4,6 +4,7 @@ import { TxtEditor } from "./TxtEditor.jsx"
 import { TodosEditor } from "./TodosEditor.jsx"
 import { TitleEditor } from "./TitleEditor.jsx"
 import { ImgEditor } from "./ImgEditor.jsx"
+import { VideoEditor } from "./VideoEditor.jsx"
 export function NotePreview({ note, updateNote, onChangeInfo }) {
 
     function handleChange(info,noteId) {
@@ -31,7 +32,7 @@ function DynamicPreview(props) {
         'NoteTxt': <TxtEditor {...props} />,
         'NoteTodos': <TodosEditor {...props} />,
         'NoteImg': <ImgEditor {...props} />,
-        // 'NoteVideo': <NoteVideo {...props} />,
+        'NoteVideo': <VideoEditor {...props} />,
         // 'NoteAudio': <NoteAudio {...props} />
     }
 
