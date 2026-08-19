@@ -1,4 +1,5 @@
 import { mailService } from '../services/mail.service.js'
+import { eventBusService } from '../../../services/event-bus.service.js'
 import { MailList } from '../cmps/MailList.jsx'
 import { MailCompose } from '../cmps/MailCompose.jsx'
 import { MailFolderList } from '../cmps/MailFolderList.jsx'
@@ -11,15 +12,17 @@ export function MailIndex() {
     const [searchParams] = useSearchParams()
     const navigate = useNavigate()
 
-    // no status in the url means inbox, so a bare #/mail still works
     const status = searchParams.get('status') || 'inbox'
 
     useEffect(() => {
         loadMails()
+        return eventBusService.on('mails-changed', () => loadMails(false))
     }, [status])
 
-    function loadMails() {
-        setMails(null)
+    // the loader is only for a folder switch - a refresh keeps the old rows up
+    // until the new ones arrive, so the list never blinks mid-action
+    function loadMails(isFolderSwitch = true) {
+        if (isFolderSwitch) setMails(null)
 
         mailService.query({ status })
             .then(setMails)

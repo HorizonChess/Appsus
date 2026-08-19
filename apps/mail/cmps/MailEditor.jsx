@@ -8,6 +8,7 @@ export function MailEditor({ mail, onChange }) {
             type="email"
             name="to"
             value={to}
+            required
             placeholder="To"
             className="mail-editor-field"
             onChange={onChange} />
