@@ -1,10 +1,18 @@
  /* note list */
 
  .notes {
-     columns: auto 250px;
+     /* columns: auto 250px; */
      /* padding: 2em; */
  }
 
+ .unpinned-notes,
+ .pinned-notes {
+     columns: auto 250px;
+ }
+
+  .pinned-notes {
+    margin-block-end: 40px;
+  }
  .note {
      position: relative;
      break-inside: avoid;
@@ -18,9 +26,9 @@
      border-radius: 5px;
  }
 
- .note-content{
-    display: flex;
-    flex-direction: column;
+ .note-content {
+     display: flex;
+     flex-direction: column;
  }
 
  .note:hover {
@@ -44,7 +52,7 @@
 
      width: 2.5em;
      height: 2.5em;
-    border:none;
+     border: none;
      background-color: transparent;
      color: black;
      opacity: 0;
@@ -56,4 +64,8 @@
 
  li:hover .remove-note-btn {
      opacity: 1;
+ }
+
+ .note-list{
+    margin-block-start: 0;
  }

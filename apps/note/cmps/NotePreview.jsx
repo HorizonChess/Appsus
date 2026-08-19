@@ -1,8 +1,5 @@
 const { useState, useRef, useEffect } = React
-import { colorOptions } from "../data/note-color-options.js"
-import { NoteToolbar } from "./NoteToolbar.jsx"
-import { NoteInputTxt } from "./NoteInputTxt.jsx"
-import { NoteTodoCheckMark } from "./NoteTodoCheckmark.jsx"
+
 import { TxtEditor } from "./TxtEditor.jsx"
 import { TodosEditor } from "./TodosEditor.jsx"
 import { TitleEditor } from "./TitleEditor.jsx"
