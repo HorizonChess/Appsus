@@ -5,6 +5,7 @@ import { TxtEditor } from "./TxtEditor.jsx"
 import { TodosEditor } from "./TodosEditor.jsx"
 import { TitleEditor } from "./TitleEditor.jsx"
 import { ComposerToolbar } from "./ComposerToolbar.jsx"
+import { ImgEditor } from "./ImgEditor.jsx"
 
 export function NoteComposer({ note, onChangeInfo, onChangeType, addNote }) {
     const [noteType, setNoteType] = useState('NoteTxt')
@@ -21,11 +22,13 @@ export function NoteComposer({ note, onChangeInfo, onChangeType, addNote }) {
     }
 
     function handleChange(info) {
+        console.log('info',info)
         onChangeInfo(info)
     }
 
     function onChangeNoteType(type, ev) {
-        console.log(type)
+        console.log('ev', ev)
+        console.log('type', type)
         if ((type) === 'NoteImg') {
 
             const reader = new FileReader()
@@ -35,13 +38,18 @@ export function NoteComposer({ note, onChangeInfo, onChangeType, addNote }) {
 
             // ...when finished encoding, create an <img /> from it...
             reader.onload = function (event) {
+                const img = new Image()
 
                 // ...and when the img is ready, run the callback
                 img.onload = () => {
+                    onChangeType(type)
+                    handleChange({ ...note.info, url: img.src })
                     setNoteType(type)
-                    handleChange({ ...info, url: event.target.result })
+                    setIsExpanded(true)
                 }
 
+                console.log('event.target.result',event.target.result)
+                img.src = event.target.result
             }
 
         } else {
@@ -101,6 +109,7 @@ function DynamicEditor(props) {
     const cmpMap = {
         'NoteTxt': <TxtEditor {...props} />,
         'NoteTodos': <TodosEditor {...props} />,
+        'NoteImg': <ImgEditor {...props} />
 
     }
     return cmpMap[props.cmpType]

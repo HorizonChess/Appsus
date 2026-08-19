@@ -7,7 +7,7 @@ export function ComposerToolbar({ onChangeNoteType }) {
             name="note-img-input"
             className="toolbar-btn" onChange={ev => {
                 ev.preventDefault()
-                onChangeNoteType('NoteImg')
+                onChangeNoteType('NoteImg',ev)
             }}
         />
         <label htmlFor="note-img-input"><i class="fa-regular fa-image"></i></label>

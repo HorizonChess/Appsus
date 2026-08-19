@@ -1,5 +1,6 @@
 const {useRef} =React
 export function ImgEditor({ info, onChangeTitle, isEditMode }) {
+   console.log('hi')
     const imgRef = useRef()
 
     // function loadImageFromInput(ev, onImageReady) {
