@@ -6,6 +6,8 @@ import { TxtEditor } from "./TxtEditor.jsx"
 import { TodosEditor } from "./TodosEditor.jsx"
 import { TitleEditor } from "./TitleEditor.jsx"
 import { ImgEditor } from "./ImgEditor.jsx"
+import { VideoEditor } from "./VideoEditor.jsx"
+import { AudioEditor } from "./VideoEditor.jsx"
 
 export function NoteEdit({ note, updateNote, onChangeInfo, onChangeStyle, onTogglePinNote }) {
     const [isColorPickerShown, setIsColorPickerShown] = useState(null)
@@ -79,8 +81,8 @@ function DynamicNoteEdit(props) {
         'NoteTxt': <TxtEditor {...props} />,
         'NoteTodos': <TodosEditor {...props} />,
         'NoteImg': <ImgEditor {...props} />,
-        // 'NoteVideo': <NoteVideo {...props} />,
-        // 'NoteAudio': <NoteAudio {...props} />
+        'NoteVideo': <VideoEditor {...props} />,
+        'NoteAudio': <AudioEditor {...props} />
     }
 
     return cmpMap[props.cmpType]
