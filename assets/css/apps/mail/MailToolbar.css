@@ -3,10 +3,29 @@
 .mail-toolbar {
     display: flex;
     align-items: center;
-    justify-content: flex-end;
-    gap: var(--mail-sp-1);
+    justify-content: space-between;
     block-size: var(--mail-toolbar-h);
     padding-inline: var(--mail-sp-2);
+}
+
+.mail-toolbar-actions,
+.mail-toolbar-sort {
+    display: flex;
+    align-items: center;
+    gap: var(--mail-sp-1);
+}
+
+.mail-select-all {
+    inline-size: 18px;
+    block-size: 18px;
+    margin-inline-start: var(--mail-sp-2);
+    accent-color: var(--mail-clr-accent);
+    cursor: pointer;
+}
+
+/* the caret hugs the checkbox instead of taking a full button footprint */
+.mail-icon-btn-sm {
+    inline-size: var(--mail-sp-5);
 }
 
 .mail-sort {
