@@ -48,7 +48,7 @@ export function NoteComposer({ note, onChangeInfo, onChangeType, addNote }) {
 
     if (!isExpanded || note.id) {
         return < section onClick={onExpandComposer} className="note-composer collapsed">
-            <h3>Write a note...</h3>
+            <h3 className="composer-placeholder">Write a note...</h3>
             <ComposerToolbar onChangeNoteType={onChangeNoteType} />
 
         </section>

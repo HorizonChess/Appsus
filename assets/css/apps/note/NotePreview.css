@@ -55,9 +55,10 @@ input:has(+ .note-todo-checkbox:checked) {
 }
 
 .note-title {
+    color: rgb(32, 33, 36);
     border: none;
-    font-family: roboto-black;
-    font-size: 1.25em;
+    font-weight: 400;
+    font-size: 1.25rem;
 }
 .note-todo-checkbox{
     display: none;
@@ -70,10 +71,7 @@ input:has(+ .note-todo-checkbox:checked) {
     border: 2px solid black;
 }
 
-.note-todo-checkbox::before {
-    content: "✓";
-    display: none;
-}
+
 
 .note-todo-checkbox:checked::before {
     display: grid;
