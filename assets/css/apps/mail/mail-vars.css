@@ -6,6 +6,7 @@
     --mail-fs-subject: 14px;
     --mail-fs-title: 22px;
     --mail-fs-message: 13px;
+    --mail-fs-search: 16px;
     --mail-lh-body: 20px;
     --mail-lh-title: 28px;
     --mail-fw-read: 400;
@@ -51,6 +52,7 @@
     --mail-shadow-btn-rest: 0 1px 2px 0 rgba(0, 0, 0, 0), 0 1px 3px 1px rgba(0, 0, 0, 0);
     --mail-shadow-btn-hover: 0 1px 2px 0 rgba(60, 64, 67, .3), 0 1px 3px 1px rgba(60, 64, 67, .15); /* UNVERIFIED - snap it */
     --mail-shadow-modal: rgba(0, 0, 0, .14) 0 8px 10px 1px, rgba(0, 0, 0, .12) 0 3px 14px 2px, rgba(0, 0, 0, .2) 0 5px 5px -3px;
+    --mail-shadow-search-focus: rgba(65, 69, 73, .3) 0 1px 1px 0, rgba(65, 69, 73, .15) 0 1px 3px 1px;
     --mail-transition-btn: box-shadow .08s linear;
 
     --mail-radius-sm: ;
@@ -58,8 +60,11 @@
     --mail-radius-lg: ;
     --mail-radius-pill: 18px;
     --mail-radius-btn: 16px;
+    --mail-radius-search: 24px;
     --mail-radius-nav: 0 16px 16px 0;
     --mail-sidebar-w: 256px;
+    --mail-search-w: 720px;
+    --mail-search-h: 48px;
     --mail-row-h: 40px;
     --mail-nav-item-h: 32px;
     /* the pill stops short of the sidebar edge - 240 wide in a 256 nav */

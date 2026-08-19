@@ -1,0 +1,48 @@
+/* mail filter - gmail's search band */
+
+.mail-filter {
+    grid-column: 1 / -1;
+    padding-block: var(--mail-sp-2);
+    /* gmail aligns search with the list, not the app edge */
+    padding-inline-start: var(--mail-sidebar-w);
+}
+
+.mail-search {
+    display: flex;
+    align-items: center;
+    gap: var(--mail-sp-3);
+    max-inline-size: var(--mail-search-w);
+    min-block-size: var(--mail-search-h);
+    padding-inline: var(--mail-sp-3);
+    border-radius: var(--mail-radius-search);
+    background-color: var(--mail-clr-search-bg);
+}
+
+/* the pill reacts, not the input */
+.mail-search:focus-within {
+    background-color: var(--mail-clr-surface);
+    box-shadow: var(--mail-shadow-search-focus);
+}
+
+.mail-search-icon {
+    color: var(--mail-clr-text-secondary);
+}
+
+.mail-search-input {
+    flex-grow: 1;
+    /* 0 or a long query stretches the pill past its max */
+    min-inline-size: 0;
+    border: none;
+    background: none;
+    font-family: inherit;
+    font-size: var(--mail-fs-search);
+    color: var(--mail-clr-text);
+}
+
+.mail-search-input:focus {
+    outline: none;
+}
+
+.mail-search-input::placeholder {
+    color: var(--mail-clr-placeholder);
+}

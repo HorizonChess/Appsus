@@ -5,6 +5,8 @@
        bare 1fr so a long subject line cannot blow the column out */
     display: grid;
     grid-template-columns: auto minmax(0, 1fr);
+    /* search band, then nav + list */
+    grid-template-rows: auto 1fr;
     /* claim the rest of the viewport, so the nav and the list surface run to the
        bottom instead of stopping under the last row */
     flex-grow: 1;

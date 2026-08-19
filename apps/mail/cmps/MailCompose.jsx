@@ -1,4 +1,5 @@
 import { mailService } from '../services/mail.service.js'
+import { showSuccessMsg, showErrorMsg } from '../../../services/event-bus.service.js'
 import { MailEditor } from './MailEditor.jsx'
 
 const { useState, useEffect } = React
@@ -20,7 +21,6 @@ export function MailCompose() {
         if (composeId) loadMail()
     }, [composeId])
 
-    // ?compose=new&to=..&subject=..&body=.. - how a note becomes a mail
     function getPrefill() {
         return {
             to: searchParams.get('to') || '',
@@ -56,9 +56,24 @@ export function MailCompose() {
         setMailToEdit(prevMail => ({ ...prevMail, [name]: value }))
     }
 
+    // close only on success, so a failed send keeps the typed mail
+    function onSend(ev) {
+        ev.preventDefault()
+
+        mailService.send(mailToEdit)
+            .then(() => {
+                showSuccessMsg('Message sent')
+                onCloseCompose()
+            })
+            .catch(err => {
+                console.log('Had issues sending mail', err)
+                showErrorMsg('Could not send message')
+            })
+    }
+
     if (!composeId || !mailToEdit) return null
 
-    return <form className="mail-compose">
+    return <form className="mail-compose" onSubmit={onSend}>
 
         <header className="mail-compose-header">
             <h3 className="mail-compose-title">New Message</h3>

@@ -83,16 +83,12 @@ function send(mail) {
     })
 }
 
-// takes the value to set, not a flip - a blind flip reads storage while the ui
-// flips local state, so two fast clicks drift the two apart
 function toggleStar(mailId, isStared) {
     return storageService.get(MAIL_KEY, mailId)
         .then(mail => storageService.put(MAIL_KEY, { ...mail, isStared }))
         .then(_notifyChange)
 }
 
-// takes the value to set, not a flip - so "opening a mail" can just ask for
-// isRead: true without caring what the current value is
 function toggleRead(mailId, isRead) {
     return storageService.get(MAIL_KEY, mailId)
         .then(mail => storageService.put(MAIL_KEY, { ...mail, isRead }))

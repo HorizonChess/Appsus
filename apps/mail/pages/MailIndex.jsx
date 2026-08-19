@@ -1,7 +1,9 @@
 import { mailService } from '../services/mail.service.js'
+import { eventBusService } from '../../../services/event-bus.service.js'
 import { MailList } from '../cmps/MailList.jsx'
 import { MailCompose } from '../cmps/MailCompose.jsx'
 import { MailFolderList } from '../cmps/MailFolderList.jsx'
+import { MailFilter } from '../cmps/MailFilter.jsx'
 
 const { useState, useEffect } = React
 const { useSearchParams, useNavigate } = ReactRouterDOM
@@ -11,17 +13,17 @@ export function MailIndex() {
     const [searchParams] = useSearchParams()
     const navigate = useNavigate()
 
-    // no status in the url means inbox, so a bare #/mail still works
     const status = searchParams.get('status') || 'inbox'
+    const txt = searchParams.get('txt') || ''
 
     useEffect(() => {
         loadMails()
-    }, [status])
+        return eventBusService.on('mails-changed', loadMails)
+    }, [status, txt])
 
+    // never blanks - mails starts null, so the loader still covers the first load
     function loadMails() {
-        setMails(null)
-
-        mailService.query({ status })
+        mailService.query({ status, txt })
             .then(setMails)
             .catch(err => console.log('Had issues loading mails', err))
     }
@@ -76,6 +78,8 @@ export function MailIndex() {
     }
 
     return <section className="mail-index">
+
+        <MailFilter />
 
         <MailFolderList />
 
