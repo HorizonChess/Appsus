@@ -7,7 +7,6 @@ import { TitleEditor } from "./TitleEditor.jsx"
 export function NotePreview({ note, updateNote, onChangeInfo }) {
 
     function handleChange(info,noteId) {
-        console.log(noteId)
         onChangeInfo(info,noteId)
     }
     return <section className="note-preview">

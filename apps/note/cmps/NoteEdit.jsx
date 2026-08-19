@@ -60,7 +60,7 @@ export function NoteEdit({ note, updateNote, onChangeInfo, onChangeStyle, onTogg
 
 
         <button onClick={handleTogglePinChange} className="note-pin pinned">
-            {isPinned ? <i class="fa-solid fa-thumbtack"></i> :
+            {isPinned ? <i className="fa-solid fa-thumbtack"></i> :
                 <i className="fa-solid fa-thumbtack-slash"></i>
             }
         </button>

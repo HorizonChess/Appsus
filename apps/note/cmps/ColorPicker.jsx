@@ -2,16 +2,15 @@ const { useState } = React
 
 import { colorOptions } from "../data/note-color-options.js"
 
-export function ColorPicker({ isPickerShown, key, onChangeStyle, style }) {
-   console.log('isPickerShown',isPickerShown)
-    if (!isPickerShown) return <span key={key}></span>
+export function ColorPicker({ isPickerShown, pickerKey, onChangeStyle, style }) {
+    if (!isPickerShown) return <span key={pickerKey}></span>
 
-    return <div className="note-color-picker" key={key}>
+    return <div className="note-color-picker" key={pickerKey}>
         {colorOptions.map(colorOption => {
-            return <div>
+            return <div key={`${pickerKey}-${colorOption}`}>
                 <label
                     className={`color-picker-label ${colorOption === "#ffffff" ? 'empty' : ''}`}
-                    htmlFor={`${key}-${colorOption}`}
+                    htmlFor={`${pickerKey}-${colorOption}`}
                     name="background-color"
                     style={{ backgroundColor: colorOption }}>
 
@@ -21,7 +20,7 @@ export function ColorPicker({ isPickerShown, key, onChangeStyle, style }) {
                     type="radio"
                     checked={colorOption === style.backgroundColor}
                     className="picker-option"
-                    id={`${key}-${colorOption}`}
+                    id={`${pickerKey}-${colorOption}`}
                     name="background-color"
                     value={colorOption}
                     onChange={onChangeStyle} />

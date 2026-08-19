@@ -35,11 +35,9 @@ export function NoteIndex() {
     function onChangeInfo(newInfo, noteId) {
         if (!noteId) {
             updateNote({ ...editedNote, info: newInfo })
-            console.log('hi')
             setEditedNote(prev => ({ ...prev, info: newInfo }))
         } else {
             const note = notes.find(note => note.id === noteId)
-            console.log('note', note)
             updateNote({ ...note, info: newInfo })
 
         }
@@ -104,13 +102,11 @@ export function NoteIndex() {
         setEditedNote(notes.find(note => note.id === noteId))
         eventBusService.emit('note-edit')
         noteService.get(noteId)
-        console.log('Modal has opened...')
         setIsShown(true)
 
     }
 
     function onCloseModal() {
-        console.log('Modal has closed...')
         setEditedNote(noteService.getEmptyNote())
         setIsShown(false)
     }

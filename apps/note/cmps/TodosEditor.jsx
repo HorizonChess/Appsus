@@ -27,19 +27,15 @@ export function TodosEditor({ info, onChangeVal, isEditMode, noteId }) {
                     <label
                         htmlFor={`${noteId}-${idx}-checkbox`}
                         style={{ display: `${todo.isDone ? 'none' : 'block'}` }}>
-                        {/* {todo.isDone ?
-                            <i class="fa-regular fa-square-check"></i> :
-                            <i class="fa-regular fa-square"></i>} */}
-                        {<i class="fa-regular fa-square"></i>}
+
+                        {<i className="fa-regular fa-square"></i>}
                     </label>
 
                     <label
                         htmlFor={`${noteId}-${idx}-checkbox`}
                         style={{ display: `${todo.isDone ? 'block' : 'none'}` }}>
-                        {/* {todo.isDone ?
-                            <i class="fa-regular fa-square-check"></i> :
-                            <i class="fa-regular fa-square"></i>} */}
-                        {<i class="fa-regular fa-square-check"></i>}
+
+                        {<i className="fa-regular fa-square-check"></i>}
                     </label>
 
 
@@ -75,19 +71,15 @@ export function TodosEditor({ info, onChangeVal, isEditMode, noteId }) {
                     <label
                         htmlFor={`${noteId}-${idx}-checkbox`}
                         style={{ display: `${todo.isDone ? 'none' : 'block'}` }}>
-                        {/* {todo.isDone ?
-                            <i class="fa-regular fa-square-check"></i> :
-                            <i class="fa-regular fa-square"></i>} */}
-                        {<i class="fa-regular fa-square"></i>}
+    
+                        {<i className="fa-regular fa-square"></i>}
                     </label>
 
                     <label
                         htmlFor={`${noteId}-${idx}-checkbox`}
                         style={{ display: `${todo.isDone ? 'block' : 'none'}` }}>
-                        {/* {todo.isDone ?
-                            <i class="fa-regular fa-square-check"></i> :
-                            <i class="fa-regular fa-square"></i>} */}
-                        {<i class="fa-regular fa-square-check"></i>}
+
+                        {<i className="fa-regular fa-square-check"></i>}
                     </label>
                 </li>
             })}

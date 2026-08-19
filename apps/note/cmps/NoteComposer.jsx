@@ -10,12 +10,6 @@ export function NoteComposer({ note, onChangeInfo, onChangeType, addNote }) {
     const [noteType, setNoteType] = useState('NoteTxt')
     const [isExpanded, setIsExpanded] = useState(false)
 
-    console.log('isExpanded', isExpanded)
-
-    // useEffect(() => {
-    //     onChangeType(noteType)
-    // }, [noteType])
-
     useEffect(() => {
         eventBusService.on('note-edit', collapseComposer)
     }, [])
@@ -38,7 +32,6 @@ export function NoteComposer({ note, onChangeInfo, onChangeType, addNote }) {
     function onSubmit() {
         setIsExpanded(!isExpanded)
         addNote()
-        console.log('onSubmit')
         setNoteType('NoteTxt')
     }
 
@@ -68,7 +61,7 @@ export function NoteComposer({ note, onChangeInfo, onChangeType, addNote }) {
 
 
         <button className="note-submit-btn" onClick={onSubmit}>
-            <i class="fa-solid fa-play"></i>
+            <i className="fa-solid fa-play"></i>
         </button>
 
     </section>

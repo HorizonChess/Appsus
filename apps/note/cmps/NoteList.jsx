@@ -9,7 +9,6 @@ export function NoteList({ notes, updateNote, onRemoveNote,
     const [colorPickerId, setColoPickerId] = useState(null)
     const backdropRef = useRef()
 
-    console.log('colorPickerId',colorPickerId)
     const pinnedNotes = notes.filter(note => note.isPinned)
     const unpinnedNotes = notes.filter(note => !note.isPinned)
 
@@ -45,7 +44,7 @@ export function NoteList({ notes, updateNote, onRemoveNote,
                             <div className='note-toolbar'>
                                 <button onClick={ev => handleColorPickerOpen(ev, note.id)} className="toolbar-btn"><i className="fa-solid fa-palette"></i></button>
                                 <button onClick={() => onOpenModal(note.id)} className="toolbar-btn"><i className="fa-solid fa-pencil"></i></button>
-                                <button onClick={ev => onDuplicateNote(note)} className="toolbar-btn"><i class="fa-regular fa-clone"></i></button>
+                                <button onClick={ev => onDuplicateNote(note)} className="toolbar-btn"><i className="fa-regular fa-clone"></i></button>
                             </div>
 
                             <ColorPicker
@@ -55,7 +54,7 @@ export function NoteList({ notes, updateNote, onRemoveNote,
                                 onChangeStyle={ev => onChangeStyle(ev, note)} />
 
                             <button onClick={ev => onTogglePinNote(note, 'inline')} className="note-pin pinned">
-                                <i class="fa-solid fa-thumbtack"></i>
+                                <i className="fa-solid fa-thumbtack"></i>
                             </button>
 
                         </article>
@@ -86,10 +85,10 @@ export function NoteList({ notes, updateNote, onRemoveNote,
                             <div className='note-toolbar'>
                                 <button onClick={ev => handleColorPickerOpen(ev, note.id)} className="toolbar-btn"><i className="fa-solid fa-palette"></i></button>
                                 <button onClick={() => onOpenModal(note.id)} className="toolbar-btn"><i className="fa-solid fa-pencil"></i></button>
-                                <button onClick={() => onDuplicateNote(note)} className="toolbar-btn"><i class="fa-regular fa-clone"></i></button>
+                                <button onClick={() => onDuplicateNote(note)} className="toolbar-btn"><i className="fa-regular fa-clone"></i></button>
                             </div>
 
-                            <ColorPicker isPickerShown={note.id === colorPickerId} key={`${note.id}-colorpicker`} style={note.style} onChangeStyle={ev => onChangeStyle(ev, note)} />
+                            <ColorPicker isPickerShown={note.id === colorPickerId} pickerKey={`${note.id}-colorpicker`} style={note.style} onChangeStyle={ev => onChangeStyle(ev, note)} />
 
                             <button onClick={ev => onTogglePinNote(note)} className="note-pin unpinned">
                                 <i className="fa-solid fa-thumbtack-slash"></i>                            </button>
