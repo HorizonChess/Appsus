@@ -48,7 +48,7 @@ export function NoteList({ notes, updateNote, onRemoveNote,
 
                             <ColorPicker isPickerShown={note.id === colorPickerId} key={`${note.id}-colorpicker`} style={note.style} onChangeStyle={ev => onChangeStyle(ev, note)} />
 
-                            <button onClick={ev => onTogglePinNote(note)} className="note-pin pinned">
+                            <button onClick={ev => onTogglePinNote(note,'inline')} className="note-pin pinned">
                                 <i class="fa-solid fa-thumbtack"></i>
                             </button>
 

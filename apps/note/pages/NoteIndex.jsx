@@ -3,12 +3,10 @@ import { noteService } from "../services/note.service.js"
 import { eventBusService } from "../../../services/event-bus.service.js"
 
 import { NoteList } from "../cmps/NoteList.jsx"
-import { NoteAdd } from "../cmps/NoteAdd.jsx"
-import { storageService } from "../../../services/async-storage.service.js"
 import { NoteModal } from "../cmps/NoteModal.jsx"
 import { NoteEdit } from "../cmps/NoteEdit.jsx"
 import { NoteComposer } from "../cmps/NoteComposer.jsx"
-var index = 1
+
 const { useState, useRef, useEffect } = React
 
 export function NoteIndex() {
@@ -84,11 +82,8 @@ export function NoteIndex() {
         const newStyle = { ...style, backgroundColor: target.value }
         const updatedNote = { ...note, style: newStyle }
 
+        if (editedNote.id) setEditedNote(updatedNote)
         updateNote(updatedNote)
-        const updatedNotes = [...notes]
-        const updatedNoteIsx = notes.findIndex(note => note.id === updatedNote.id)
-        updatedNotes.splice(updatedNoteIsx, 1, updatedNote)
-        setNotes(updatedNotes)
     }
 
     function removeNote(noteId) {
