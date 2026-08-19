@@ -28,6 +28,10 @@ export function NoteIndex() {
 
     function onTogglePinNote(note) {
         const updatedNote = { ...note, isPinned: !note.isPinned }
+        const updatedNoteIdx = notes.findIndex(note => note.id === updatedNote.id)
+        notes.splice(updatedNoteIdx, 1)
+        notes.unshift(updatedNote)
+
         if (editedNote.id) setEditedNote(updatedNote)
         updateNote(updatedNote)
     }
@@ -53,7 +57,6 @@ export function NoteIndex() {
         }
 
         setNotes(updatedNotes)
-
     }
 
     function addNote() {
@@ -113,16 +116,18 @@ export function NoteIndex() {
 
     function onDuplicateNote(note) {
         const duplicatedNote = JSON.parse(JSON.stringify(note))
+        const duplicatedNoteIdx = notes.findIndex(note => note.id === duplicatedNote.id)
+
         duplicatedNote.id = null
-        notes.push(duplicatedNote)
-        const noteIdx = notes.length - 1
+        notes.splice(duplicatedNoteIdx, 0, duplicatedNote)
+        // const noteIdx = notes.length - 1
 
         setNotes([...notes])
 
         noteService.save(duplicatedNote)
             .then(note => {
                 const newNotes = [...notes]
-                newNotes.splice(noteIdx, 1, note)
+                newNotes.splice(duplicatedNoteIdx+1, 1, note)
                 setNotes(newNotes)
             })
 
