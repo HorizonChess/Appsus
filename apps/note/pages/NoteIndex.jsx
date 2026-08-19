@@ -115,6 +115,23 @@ export function NoteIndex() {
         setIsShown(false)
     }
 
+    function onDuplicateNote(note) {
+        const duplicatedNote = JSON.parse(JSON.stringify(note))
+        duplicatedNote.id = null
+        notes.push(duplicatedNote)
+        const noteIdx = notes.length - 1
+
+        setNotes([...notes])
+
+        noteService.save(duplicatedNote)
+            .then(note => {
+                const newNotes = [...notes]
+                newNotes.splice(noteIdx, 1, note)
+                setNotes(newNotes)
+            })
+
+    }
+
     return <section className="notes-container">
         <h1>Notes app</h1>
 
@@ -133,6 +150,7 @@ export function NoteIndex() {
             onChangeStyle={onChangeStyle}
             onOpenModal={onOpenModal}
             onChangeInfo={onChangeInfo}
+            onDuplicateNote={onDuplicateNote}
         />
 
         <NoteModal
