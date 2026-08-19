@@ -1,6 +1,7 @@
 .note-content {
     align-items: start;
     display: grid;
+
     /* overflow: scroll; */
 }
 

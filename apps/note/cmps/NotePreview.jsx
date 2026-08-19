@@ -10,7 +10,7 @@ export function NotePreview({ note, updateNote, onChangeInfo }) {
         console.log(noteId)
         onChangeInfo(info,noteId)
     }
-    return <section>
+    return <section className="note-preview">
         <TitleEditor info={note.info} isEditMode={false} />
 
         <DynamicPreview

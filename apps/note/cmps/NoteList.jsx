@@ -7,9 +7,9 @@ const { useState, useRef } = React
 export function NoteList({ notes, updateNote, onRemoveNote, onChangeStyle, onOpenModal, onChangeInfo }) {
     const [colorPickerId, setColoPickerId] = useState(null)
     const backdropRef = useRef()
-    
-    const pinnedNotes = notes.filter(note=>note.isPinned)
-    const unpinnedNotes = notes.filter(note=>!note.isPinned)
+
+    const pinnedNotes = notes.filter(note => note.isPinned)
+    const unpinnedNotes = notes.filter(note => !note.isPinned)
 
     function handleColorPickerOpen(ev, colorPickerId) {
         ev.stopPropagation()
@@ -46,13 +46,17 @@ export function NoteList({ notes, updateNote, onRemoveNote, onChangeStyle, onOpe
                             </div>
 
                             <ColorPicker isPickerShown={note.id === colorPickerId} key={`${note.id}-colorpicker`} style={note.style} onChangeStyle={ev => onChangeStyle(ev, note)} />
+
+                            <button className="note-pin pinned">
+                                <i class="fa-solid fa-thumbtack"></i>
+                            </button>
+
                         </article>
 
                     </li>
 
                 })}
                 <div className="color-picker-backdrop" onClick={handleColorPickerClose} ref={backdropRef}></div>
-
             </ul>
         </section>
 
@@ -78,6 +82,9 @@ export function NoteList({ notes, updateNote, onRemoveNote, onChangeStyle, onOpe
                             </div>
 
                             <ColorPicker isPickerShown={note.id === colorPickerId} key={`${note.id}-colorpicker`} style={note.style} onChangeStyle={ev => onChangeStyle(ev, note)} />
+
+                            <button className="note-pin unpinned">
+                                <i className="fa-solid fa-thumbtack-slash"></i>                            </button>
                         </article>
 
                     </li>

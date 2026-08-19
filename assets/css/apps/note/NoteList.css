@@ -10,10 +10,12 @@
      columns: auto 250px;
  }
 
-  .pinned-notes {
-    margin-block-end: 40px;
-  }
+ .pinned-notes {
+     margin-block-end: 40px;
+ }
+
  .note {
+     display: grid;
      position: relative;
      break-inside: avoid;
      transition: 0.3s ease;
@@ -66,6 +68,27 @@
      opacity: 1;
  }
 
- .note-list{
-    margin-block-start: 0;
+ .note-list {
+     margin-block-start: 0;
+ }
+
+ .note-pin {
+     position: absolute;
+     right: 0px;
+     width: 2.5em;
+     height: 2.5em;
+     background-color: transparent;
+     border: none;
+     color: rgba(0, 0, 0, 0.54);
+     transition: 0.3s ease;
+     border-radius: 50%;
+     background-color: rgba(128, 128, 128, 0);
+ }
+
+ .note-pin.unpinned {
+     opacity: 0;
+ }
+
+ .note:hover .note-pin.unpinned {
+     opacity: 1;
  }
