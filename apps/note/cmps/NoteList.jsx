@@ -27,6 +27,8 @@ export function NoteList({ notes, updateNote, onRemoveNote,
     return <section className="notes">
 
         <section className="pinned-notes">
+            <div className="pin-label">Pinned</div>
+
             <ul className="note-list" >
                 {pinnedNotes.map(note => {
 
@@ -68,6 +70,8 @@ export function NoteList({ notes, updateNote, onRemoveNote,
 
 
         <section className="unpinned-notes">
+            <div className="pin-label">Un-Pinned</div>
+
             <ul className="note-list" >
                 {unpinnedNotes.map(note => {
 

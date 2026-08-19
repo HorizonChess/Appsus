@@ -5,9 +5,16 @@
      /* padding: 2em; */
  }
 
- .unpinned-notes,
- .pinned-notes {
+ .unpinned-notes .note-list,
+ .pinned-notes .note-list {
      columns: auto 250px;
+ }
+
+
+ .pin-label {
+     color: rgb(95, 99, 104);
+     font-size: .6875rem;
+    margin-block-end: 0.5em;
  }
 
  .pinned-notes {
