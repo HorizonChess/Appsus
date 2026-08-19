@@ -10,8 +10,8 @@ export function NoteEdit({ note, updateNote, onChangeInfo, onChangeStyle, onTogg
     const [isColorPickerShown, setIsColorPickerShown] = useState(null)
     const [noteEditStyle, setNoteEditStyle] = useState(note.style)
     const [isPinned, setIsPinned] = useState(note.isPinned)
-    
-    console.log('isPinned',isPinned)
+
+    console.log('isPinned', isPinned)
     const backdropRef = useRef()
 
     function handleChange(info, noteId) {
@@ -31,8 +31,8 @@ export function NoteEdit({ note, updateNote, onChangeInfo, onChangeStyle, onTogg
     }
 
     function handleTogglePinChange() {
+        setIsPinned(!isPinned)
         onTogglePinNote(note)
-        setIsPinned(prev=>!prev)
     }
 
     function handleColorChange(ev) {
@@ -59,11 +59,15 @@ export function NoteEdit({ note, updateNote, onChangeInfo, onChangeStyle, onTogg
         <ColorPicker isPickerShown={isColorPickerShown} key={`${note.id}-colorpicker`} style={note.style} onChangeStyle={handleColorChange} />
 
 
-        <button onClick={handleTogglePinChange} className="note-pin pinned">
-            {isPinned ? <i className="fa-solid fa-thumbtack"></i> :
-                <i className="fa-solid fa-thumbtack-slash"></i>
-            }
-        </button>
+        {isPinned && <button onClick={handleTogglePinChange} className="note-pin pinned">
+            <i className={`fa-solid fa-thumbtack-slash`}></i>
+
+        </button>}
+        {!isPinned && <button onClick={handleTogglePinChange} className="note-pin pinned">
+            <i className={`fa-solid fa-thumbtack`}></i>
+
+        </button>}
+
         <div className="color-picker-backdrop" onClick={handleColorPickerClose} ref={backdropRef}></div>
 
     </section>
