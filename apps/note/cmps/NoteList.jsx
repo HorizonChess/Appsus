@@ -4,7 +4,8 @@ import { NotePreview } from "./NotePreview.jsx"
 import { ColorPicker } from "./ColorPicker.jsx"
 const { useState, useRef } = React
 
-export function NoteList({ notes, updateNote, onRemoveNote, onChangeStyle, onOpenModal, onChangeInfo }) {
+export function NoteList({ notes, updateNote, onRemoveNote,
+    onChangeStyle, onOpenModal, onChangeInfo, onTogglePinNote }) {
     const [colorPickerId, setColoPickerId] = useState(null)
     const backdropRef = useRef()
 
@@ -47,7 +48,7 @@ export function NoteList({ notes, updateNote, onRemoveNote, onChangeStyle, onOpe
 
                             <ColorPicker isPickerShown={note.id === colorPickerId} key={`${note.id}-colorpicker`} style={note.style} onChangeStyle={ev => onChangeStyle(ev, note)} />
 
-                            <button className="note-pin pinned">
+                            <button onClick={ev => onTogglePinNote(note)} className="note-pin pinned">
                                 <i class="fa-solid fa-thumbtack"></i>
                             </button>
 
@@ -83,7 +84,7 @@ export function NoteList({ notes, updateNote, onRemoveNote, onChangeStyle, onOpe
 
                             <ColorPicker isPickerShown={note.id === colorPickerId} key={`${note.id}-colorpicker`} style={note.style} onChangeStyle={ev => onChangeStyle(ev, note)} />
 
-                            <button className="note-pin unpinned">
+                            <button onClick={ev => onTogglePinNote(note)} className="note-pin unpinned">
                                 <i className="fa-solid fa-thumbtack-slash"></i>                            </button>
                         </article>
 

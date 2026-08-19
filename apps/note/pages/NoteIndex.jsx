@@ -16,7 +16,6 @@ export function NoteIndex() {
     const [isShown, setIsShown] = useState(false)
     const [editedNote, setEditedNote] = useState(noteService.getEmptyNote())
 
-    console.log('editedNote', editedNote)
     useEffect(() => {
         noteService.query({})
             .then(notes => setNotes(notes))
@@ -27,6 +26,16 @@ export function NoteIndex() {
 
         setEditedNote({ ...editedNote, type, info: type === 'NoteTodos' ? ({ title: '', todos: [emptyTodo] }) : ({ title: '', txt: '' }) })
 
+    }
+
+    function onTogglePinNote(note) {
+        const updatedNote = { ...note, isPinned: !note.isPinned }
+
+        updateNote(updatedNote)
+        const updatedNotes = [...notes]
+        const updatedNoteIsx = notes.findIndex(note => note.id === updatedNote.id)
+        updatedNotes.splice(updatedNoteIsx, 1, updatedNote)
+        setNotes(updatedNotes)
     }
 
     function onChangeInfo(newInfo, noteId) {
@@ -74,8 +83,6 @@ export function NoteIndex() {
     }
 
     function onChangeStyle(ev, note) {
-        console.log('ev',ev)
-        console.log('note',note)
         const { target } = ev
         const { style } = note
         const newStyle = { ...style, backgroundColor: target.value }
@@ -123,20 +130,21 @@ export function NoteIndex() {
         <NoteComposer note={editedNote} onChangeInfo={onChangeInfo} onChangeType={onChangeType} addNote={addNote} />
         <NoteList
             notes={notes}
+            onTogglePinNote={onTogglePinNote}
             editedNote={editedNote}
             updateNote={updateNote}
             onRemoveNote={removeNote}
             onChangeStyle={onChangeStyle}
             onOpenModal={onOpenModal}
             onChangeInfo={onChangeInfo}
-/>
+        />
 
         <NoteModal
             isShown={isShown}
             onClose={onCloseModal}
             style={editedNote.style}
         >
-            {editedNote && editedNote.id ? <NoteEdit note={{...editedNote}} onChangeInfo={onChangeInfo} onChangeStyle={onChangeStyle}/> : <span></span>}
+            {editedNote && editedNote.id ? <NoteEdit note={{ ...editedNote }} onChangeInfo={onChangeInfo} onChangeStyle={onChangeStyle} /> : <span></span>}
         </NoteModal>
 
     </section>
