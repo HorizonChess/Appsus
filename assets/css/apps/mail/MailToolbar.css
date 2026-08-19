@@ -1,0 +1,41 @@
+/* mail toolbar - the strip above the list */
+
+.mail-toolbar {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: var(--mail-sp-1);
+    block-size: var(--mail-toolbar-h);
+    padding-inline: var(--mail-sp-2);
+}
+
+.mail-sort {
+    display: flex;
+    align-items: center;
+    gap: var(--mail-sp-2);
+}
+
+.mail-sort-label {
+    font-size: var(--mail-fs-small);
+    color: var(--mail-clr-text-secondary);
+}
+
+.mail-sort-select {
+    block-size: var(--mail-btn-h);
+    padding-inline: var(--mail-sp-2);
+    border: none;
+    border-radius: var(--mail-radius-pill);
+    background: none;
+    font-family: inherit;
+    font-size: var(--mail-fs-body);
+    color: var(--mail-clr-text);
+    cursor: pointer;
+}
+
+.mail-sort-select:hover {
+    background-color: var(--mail-clr-hover);
+}
+
+.mail-sort-select:focus {
+    outline: none;
+}

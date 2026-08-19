@@ -26,6 +26,7 @@
 @import './apps/mail/mail-common.css';
 @import './apps/mail/MailIndex.css';
 @import './apps/mail/MailFilter.css';
+@import './apps/mail/MailToolbar.css';
 @import './apps/mail/MailFolderList.css';
 @import './apps/mail/MailList.css';
 @import './apps/mail/MailPreview.css';

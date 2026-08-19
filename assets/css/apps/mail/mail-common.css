@@ -37,6 +37,7 @@
    nav buttons stay unscaled while the list rows around them scale */
 .mail-index button,
 .mail-index input,
+.mail-index select,
 .mail-index textarea {
     font-size-adjust: inherit;
 }

@@ -4,6 +4,7 @@ import { MailList } from '../cmps/MailList.jsx'
 import { MailCompose } from '../cmps/MailCompose.jsx'
 import { MailFolderList } from '../cmps/MailFolderList.jsx'
 import { MailFilter } from '../cmps/MailFilter.jsx'
+import { MailToolbar } from '../cmps/MailToolbar.jsx'
 
 const { useState, useEffect } = React
 const { useSearchParams, useNavigate } = ReactRouterDOM
@@ -15,15 +16,17 @@ export function MailIndex() {
 
     const status = searchParams.get('status') || 'inbox'
     const txt = searchParams.get('txt') || ''
+    const sortBy = searchParams.get('sortBy') || 'date'
+    const sortDir = searchParams.get('sortDir') || -1
 
     useEffect(() => {
         loadMails()
         return eventBusService.on('mails-changed', loadMails)
-    }, [status, txt])
+    }, [status, txt, sortBy, sortDir])
 
     // never blanks - mails starts null, so the loader still covers the first load
     function loadMails() {
-        mailService.query({ status, txt })
+        mailService.query({ status, txt, sortBy, sortDir })
             .then(setMails)
             .catch(err => console.log('Had issues loading mails', err))
     }
@@ -84,6 +87,8 @@ export function MailIndex() {
         <MailFolderList />
 
         <main className="mail-content">
+            <MailToolbar />
+
             {!mails && <div className="loader"></div>}
 
             {mails && <MailList
