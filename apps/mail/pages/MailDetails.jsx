@@ -9,7 +9,7 @@ const { useParams, useNavigate, useSearchParams } = ReactRouterDOM
 export function MailDetails() {
     const [mail, setMail] = useState(null)
     const { mailId } = useParams()
-    const [searchParams] = useSearchParams()
+    const [searchParams, setSearchParams] = useSearchParams()
     const navigate = useNavigate()
 
     useEffect(() => {
@@ -33,6 +33,14 @@ export function MailDetails() {
     // the folder lives in the query string, so it rides along and comes back
     function onBack() {
         navigate(`/mail?${searchParams}`)
+    }
+
+    // compose is a sibling, so the url is the only way to reach it
+    function onReply() {
+        const nextParams = new URLSearchParams(searchParams)
+        nextParams.set('compose', 'new')
+        nextParams.set('src', mailId)
+        setSearchParams(nextParams)
     }
 
     function onStarClick() {
@@ -119,7 +127,7 @@ export function MailDetails() {
                         <span className={`material-symbols-outlined ${isStared ? 'is-stared' : ''}`}>star</span>
                     </button>
 
-                    <button className="mail-icon-btn" title="Reply">
+                    <button className="mail-icon-btn" title="Reply" onClick={onReply}>
                         <span className="material-symbols-outlined">reply</span>
                     </button>
                 </header>
@@ -127,7 +135,7 @@ export function MailDetails() {
                 <p className="mail-details-body">{body}</p>
 
                 <footer className="mail-details-reply">
-                    <button className="mail-reply-btn">
+                    <button className="mail-reply-btn" onClick={onReply}>
                         <span className="material-symbols-outlined">reply</span>
                         <span>Reply</span>
                     </button>

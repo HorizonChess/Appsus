@@ -28,6 +28,7 @@ export const mailService = {
     toggleStar,
     toggleRead,
     getEmptyMail,
+    getReplyPrefill,
     getDefaultFilter,
     getFolderCounts,
     isInFolder,
@@ -151,6 +152,19 @@ function getEmptyMail({ to = '', subject = '', body = '' } = {}) {
         isRead: true,
         isStared: false,
         labels: [],
+    }
+}
+
+// feeds getEmptyMail, same shape as the note-to-mail prefill
+function getReplyPrefill(mail) {
+    const sentAt = mail.sentAt || mail.createdAt
+    const sender = mail.fromName || mail.from
+
+    return {
+        to: mail.from,
+        // skipped when it is already a reply, or the prefixes stack
+        subject: mail.subject.startsWith('Re: ') ? mail.subject : `Re: ${mail.subject}`,
+        body: `\n\nOn ${formatMailDate(sentAt)}, ${sender} <${mail.from}> wrote:\n${mail.body}`,
     }
 }
 
