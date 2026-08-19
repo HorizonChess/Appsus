@@ -4,7 +4,10 @@
 
     /* overflow: scroll; */
 }
-
+.note-preview{
+    grid-row:1/2;
+    overflow:clip
+}
 audio {
     width: 250px;
 }
@@ -24,6 +27,9 @@ figure {
 
 }
 
+.note-toolbar{
+    grid-row:2/3
+}
 
 
 .todo-list {
