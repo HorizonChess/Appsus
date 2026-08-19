@@ -106,14 +106,3 @@
     gap: var(--mail-sp-1);
 }
 
-.mail-preview .label-chip {
-    flex: 0 0 auto;
-    padding-block: var(--mail-sp-1);
-    padding-inline: var(--mail-sp-2);
-    border-radius: var(--mail-radius-sm);
-    font-size: var(--mail-fs-small);
-    font-weight: var(--mail-fw-read);
-    line-height: 1;
-    color: var(--mail-clr-text);
-}
-

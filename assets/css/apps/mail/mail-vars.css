@@ -55,7 +55,7 @@
     --mail-shadow-search-focus: rgba(65, 69, 73, .3) 0 1px 1px 0, rgba(65, 69, 73, .15) 0 1px 3px 1px;
     --mail-transition-btn: box-shadow .08s linear;
 
-    --mail-radius-sm: ;
+    --mail-radius-sm: 4px;
     --mail-radius-md: 8px;
     --mail-radius-lg: ;
     --mail-radius-pill: 18px;
@@ -92,12 +92,4 @@
     --mail-sp-4: 16px;
     --mail-sp-5: 24px;
     --mail-sp-6: 32px;
-
-    --mail-label-critical: #e8483c;
-    --mail-label-family: #1565c0;
-    --mail-label-work: #43a047;
-    --mail-label-friends: #f5e11a;
-    --mail-label-spam: #f79b1e;
-    --mail-label-memories: #ba68e8;
-    --mail-label-romantic: #29b6d8;
 }

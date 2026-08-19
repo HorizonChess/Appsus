@@ -1,7 +1,7 @@
 import { mailService } from '../services/mail.service.js'
 
 export function MailPreview({ mail, onToggleStar, onSetRead, onSelectMail, onRemoveMail }) {
-    const { subject, body, from, fromName, isRead, isStared, labels = [] } = mail
+    const { subject, body, from, fromName, isRead, isStared } = mail
     const sentAt = mail.sentAt || mail.createdAt
 
     function onStarClick(ev) {
@@ -33,12 +33,6 @@ export function MailPreview({ mail, onToggleStar, onSetRead, onSelectMail, onRem
         <span className="mail-sender">{fromName || from}</span>
 
         <div className="mail-txt">
-            {labels.map(label => (
-                <span
-                    key={label}
-                    className="label-chip"
-                    style={{ backgroundColor: `var(--mail-label-${label})` }}>{label}</span>
-            ))}
             <span className="mail-subject">{subject}</span>
             <span className="mail-snippet"> - {body}</span>
         </div>

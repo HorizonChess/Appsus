@@ -11,8 +11,6 @@ export const loggedinUser = {
     fullname: 'Mahatma Appsus',
 }
 
-export const MAIL_LABELS = ['critical', 'family', 'work', 'friends', 'spam', 'memories', 'romantic']
-
 // the join key between the sidebar and getFolderCounts, and the sidebar's order
 export const MAIL_FOLDERS = ['inbox', 'starred', 'sent', 'draft', 'trash']
 
@@ -34,7 +32,6 @@ export const mailService = {
     isInFolder,
     formatMailDate,
     loggedinUser,
-    MAIL_LABELS,
     MAIL_FOLDERS,
 }
 
@@ -151,7 +148,6 @@ function getEmptyMail({ to = '', subject = '', body = '' } = {}) {
         removedAt: null,
         isRead: true,
         isStared: false,
-        labels: [],
     }
 }
 
@@ -174,7 +170,6 @@ function getDefaultFilter() {
         txt: '',
         isRead: null,     // null = show all
         isStared: null,   // null = show all
-        labels: [],
         from: '',
         subject: '',
         sortBy: 'date',   // date / subject / from
@@ -222,11 +217,6 @@ function _filterMails(mails, criteria) {
 
     if (criteria.isStared !== null) {
         mails = mails.filter(mail => mail.isStared === criteria.isStared)
-    }
-
-    // has ANY of the selected labels
-    if (criteria.labels && criteria.labels.length) {
-        mails = mails.filter(mail => mail.labels.some(label => criteria.labels.includes(label)))
     }
 
     return mails

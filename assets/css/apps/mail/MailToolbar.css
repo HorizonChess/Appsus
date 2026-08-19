@@ -19,13 +19,20 @@
     inline-size: 18px;
     block-size: 18px;
     margin-inline-start: var(--mail-sp-2);
+    border-radius: var(--mail-radius-sm);
     accent-color: var(--mail-clr-accent);
     cursor: pointer;
+}
+
+/* native checkboxes ignore padding, so the halo is a shadow spread */
+.mail-select-all:hover {
+    box-shadow: 0 0 0 var(--mail-sp-2) var(--mail-clr-hover);
 }
 
 /* the caret hugs the checkbox instead of taking a full button footprint */
 .mail-icon-btn-sm {
     inline-size: var(--mail-sp-5);
+    border-radius: var(--mail-radius-sm);
 }
 
 .mail-sort {
