@@ -1,6 +1,8 @@
  /* note list */
 
  .notes {
+        margin:49.5px;
+
      /* columns: auto 250px; */
      /* padding: 2em; */
  }
@@ -96,7 +98,7 @@
  .note-pin.unpinned {
      opacity: 0;
 
-     
+
  }
 
  .note:hover .note-pin.unpinned {

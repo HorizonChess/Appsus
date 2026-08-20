@@ -11,12 +11,13 @@
 
 .note-layout{
     display: grid;
-    grid-template-columns: minmax(3rem,auto) 1fr minmax(3rem,auto);
+    grid-template-rows: min-content;
+    grid-template-columns: minmax(5rem,auto) 1fr minmax(5rem,auto);
 }
 
 .note-layout>*:not(.note-sidebar){
     grid-column: 2;
 }
 .note-layout>.note-sidebar{
-    grid-column: 3;
+    grid-column: 1;
 }

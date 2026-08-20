@@ -6,7 +6,8 @@
 }
 .note-preview{
     grid-row:1/2;
-    overflow:clip
+    overflow:clip;
+    width:100%;
 }
 audio {
     width: 250px;
@@ -93,3 +94,15 @@ input:has(+ .note-todo-checkbox:checked) {
     border: none;
     background-color: transparent;
 }
+
+ .note .note-txt{
+      overflow-wrap: break-word;
+      hyphens: auto;
+        inline-size: 225px;
+
+
+ }
+
+ .note .note-edit-content{
+    width: 100%;
+ }

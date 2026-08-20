@@ -156,7 +156,7 @@ info: type === 'NoteTodos' ? ({ title: '', todos: [emptyTodo] }) : ({ title: '',
         noteService.save(duplicatedNote)
             .then(note => {
                 const newNotes = [...notes]
-                newNotes.splice(duplicatedNoteIdx+1, 1, note)
+                newNotes.splice(duplicatedNoteIdx, 1, note)
                 setNotes(newNotes)
             })
 

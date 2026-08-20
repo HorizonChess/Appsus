@@ -14,7 +14,6 @@ export function NoteEdit({ note, updateNote, onChangeInfo, onChangeStyle, onTogg
     const [noteEditStyle, setNoteEditStyle] = useState(note.style)
     const [isPinned, setIsPinned] = useState(note.isPinned)
 
-    console.log('isPinned', isPinned)
     const backdropRef = useRef()
 
     function handleChange(info, noteId) {
