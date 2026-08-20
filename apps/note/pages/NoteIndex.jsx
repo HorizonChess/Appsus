@@ -22,7 +22,18 @@ export function NoteIndex() {
     function onChangeType(type) {
         const emptyTodo = { txt: '', isDone: false }
 
-        setEditedNote({ ...editedNote, type, info: type === 'NoteTodos' ? ({ title: '', todos: [emptyTodo] }) : ({ title: '', txt: '' }) })
+        setEditedNote({
+...editedNote,
+type,
+info: type === 'NoteTodos' ? ({ title: '', todos: [emptyTodo] }) : ({ title: '', txt: '' })
+        })
+
+    }
+
+    function onTogglePinEmptyNote() {
+        const updatedNote = { ...editedNote, isPinned: !editedNote.isPinned }
+        setEditedNote(updatedNote)
+        updateNote(updatedNote)
 
     }
 
@@ -140,7 +151,8 @@ export function NoteIndex() {
             note={editedNote}
             onChangeInfo={onChangeInfo}
             onChangeType={onChangeType}
-            addNote={addNote} />
+            addNote={addNote}
+            onTogglePinEmptyNote={onTogglePinEmptyNote} />
 
         <NoteList
             notes={notes}

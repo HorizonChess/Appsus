@@ -7,9 +7,10 @@ import { TitleEditor } from "./TitleEditor.jsx"
 import { ComposerToolbar } from "./ComposerToolbar.jsx"
 import { ImgEditor } from "./ImgEditor.jsx"
 
-export function NoteComposer({ note, onChangeInfo, onChangeType, addNote }) {
+export function NoteComposer({ note, onChangeInfo, onChangeType, addNote,onTogglePinEmptyNote }) {
     const [noteType, setNoteType] = useState('NoteTxt')
     const [isExpanded, setIsExpanded] = useState(false)
+    const [isPinned, setIsPinned] = useState(false)
 
     useEffect(() => {
         eventBusService.on('note-edit', collapseComposer)
@@ -18,37 +19,28 @@ export function NoteComposer({ note, onChangeInfo, onChangeType, addNote }) {
     function collapseComposer(msg) {
         setNoteType('NoteTxt')
         setIsExpanded(false)
-
     }
 
     function handleChange(info) {
-        console.log('info',info)
         onChangeInfo(info)
     }
 
     function onChangeNoteType(type, ev) {
-        console.log('ev', ev)
-        console.log('type', type)
         if ((type) === 'NoteImg') {
 
             const reader = new FileReader()
 
-            // Read and encode the file...
             reader.readAsDataURL(ev.target.files[0])
 
-            // ...when finished encoding, create an <img /> from it...
             reader.onload = function (event) {
                 const img = new Image()
 
-                // ...and when the img is ready, run the callback
                 img.onload = () => {
                     onChangeType(type)
                     handleChange({ ...note.info, url: img.src })
                     setNoteType(type)
                     setIsExpanded(true)
                 }
-
-                console.log('event.target.result',event.target.result)
                 img.src = event.target.result
             }
 
@@ -60,14 +52,16 @@ export function NoteComposer({ note, onChangeInfo, onChangeType, addNote }) {
 
     }
 
-    function onImageUpload() {
-
+    function handleTogglePinChange() {
+        setIsPinned(!isPinned)
+        onTogglePinEmptyNote(note)
     }
 
     function onSubmit() {
         setIsExpanded(!isExpanded)
         addNote()
         setNoteType('NoteTxt')
+        setIsPinned(false)
     }
 
     function onExpandComposer(ev) {
@@ -96,6 +90,13 @@ export function NoteComposer({ note, onChangeInfo, onChangeType, addNote }) {
             onChangeVal={handleChange} />
 
 
+        {isPinned && <button onClick={handleTogglePinChange} className="note-pin pinned">
+            <i className="fa-solid fa-thumbtack"></i>
+
+        </button>}
+        {!isPinned && <button onClick={handleTogglePinChange} className="note-pin unpinned">
+            <i className="fa-solid fa-thumbtack-slash"></i>
+        </button>}
 
         <button className="note-submit-btn" onClick={onSubmit}>
             <i className="fa-solid fa-play"></i>
