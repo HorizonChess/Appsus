@@ -3,7 +3,7 @@
 }
 
 
-.root-cmp:has(.mail-index) {
+.root-cmp:has(.mail-index){
     display: flex;
     flex-direction: column;
     min-block-size: 100dvh;
