@@ -22,7 +22,6 @@ export function MailFilter() {
         return () => clearTimeout(timeoutId)
     }, [txt])
 
-    // delete rather than set '' so get() keeps answering null
     function setParam(key, value) {
         const nextParams = new URLSearchParams(searchParams)
 

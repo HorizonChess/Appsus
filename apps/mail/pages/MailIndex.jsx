@@ -19,12 +19,17 @@ export function MailIndex() {
     const sortBy = searchParams.get('sortBy') || 'date'
     const sortDir = searchParams.get('sortDir') || -1
 
+    // a folder switch drops the old rows right away - the loader covers the gap
+    useEffect(() => {
+        setMails(null)
+    }, [status])
+
     useEffect(() => {
         loadMails()
         return eventBusService.on('mails-changed', loadMails)
     }, [status, txt, sortBy, sortDir])
 
-    // never blanks - mails starts null, so the loader still covers the first load
+    // a search, a sort or a refresh keeps the old rows up until the new ones land
     function loadMails() {
         mailService.query({ status, txt, sortBy, sortDir })
             .then(setMails)
