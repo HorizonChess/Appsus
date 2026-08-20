@@ -89,18 +89,20 @@ info: type === 'NoteTodos' ? ({ title: '', todos: [emptyTodo] }) : ({ title: '',
     }
 
     function addNote() {
-        notes.push(editedNote)
+        if (editedNote.type === filterBy.type) notes.push(editedNote)
+
         setEditedNote(noteService.getEmptyNote())
 
         const noteIdx = notes.length - 1
 
-        setNotes([...notes])
+        setNotes(notes.filter(note => note.type === filterBy.type))
 
         noteService.save(editedNote)
             .then(note => {
                 const newNotes = [...notes]
-                newNotes.splice(noteIdx, 1, note)
-                setNotes(newNotes)
+                if (note.type === filterBy.type) newNotes.splice(noteIdx, 1, note)
+
+                setNotes(newNotes.filter(note => note.type === filterBy.type))
             })
 
 

@@ -1,7 +1,15 @@
 .note-tabs {
     display: flex;
+    position: fixed;
     flex-direction: column;
     margin-block-start: 8px;
+    cursor: pointer;
+            transition:100ms ease;
+
+}
+
+.note-tab{
+    cursor: pointer;
 }
 
 .note-sidebar {
@@ -25,6 +33,10 @@
     font-size: 0;
     transition:100ms ease;
 }
+.note-sidebar:hover .note-tabs{
+    width: 16.75em;
+}
+
 .note-sidebar:hover .note-tab-txt {
     margin-inline-start: 1.25em;
     font-size: .875em;
