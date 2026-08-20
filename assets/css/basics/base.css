@@ -29,3 +29,8 @@ li {
     list-style: none;
     padding-inline: 1em;
 }
+
+button{
+    border:none;
+    background-color: transparent;   
+}
