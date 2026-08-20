@@ -1,0 +1,28 @@
+.note-tabs{
+    display: flex;
+    flex-direction: column;
+}
+
+.note-tab-btn{
+    width: fit-content;
+}
+.note-sidebar nav{}
+.note-sidebar nav a {
+    display: grid;
+    align-items: center;
+    justify-items: center;
+    justify-content: center;
+    /* margin: .5em; */
+    color: grey;
+    width: 3rem;
+    height:3rem;
+    font-size:1.5em;
+    border-radius:50%;
+}
+
+.note-sidebar a.active {
+    background-color: rgb(254, 239, 195);
+    font-weight: bold;
+    text-decoration: overline;
+
+}

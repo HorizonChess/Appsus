@@ -13,7 +13,8 @@ export const noteService = {
     get,
     getEmptyNote,
     save,
-    remove
+    remove,
+    getFilterFromSearchParams
 
 }
 
@@ -115,4 +116,18 @@ function _filterByText(notes, text) {
 
         return isContainTxt
     })
+}
+
+function getDefaultFilter(filterBy = { txt: '', type: '' }) {
+    return { txt: filterBy.txt, type: filterBy.type }
+}
+
+function getFilterFromSearchParams(searchParams) {
+    const defaultFilter = getDefaultFilter()
+    const filterBy = {}
+
+    for (const field in defaultFilter) {
+        filterBy[field] = searchParams.get(field) || ''
+    }
+    return filterBy
 }

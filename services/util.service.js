@@ -7,7 +7,8 @@ export const utilService = {
     getDayName,
     getMonthName,
     loadFromStorage,
-    saveToStorage
+    saveToStorage,
+    trimObj
 }
 
 function saveToStorage(key, val) {
@@ -88,4 +89,15 @@ function formatMailDate(timestamp) {
     }
 
     return `${utilService.padNum(date.getDate())}/${utilService.padNum(date.getMonth() + 1)}/${date.getFullYear()}`
+}
+
+
+function trimObj(obj) {
+    console.log('obj',obj)
+    const trimmedObj = {}
+
+    for (const key in obj) {
+        if (obj[key]) trimmedObj[key] = obj[key]
+    }
+    return trimmedObj
 }

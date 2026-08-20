@@ -1,23 +1,41 @@
 
 import { noteService } from "../services/note.service.js"
 import { eventBusService } from "../../../services/event-bus.service.js"
+import { utilService } from "../../../services/util.service.js"
 
 import { NoteList } from "../cmps/NoteList.jsx"
 import { NoteModal } from "../cmps/NoteModal.jsx"
 import { NoteEdit } from "../cmps/NoteEdit.jsx"
 import { NoteComposer } from "../cmps/NoteComposer.jsx"
+import { NoteFilter } from "../cmps/NoteFilter.jsx"
+
+
+import { useEffectUpdate } from '../custom-hooks/useEffectUpdate.js'
 
 const { useState, useRef, useEffect } = React
+const { useSearchParams, useNavigate } = ReactRouterDOM
 
 export function NoteIndex() {
     const [notes, setNotes] = useState([])
     const [isShown, setIsShown] = useState(false)
     const [editedNote, setEditedNote] = useState(noteService.getEmptyNote())
 
+    const [searchParams, setSearchParams] = useSearchParams();
+    const [filterBy, setFilterBy] = useState(noteService.getFilterFromSearchParams(searchParams))
+
+
     useEffect(() => {
-        noteService.query({})
-            .then(notes => setNotes(notes))
+        loadNotes(filterBy)
     }, [])
+
+    useEffectUpdate(() => {
+        loadNotes(filterBy)
+        setSearchParams(utilService.trimObj(filterBy))
+    }, [filterBy])
+
+    function loadNotes() {
+        noteService.query(filterBy).then(setNotes)
+    }
 
     function onChangeType(type) {
         const emptyTodo = { txt: '', isDone: false }
@@ -144,8 +162,10 @@ info: type === 'NoteTodos' ? ({ title: '', todos: [emptyTodo] }) : ({ title: '',
 
     }
 
-    return <section className="notes-container">
-        <h1>Notes app</h1>
+    return <section className="notes-container note-layout">
+        {/* <SearchNote onSetFilterBy={setFilterBy} filterBy={queryOptions} /> */}
+
+        <NoteFilter filterBy={filterBy} onSetFilterBy={setFilterBy} onClearFilter={''} />
 
         <NoteComposer
             note={editedNote}

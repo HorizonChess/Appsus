@@ -8,3 +8,15 @@
     flex-direction: column;
     min-block-size: 100dvh;
 }
+
+.note-layout{
+    display: grid;
+    grid-template-columns: minmax(3rem,auto) 1fr minmax(3rem,auto);
+}
+
+.note-layout>*:not(.note-sidebar){
+    grid-column: 2;
+}
+.note-layout>.note-sidebar{
+    grid-column: 3;
+}
