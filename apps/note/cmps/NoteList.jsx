@@ -36,7 +36,6 @@ export function NoteList({ notes, updateNote, onRemoveNote,
                         <article key={note.id} className="note" style={note.style} >
                             <NotePreview
                                 note={note}
-                                updateNote={updateNote}
                                 onChangeInfo={onChangeInfo} />
 
                             <button
@@ -79,7 +78,6 @@ export function NoteList({ notes, updateNote, onRemoveNote,
                         <article key={note.id} className="note" style={note.style} >
                             <NotePreview
                                 note={note}
-                                updateNote={updateNote}
                                 onChangeInfo={onChangeInfo} />
 
                             <button

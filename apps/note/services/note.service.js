@@ -46,8 +46,11 @@ function get(noteId) {
 
 function save(note) {
     if (note.id) {
+        note.updatedAt = Date.now()
+
         return storageService.put(NOTES_KEY, note)
     } else {
+
         return storageService.post(NOTES_KEY, note)
     }
 }
@@ -86,7 +89,7 @@ function _createNote(demoNote) {
 
 }
 
-function getEmptyNote(type = 'NoteTxt', info = {title:'',txt:''}, style = { backgroundColor: '#ffffff' }) {
+function getEmptyNote(type = 'NoteTxt', info = { title: '', txt: '' }, style = { backgroundColor: '#ffffff' }) {
     return {
         type,
         info,

@@ -77,7 +77,12 @@ input[type="file"] {
     grid-row: 1;
     justify-self: end;
 }
-
+.note-composer .note-edit-content{
+    grid-row: 2;
+}
+.note-composer .note-submit-btn{
+    grid-row: 2;
+}
 .composer-placeholder {
     font-family: roboto;
     color: rgb(32, 33, 36);

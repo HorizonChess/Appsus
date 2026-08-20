@@ -11,7 +11,7 @@
 
 .note-layout{
     display: grid;
-    grid-template-rows: min-content;
+    grid-template-rows: min-content min-content;
     grid-template-columns: minmax(5rem,auto) 1fr minmax(5rem,auto);
 }
 

@@ -19,38 +19,62 @@ export function NoteFilter({ filterBy, onSetFilterBy }) {
     }
 
 
-    return <aside className="note-sidebar">
-        <nav className="note-tabs">
-            <div className="note-tab" onClick={ev => handleChange('')}>
-                <button className={`note-tab-btn ${!filterByToEdit.type ? 'active' : ''}`} name='type' value='' >
-                    <i class="fa-regular fa-lightbulb"></i></button>
-                <h3 className="note-tab-txt">All Notes</h3>
-            </div>
+    return <div class='note-filter'>
+        {/* <div className="note-search">
 
-            <div className="note-tab" onClick={ev => handleChange('NoteTxt')}>
-                <button className={`note-tab-btn ${filterByToEdit.type === 'NoteTxt' ? 'active' : ''}`} name='type' value='NoteTxt' >
-                    <i class="fa-solid fa-pencil"></i></button>
-                <h3 className="note-tab-txt">Text Notes</h3>
-            </div>
+            <span className="material-symbols-outlined note-search-icon">search</span>
 
-            <div className="note-tab" onClick={ev => handleChange('NoteTodos')}>
-                <button className={`note-tab-btn ${filterByToEdit.type === 'NoteTodos' ? 'active' : ''}`} name='type' value='NoteTodos' >
-                    <i class="fa-regular fa-square-check"></i></button>
-                <h3 className="note-tab-txt">Todo Notes</h3>
-            </div>
+            <input
+                type="text"
+                value={filterByToEdit.txt}
+                placeholder="Search note"
+                className="note-search-input"
+                onChange={ev => handleChange(ev.target.value,'txt')} />
 
-            <div className="note-tab" onClick={ev => handleChange('NoteVideo')}>
-                <button className={`note-tab-btn ${filterByToEdit.type === 'NoteVideo' ? 'active' : ''}`} name='type' value='NoteVideo' >
-                    <i class="fa-brands fa-youtube"></i></button>
-                <h3 className="note-tab-txt">Video Notes</h3>
-            </div>
+            {filterBy && filterBy.txt && <button
+                type="button"
+                className="note-icon-btn"
+                title="Clear search"
+                onClick={ev => handleChange('','txt')}>
+                <span className="material-symbols-outlined">close</span>
+            </button>}
 
-            <div className="note-tab" onClick={ev => handleChange('NoteAudio')}>
-                <button className={`note-tab-btn ${filterByToEdit.type === 'NoteAudio' ? 'active' : ''}`} name='type' value='NoteAudio' >
-                    <i class="fa-solid fa-volume"></i></button>
-                <h3 className="note-tab-txt">Audio Notes</h3>
-            </div>
+        </div> */}
 
-        </nav>
-    </aside>
+        <aside className="note-sidebar">
+            <nav className="note-tabs">
+                <div className="note-tab" onClick={ev => handleChange('','type')}>
+                    <button className={`note-tab-btn ${!filterByToEdit.type ? 'active' : ''}`} name='type' value='' >
+                        <i class="fa-regular fa-lightbulb"></i></button>
+                    <h3 className="note-tab-txt">All Notes</h3>
+                </div>
+
+                <div className="note-tab" onClick={ev => handleChange('NoteTxt','type')}>
+                    <button className={`note-tab-btn ${filterByToEdit.type === 'NoteTxt' ? 'active' : ''}`} name='type' value='NoteTxt' >
+                        <i class="fa-solid fa-pencil"></i></button>
+                    <h3 className="note-tab-txt">Text Notes</h3>
+                </div>
+
+                <div className="note-tab" onClick={ev => handleChange('NoteTodos','type')}>
+                    <button className={`note-tab-btn ${filterByToEdit.type === 'NoteTodos' ? 'active' : ''}`} name='type' value='NoteTodos' >
+                        <i class="fa-regular fa-square-check"></i></button>
+                    <h3 className="note-tab-txt">Todo Notes</h3>
+                </div>
+
+                <div className="note-tab" onClick={ev => handleChange('NoteVideo','type')}>
+                    <button className={`note-tab-btn ${filterByToEdit.type === 'NoteVideo' ? 'active' : ''}`} name='type' value='NoteVideo' >
+                        <i class="fa-brands fa-youtube"></i></button>
+                    <h3 className="note-tab-txt">Video Notes</h3>
+                </div>
+
+                <div className="note-tab" onClick={ev => handleChange('NoteAudio','type')}>
+                    <button className={`note-tab-btn ${filterByToEdit.type === 'NoteAudio' ? 'active' : ''}`} name='type' value='NoteAudio' >
+                        <i class="fa-solid fa-volume"></i></button>
+                    <h3 className="note-tab-txt">Audio Notes</h3>
+                </div>
+
+            </nav>
+        </aside>
+    </div>
+
 }

@@ -30,6 +30,7 @@ export function NoteIndex() {
 
     useEffectUpdate(() => {
         loadNotes(filterBy)
+        // setSearchParams(filterBy)
         setSearchParams(utilService.trimObj(filterBy))
     }, [filterBy])
 
@@ -41,9 +42,9 @@ export function NoteIndex() {
         const emptyTodo = { txt: '', isDone: false }
 
         setEditedNote({
-...editedNote,
-type,
-info: type === 'NoteTodos' ? ({ title: '', todos: [emptyTodo] }) : ({ title: '', txt: '' })
+            ...editedNote,
+            type,
+            info: type === 'NoteTodos' ? ({ title: '', todos: [emptyTodo] }) : ({ title: '', txt: '' })
         })
 
     }
@@ -131,7 +132,6 @@ info: type === 'NoteTodos' ? ({ title: '', todos: [emptyTodo] }) : ({ title: '',
 
     </section>
 
-
     function onOpenModal(noteId) {
         setEditedNote(notes.find(note => note.id === noteId))
         eventBusService.emit('note-edit')
@@ -180,13 +180,13 @@ info: type === 'NoteTodos' ? ({ title: '', todos: [emptyTodo] }) : ({ title: '',
             notes={notes}
             onTogglePinNote={onTogglePinNote}
             editedNote={editedNote}
-            updateNote={updateNote}
             onRemoveNote={removeNote}
             onChangeStyle={onChangeStyle}
             onOpenModal={onOpenModal}
             onChangeInfo={onChangeInfo}
             onDuplicateNote={onDuplicateNote}
         />
+
 
         <NoteModal
             isShown={isShown}
@@ -203,6 +203,7 @@ info: type === 'NoteTodos' ? ({ title: '', todos: [emptyTodo] }) : ({ title: '',
                 :
                 <span></span>}
         </NoteModal>
+
 
     </section>
 }
