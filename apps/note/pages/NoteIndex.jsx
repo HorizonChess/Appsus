@@ -22,7 +22,7 @@ export function NoteIndex() {
 
     const [isShown, setIsShown] = useState(false)
     const [editedNote, setEditedNote] = useState(null)
-
+    console.log('editedNote',editedNote)
     useEffect(() => {
         loadNotes()
     }, [])
@@ -75,40 +75,46 @@ export function NoteIndex() {
     }
 
 
-    function onChangeType(type) {
+    function onChangeType(type, ev) {
+        var note
+        if (!editedNote) note = noteService.getEmptyNote()
+        else note = editedNote
+
         const emptyTodo = { txt: '', isDone: false }
 
-        setEditedNote({
-            ...editedNote,
-            type,
-            info: type === 'NoteTodos' ? ({ title: '', todos: [emptyTodo] }) : ({ title: '', txt: '' })
-        })
+        if ((type) === 'NoteImg') {
 
+            const reader = new FileReader()
+
+            reader.readAsDataURL(ev.target.files[0])
+
+            reader.onload = function (event) {
+                const img = new Image()
+
+                img.onload = () => {
+                    const newInfo = { ...note.info, url: img.src }
+                    note.info = newInfo
+                    note.type = 'NoteImg'
+                    setEditedNote(note)
+                }
+                img.src = event.target.result
+            }
+
+        } else {
+            setEditedNote({
+                ...note,
+                type,
+                info: type === 'NoteTodos' ? ({ title: '', todos: [emptyTodo] }) : ({ title: '', txt: '' })
+            })
+        }
     }
-
-    // function onTogglePinEmptyNote() {
-    //     const updatedNote = { ...editedNote, isPinned: !editedNote.isPinned }
-    //     setEditedNote(updatedNote)
-    //     updateNote(updatedNote)
-
-    // }
-
-    // function onTogglePinNote(note) {
-    //     const updatedNote = { ...note, isPinned: !note.isPinned }
-    //     const updatedNoteIdx = notes.findIndex(note => note.id === updatedNote.id)
-    //     notes.splice(updatedNoteIdx, 1)
-    //     notes.unshift(updatedNote)
-
-    //     if (editedNote.id) setEditedNote(updatedNote)
-    //     updateNote(updatedNote)
-    // }
 
     function onTogglePinNote(noteId) {
         if (noteId || editedNote.id) {
             const searchNoteId = noteId ? noteId : editedNote.id
 
             const noteIdx = notes.findIndex(note => note.id === searchNoteId)
-            console.log('noteIdx',noteIdx)
+            console.log('noteIdx', noteIdx)
             const note = notes.at(noteIdx)
 
             note.isPinned = !note.isPinned

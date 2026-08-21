@@ -7,8 +7,8 @@ import { TitleEditor } from "./TitleEditor.jsx"
 import { ComposerToolbar } from "./ComposerToolbar.jsx"
 import { ImgEditor } from "./ImgEditor.jsx"
 
-export function NoteComposer({ note, onChangeInfo, onChangeType, addNote,onTogglePinEmptyNote }) {
-    const [noteType, setNoteType] = useState('NoteTxt')
+export function NoteComposer({ note, onChangeInfo, onChangeType, addNote, onTogglePinEmptyNote }) {
+    // const [noteType, setNoteType] = useState('NoteTxt')
     const [isExpanded, setIsExpanded] = useState(false)
     const [isPinned, setIsPinned] = useState(false)
 
@@ -17,7 +17,7 @@ export function NoteComposer({ note, onChangeInfo, onChangeType, addNote,onToggl
     }, [])
 
     function collapseComposer(msg) {
-        setNoteType('NoteTxt')
+        // setNoteType('NoteTxt')
         setIsExpanded(false)
     }
 
@@ -25,32 +25,6 @@ export function NoteComposer({ note, onChangeInfo, onChangeType, addNote,onToggl
         onChangeInfo(info)
     }
 
-    function onChangeNoteType(type, ev) {
-        if ((type) === 'NoteImg') {
-
-            const reader = new FileReader()
-
-            reader.readAsDataURL(ev.target.files[0])
-
-            reader.onload = function (event) {
-                const img = new Image()
-
-                img.onload = () => {
-                    onChangeType(type)
-                    handleChange({ ...note.info, url: img.src })
-                    setNoteType(type)
-                    setIsExpanded(true)
-                }
-                img.src = event.target.result
-            }
-
-        } else {
-            setNoteType(type)
-            onChangeType(type)
-            setIsExpanded(true)
-        }
-
-    }
 
     function handleTogglePinChange() {
         setIsPinned(!isPinned)
@@ -60,24 +34,39 @@ export function NoteComposer({ note, onChangeInfo, onChangeType, addNote,onToggl
     function onSubmit() {
         setIsExpanded(!isExpanded)
         addNote()
-        setNoteType('NoteTxt')
+        // setNoteType('NoteTxt')
         setIsPinned(false)
     }
 
     function onExpandComposer(ev) {
         ev.preventDefault()
-onloadEmptyNote()
+        onloadEmptyNote()
         setIsExpanded(true)
     }
 
-    if (!isExpanded) {
+    if (!note || note.id) {
         return < section className="note-composer collapsed">
             <h3 className="composer-placeholder"
-                onClick={onExpandComposer}>Write a note...</h3>
-            <ComposerToolbar onChangeNoteType={onChangeNoteType} />
+                onClick={ev=>onChangeType('NoteTxt', ev)}>Write a note...</h3>
 
+            <div className="composer-toolbar">
+                <button className="toolbar-btn" onClick={ev => onChangeType('NoteTodos')}><i className="fa-regular fa-square-check"></i></button>
+                
+                <input type="file"
+                    accept="image/*,.pdf"
+                    id="note-img-input"
+                    name="note-img-input"
+                    className="toolbar-btn" onChange={ev => {
+                        ev.preventDefault()
+                        onChangeType('NoteImg', ev)
+                    }}
+                />
+
+                <label htmlFor="note-img-input"><i class="fa-regular fa-image"></i></label>
+            </div>
         </section>
     }
+
 
     return < section className="note-composer expanded">
         <TitleEditor info={note.info} onChangeTitle={handleChange} isEditMode={true} />
@@ -85,7 +74,7 @@ onloadEmptyNote()
 
         <DynamicEditor
             key={`note#${note.id}-editor`}
-            cmpType={noteType}
+            cmpType={note.type}
             info={note.info}
             isEditMode={true}
             onChangeVal={handleChange} />
