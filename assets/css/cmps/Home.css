@@ -1,33 +1,136 @@
- /* home */
+/* home - the shared landing page for both apps */
 
 .home {
-    background-color: var(--bg2);
+    --home-surface: rgb(255, 255, 255);
+    --home-ink: rgb(32, 33, 36);
+    --home-ink-muted: rgb(95, 99, 104);
+    --home-shadow: 0 1px 2px rgba(60, 64, 67, .3), 0 1px 3px 1px rgba(60, 64, 67, .15);
+    --home-shadow-lift: 0 6px 10px rgba(60, 64, 67, .18), 0 12px 28px 4px rgba(60, 64, 67, .16);
+
+    /* the two app tints bleeding in from opposite corners - gmail's nav blue and
+       keep's selected yellow, so the page belongs to neither and nods to both */
+    min-block-size: 80dvh;
+    padding-block: clamp(2.5rem, 8vh, 5rem);
+    padding-inline: 1.5rem;
+    background-color: rgb(250, 251, 253);
+    background-image:
+        radial-gradient(circle at 12% 18%, rgba(211, 227, 253, .85), transparent 42%),
+        radial-gradient(circle at 88% 82%, rgba(254, 239, 195, .85), transparent 42%);
+    /* nothing sets a base font outside the mail app, so this would be the
+       browser's default serif otherwise */
+    font-family: Roboto, Helvetica, Arial, sans-serif;
+    color: var(--home-ink);
+    text-align: center;
 }
 
-.home .box-container {
-    padding: 1em 0;
+.home-hero {
+    margin-block-end: clamp(2rem, 6vh, 3.5rem);
 }
 
-.home .box1 {
-    background-color: var(--color1);
-    min-height: 10em;
+.home-title {
+    font-size: clamp(2.25rem, 6vw, 3.5rem);
+    font-weight: 700;
+    letter-spacing: -.02em;
 }
 
-.home .box2 {
-    background-color: var(--color2);
-    min-height: 10em;
+.home-subtitle {
+    margin-block-start: .5rem;
+    font-size: clamp(1rem, 2.5vw, 1.25rem);
+    color: var(--home-ink-muted);
 }
 
- @media (min-width: 750px) {
-    .home .box-container {
-        display: flex;
-        flex-direction: row-reverse;
+.home-apps {
+    display: grid;
+    /* as many across as fit, stacked when they do not - a fourth app needs no
+       change here either */
+    grid-template-columns: repeat(auto-fit, minmax(14rem, 1fr));
+    gap: 1.5rem;
+    max-inline-size: 60rem;
+    margin-inline: auto;
+    padding: 0;
+    list-style: none;
+}
+
+/* base.css pads every li */
+.home-apps li {
+    padding: 0;
+}
+
+.home-app {
+    display: flex;
+    block-size: 100%;
+    flex-direction: column;
+    align-items: center;
+    gap: .75rem;
+    padding: 2.5rem 1.5rem;
+    border-radius: 1rem;
+    background-color: var(--home-surface);
+    box-shadow: var(--home-shadow);
+    transition: transform .18s ease, box-shadow .18s ease;
+}
+
+.home-app:hover,
+.home-app:focus-visible {
+    transform: translateY(-6px);
+    box-shadow: var(--home-shadow-lift);
+}
+
+/* no app behind it yet, so it does not invite a click */
+.home-app.is-soon {
+    box-shadow: none;
+    background-color: transparent;
+    border: 1px dashed rgb(218, 220, 224);
+}
+
+.home-app.is-soon:hover {
+    transform: none;
+    box-shadow: none;
+}
+
+/* both tints come off the card's own custom properties, set from the app list.
+   the font awesome kit runs in js mode, which swaps the <i> for an <svg> sized at
+   1em - so the glyph size has to be set here, on the circle, not on the <i> */
+.home-app-icon {
+    display: grid;
+    place-items: center;
+    inline-size: 5.5rem;
+    block-size: 5.5rem;
+    border-radius: 50%;
+    background-color: var(--app-tint);
+    font-size: 3.5rem;
+}
+
+/* base.css stretches images to fill and crops them, which would eat the mark */
+.home-app-icon img {
+    inline-size: 3.25rem;
+    block-size: 3.25rem;
+    object-fit: contain;
+}
+
+/* whichever of the two the kit ends up rendering */
+.home-app-icon i,
+.home-app-icon svg {
+    color: var(--app-ink);
+}
+
+.home-app-name {
+    font-size: 1.375rem;
+    font-weight: 500;
+}
+
+.home-app-tagline {
+    margin: 0;
+    color: var(--home-ink-muted);
+}
+
+/* the lift is decoration - it should not move for anyone who asked it not to */
+@media (prefers-reduced-motion: reduce) {
+    .home-app {
+        transition: none;
     }
-    .home .box1 {
-        flex: 1
+
+    .home-app:hover,
+    .home-app:focus-visible {
+        transform: none;
     }
-    .home .box2 {
-        width: 30vw;
-    }
-    
 }
