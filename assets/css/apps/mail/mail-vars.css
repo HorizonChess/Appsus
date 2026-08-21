@@ -82,7 +82,9 @@
     --mail-star-size: 20px;
     --mail-icon-size: 20px;
     --mail-compose-icon-size: 24px;
-    --mail-col-sender-w: 168px;
+    /* gives ground continuously as the window narrows, instead of holding 168 until
+       a breakpoint takes it away */
+    --mail-col-sender-w: clamp(104px, 16vw, 168px);
     --mail-col-sender-indent: 32px;
     --mail-col-date-w: 56px;
 

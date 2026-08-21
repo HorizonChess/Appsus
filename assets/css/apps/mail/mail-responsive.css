@@ -1,0 +1,55 @@
+/* mail responsive - every breakpoint in one place, loaded last so it wins.
+   most of it re-points the tokens in mail-vars.css rather than restyling anything */
+
+/* the sidebar becomes an icon rail before its 256px starts eating the list.
+   everything measured off --mail-sidebar-w follows, including the search band */
+@media (max-width: 1000px) {
+    .mail-index {
+        --mail-sidebar-w: 72px;
+        --mail-col-sender-indent: var(--mail-sp-3);
+    }
+
+    .mail-folder-list,
+    .mail-folders {
+        align-items: center;
+    }
+
+    .mail-compose-btn {
+        align-self: center;
+        justify-content: center;
+        inline-size: var(--mail-compose-btn-h);
+        margin-inline: 0;
+        padding-inline: 0;
+        border-radius: 50%;
+    }
+
+    /* the text would hold the rail open wider than the icons need */
+    .mail-compose-btn span:not(.material-symbols-outlined),
+    .mail-folder-label,
+    .mail-folder-count {
+        display: none;
+    }
+
+    .mail-folder {
+        justify-content: center;
+        inline-size: var(--mail-icon-btn-size);
+        block-size: var(--mail-icon-btn-size);
+        margin-inline-end: 0;
+        padding-inline: 0;
+        border-radius: 50%;
+    }
+}
+
+/* the toolbar runs out of room before the list does */
+@media (max-width: 720px) {
+    .mail-toolbar {
+        padding-inline: 0;
+    }
+
+    .mail-select-all,
+    .mail-icon-btn-sm,
+    .mail-hide-mobile,
+    .mail-sort-label {
+        display: none;
+    }
+}
