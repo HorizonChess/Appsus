@@ -24,6 +24,7 @@
 @import './apps/note/TodosEditor.css';
 @import './apps/note/ImgEditor.css';
 @import './apps/note/VideoEditor.css';
+@import './apps/note/AudioEditor.css';
 @import './apps/note/ComposerToolbar.css';
 @import './apps/mail/mail-vars.css';
 @import './apps/mail/mail-common.css';

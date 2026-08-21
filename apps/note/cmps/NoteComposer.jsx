@@ -1,6 +1,7 @@
 import { eventBusService } from "../../../services/event-bus.service.js"
 
 const { useState, useEffect } = React
+import { AudioEditor } from "./AudioEditor.jsx"
 import { TxtEditor } from "./TxtEditor.jsx"
 import { TodosEditor } from "./TodosEditor.jsx"
 import { TitleEditor } from "./TitleEditor.jsx"
@@ -47,11 +48,15 @@ export function NoteComposer({ note, onChangeInfo, onChangeType, addNote, onTogg
     if (!note || note.id) {
         return < section className="note-composer collapsed">
             <h3 className="composer-placeholder"
-                onClick={ev=>onChangeType('NoteTxt', ev)}>Write a note...</h3>
+                onClick={ev => onChangeType('NoteTxt', ev)}>Write a note...</h3>
 
             <div className="composer-toolbar">
-                <button className="toolbar-btn" onClick={ev => onChangeType('NoteTodos')}><i className="fa-regular fa-square-check"></i></button>
-                
+                <button
+                    className="toolbar-btn"
+                    onClick={ev => onChangeType('NoteTodos')}>
+                    <i className="fa-regular fa-square-check"></i>
+                </button>
+
                 <input type="file"
                     accept="image/*,.pdf"
                     id="note-img-input"
@@ -61,8 +66,15 @@ export function NoteComposer({ note, onChangeInfo, onChangeType, addNote, onTogg
                         onChangeType('NoteImg', ev)
                     }}
                 />
-
                 <label htmlFor="note-img-input"><i class="fa-regular fa-image"></i></label>
+
+                <button
+                    className="toolbar-btn"
+                    onClick={ev => onChangeType('NoteAudio')}>
+                    <i class="fa-solid fa-microphone"></i>
+                </button>
+
+
             </div>
         </section>
     }
@@ -100,7 +112,8 @@ function DynamicEditor(props) {
     const cmpMap = {
         'NoteTxt': <TxtEditor {...props} />,
         'NoteTodos': <TodosEditor {...props} />,
-        'NoteImg': <ImgEditor {...props} />
+        'NoteImg': <ImgEditor {...props} />,
+        'NoteAudio': <AudioEditor {...props} />
 
     }
     return cmpMap[props.cmpType]

@@ -1,0 +1,49 @@
+.record-btn {}
+
+
+.record-btn {
+    font-size: 2em;
+    width: 2em;
+    height: 2em;
+    background-color: transparent;
+    border: none;
+    border-radius: 50%;
+    color: rgba(0, 0, 0, 0.54);
+    transition: 0.3s ease;
+    border-radius: 50%;
+    background-color: rgba(128, 128, 128, 0);
+    animation: 0.5s linear 1s infinite alternate recording;
+    justify-self: center;
+
+}
+figure{
+    display: flex;
+    justify-content: center;
+}
+audio{
+    justify-self: center;
+}
+.record-btn.recording:hover{
+    background-color: rgba(128, 128, 128, 0.293);
+
+}
+.record-btn.recording:hover::before{
+    content:'|';
+    position: absolute;
+    font-size: 1.2em;
+    transform: rotate(45deg) translateX(-50%);
+    left:50%;
+    top:52%;
+    justify-self: center;
+
+}
+
+@keyframes recording {
+    from {
+        color: black
+    }
+
+    to {
+        color: red;
+    }
+}

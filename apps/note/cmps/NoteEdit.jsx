@@ -7,7 +7,7 @@ import { TodosEditor } from "./TodosEditor.jsx"
 import { TitleEditor } from "./TitleEditor.jsx"
 import { ImgEditor } from "./ImgEditor.jsx"
 import { VideoEditor } from "./VideoEditor.jsx"
-import { AudioEditor } from "./VideoEditor.jsx"
+import { AudioEditor } from "./AudioEditor.jsx"
 
 export function NoteEdit({ note, updateNote, onChangeInfo, onChangeStyle, onTogglePinNote }) {
     const [isColorPickerShown, setIsColorPickerShown] = useState(null)
@@ -49,7 +49,7 @@ export function NoteEdit({ note, updateNote, onChangeInfo, onChangeStyle, onTogg
             key={`note#${note.id}-editor`}
             cmpType={note.type}
             info={note.info}
-            isEditMode={true}
+            isEditMode={note.type==='NoteTxt' || note.type==='NoteTodos' }
             onChangeVal={handleChange}
             noteId={note.id}
         />
