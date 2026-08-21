@@ -2,15 +2,51 @@
 
 .mail-filter {
     grid-column: 1 / -1;
+    display: flex;
+    align-items: center;
     padding-block: var(--mail-sp-2);
-    /* gmail aligns search with the list, not the app edge */
-    padding-inline-start: var(--mail-sidebar-w);
+}
+
+/* takes the nav's width, which is what keeps search aligned with the list rather
+   than with the app edge. it does not follow the hamburger - gmail's search holds
+   still while the nav collapses behind it */
+.mail-brand {
+    display: flex;
+    flex: 0 0 var(--mail-sidebar-w);
+    align-items: center;
+    gap: var(--mail-sp-1);
+    min-inline-size: 0;
+    padding-inline-start: var(--mail-sp-2);
+}
+
+.mail-brand .mail-icon-btn {
+    inline-size: var(--mail-search-h);
+    block-size: var(--mail-search-h);
+}
+
+.mail-brand .material-symbols-outlined {
+    font-size: var(--mail-icon-size-lg);
+}
+
+/* base.css stretches every img to fill its box, so the logo has to opt out */
+.mail-index .mail-logo {
+    inline-size: auto;
+    block-size: var(--mail-logo-h);
+}
+
+/* live text rather than pixels, so it stays sharp and can be hidden when narrow */
+.mail-logo-txt {
+    font-size: var(--mail-fs-title);
+    color: var(--mail-clr-text-secondary);
+    white-space: nowrap;
 }
 
 .mail-search {
     display: flex;
+    flex: 1 1 auto;
     align-items: center;
     gap: var(--mail-sp-3);
+    min-inline-size: 0;
     max-inline-size: var(--mail-search-w);
     min-block-size: var(--mail-search-h);
     padding-inline: var(--mail-sp-3);

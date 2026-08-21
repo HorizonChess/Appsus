@@ -1,15 +1,33 @@
 /* mail responsive - every breakpoint in one place, loaded last so it wins.
    most of it re-points the tokens in mail-vars.css rather than restyling anything */
 
-/* the sidebar becomes an icon rail before its 256px starts eating the list.
-   everything measured off --mail-sidebar-w follows, including the search band */
+/* the window can no longer afford a 256px nav. the hamburger reaches the same
+   width through .is-rail instead, and the container query below covers both */
 @media (max-width: 1000px) {
     .mail-index {
-        --mail-sidebar-w: 72px;
+        --mail-sidebar-w: var(--mail-rail-w);
         --mail-col-sender-indent: var(--mail-sp-3);
     }
 
-    .mail-folder-list,
+    /* hamburger and mark together are wider than the rail, so the brand stops
+       matching the nav here and takes only what it needs */
+    .mail-brand {
+        flex: 0 0 auto;
+    }
+
+    .mail-logo-txt {
+        display: none;
+    }
+}
+
+/* whatever narrowed the nav, it loses its text and the pills become circles */
+@container mail-nav (max-width: 120px) {
+    .mail-compose-btn span:not(.material-symbols-outlined),
+    .mail-folder-label,
+    .mail-folder-count {
+        display: none;
+    }
+
     .mail-folders {
         align-items: center;
     }
@@ -21,13 +39,6 @@
         margin-inline: 0;
         padding-inline: 0;
         border-radius: 50%;
-    }
-
-    /* the text would hold the rail open wider than the icons need */
-    .mail-compose-btn span:not(.material-symbols-outlined),
-    .mail-folder-label,
-    .mail-folder-count {
-        display: none;
     }
 
     .mail-folder {

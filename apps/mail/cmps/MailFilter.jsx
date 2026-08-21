@@ -29,7 +29,26 @@ export function MailFilter() {
         setParams({ txt: '' })
     }
 
+    // the sidebar reads this off the url, so the two never have to be wired together
+    function onToggleNav() {
+        setParams({ nav: searchParams.get('nav') ? '' : 'rail' })
+    }
+
     return <div className="mail-filter">
+
+        <div className="mail-brand">
+            <button
+                type="button"
+                className="mail-icon-btn"
+                title="Main menu"
+                onClick={onToggleNav}>
+                <span className="material-symbols-outlined">menu</span>
+            </button>
+
+            <img className="mail-logo" src="assets/MrEmail-icon.png" alt="" />
+            <span className="mail-logo-txt">MrEmail</span>
+        </div>
+
         <div className="mail-search">
 
             <span className="material-symbols-outlined mail-search-icon">search</span>

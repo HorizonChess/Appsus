@@ -26,6 +26,7 @@ export function MailFolderList() {
     const navigate = useNavigate()
 
     const activeFolder = searchParams.get('folder') || 'inbox'
+    const isRail = searchParams.get('nav') === 'rail'
 
     useEffect(() => {
         loadCounts()
@@ -47,7 +48,7 @@ export function MailFolderList() {
         setParams({ compose: 'new' })
     }
 
-    return <nav className="mail-folder-list">
+    return <nav className={`mail-folder-list ${isRail ? 'is-rail' : ''}`}>
 
         <button className="mail-compose-btn" onClick={onOpenCompose}>
             <span className="material-symbols-outlined">edit</span>
