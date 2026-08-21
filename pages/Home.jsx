@@ -49,7 +49,7 @@ function AppCard({ app }) {
 }
 
 export function Home() {
-    return <section className="home">
+    return <section className="page home">
 
         <header className="home-hero">
             <h1 className="home-title">Appsus</h1>

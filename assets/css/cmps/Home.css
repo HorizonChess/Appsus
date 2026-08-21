@@ -7,19 +7,7 @@
     --home-shadow: 0 1px 2px rgba(60, 64, 67, .3), 0 1px 3px 1px rgba(60, 64, 67, .15);
     --home-shadow-lift: 0 6px 10px rgba(60, 64, 67, .18), 0 12px 28px 4px rgba(60, 64, 67, .16);
 
-    /* the two app tints bleeding in from opposite corners - gmail's nav blue and
-       keep's selected yellow, so the page belongs to neither and nods to both */
-    min-block-size: 80dvh;
-    padding-block: clamp(2.5rem, 8vh, 5rem);
-    padding-inline: 1.5rem;
-    background-color: rgb(250, 251, 253);
-    background-image:
-        radial-gradient(circle at 12% 18%, rgba(211, 227, 253, .85), transparent 42%),
-        radial-gradient(circle at 88% 82%, rgba(254, 239, 195, .85), transparent 42%);
-    /* nothing sets a base font outside the mail app, so this would be the
-       browser's default serif otherwise */
-    font-family: Roboto, Helvetica, Arial, sans-serif;
-    color: var(--home-ink);
+    /* background, font and padding come from .page in layout.css */
     text-align: center;
 }
 

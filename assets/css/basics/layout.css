@@ -2,6 +2,20 @@
     padding: 0 1em;
 }
 
+.page {
+    min-block-size: 80dvh;
+    padding-block: clamp(2.5rem, 8vh, 5rem);
+    padding-inline: 1.5rem;
+    background-color: rgb(250, 251, 253);
+    background-image:
+        radial-gradient(circle at 12% 18%, rgba(211, 227, 253, .85), transparent 42%),
+        radial-gradient(circle at 88% 82%, rgba(254, 239, 195, .85), transparent 42%);
+    /* nothing sets a base font outside the mail app, so this would otherwise fall
+       back to the browser's default serif */
+    font-family: Roboto, Helvetica, Arial, sans-serif;
+    color: rgb(32, 33, 36);
+}
+
 
 /* the page itself must not scroll, or the header and nav slide away with the list */
 .root-cmp:has(.mail-index){
