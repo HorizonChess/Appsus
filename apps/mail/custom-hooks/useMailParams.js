@@ -1,7 +1,7 @@
 const { useSearchParams } = ReactRouterDOM
 
 // changing any of these reshuffles the list, so the page you were on is stale
-const PAGE_RESET_PARAMS = ['status', 'txt', 'sortBy', 'sortDir', 'isRead', 'isStared']
+const PAGE_RESET_PARAMS = ['folder', 'txt', 'sortBy', 'sortDir', 'isRead', 'isStared']
 
 export function useMailParams() {
     const [searchParams, setSearchParams] = useSearchParams()

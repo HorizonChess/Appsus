@@ -14,7 +14,7 @@ export function MailIndex() {
     const [searchParams] = useSearchParams()
     const navigate = useNavigate()
 
-    const status = searchParams.get('status') || 'inbox'
+    const folder = searchParams.get('folder') || 'inbox'
     const txt = searchParams.get('txt') || ''
     // no defaults here - query merges getDefaultFilter over whatever is missing
     const sortBy = searchParams.get('sortBy')
@@ -29,15 +29,15 @@ export function MailIndex() {
     // a folder switch drops the old rows right away - the loader covers the gap
     useEffect(() => {
         setMails(null)
-    }, [status])
+    }, [folder])
 
     useEffect(() => {
         loadMails()
         return eventBusService.on('mails-changed', loadMails)
-    }, [status, txt, sortBy, sortDir])
+    }, [folder, txt, sortBy, sortDir])
 
     function loadMails() {
-        mailService.query({ status, txt, sortBy, sortDir })
+        mailService.query({ folder, txt, sortBy, sortDir })
             .then(setMails)
             .catch(err => console.log('Had issues loading mails', err))
     }
@@ -58,7 +58,7 @@ export function MailIndex() {
     function applyChange(mailId, changes) {
         setMails(mails
             .map(mail => (mail.id === mailId ? { ...mail, ...changes } : mail))
-            .filter(mail => mailService.isInFolder(mail, status)))
+            .filter(mail => mailService.isInFolder(mail, folder)))
     }
 
     // the folder rides along in the query string so details can hand it back

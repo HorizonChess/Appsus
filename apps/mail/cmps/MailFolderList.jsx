@@ -14,22 +14,18 @@ const FOLDER_DISPLAY = {
     trash: { label: 'Trash', icon: 'delete' },
 }
 
-// gmail badges unread on inbox but total on drafts, and nothing anywhere else.
-// the defaults cover the first render, before the counts have loaded
-function getBadge(status, { total = 0, unread = 0 } = {}) {
-    if (status === 'inbox') return unread
-    if (status === 'draft') return total
+function getBadge(folder, { total = 0, unread = 0 } = {}) {
+    if (folder === 'inbox') return unread
+    if (folder === 'draft') return total
     return 0
 }
 
-// takes no props - the sidebar shows on both the list and the open mail, and
-// passing it down from each of them was the whole reason details had to nest
 export function MailFolderList() {
     const [counts, setCounts] = useState({})
     const [searchParams, setParams] = useMailParams()
     const navigate = useNavigate()
 
-    const activeStatus = searchParams.get('status') || 'inbox'
+    const activeFolder = searchParams.get('folder') || 'inbox'
 
     useEffect(() => {
         loadCounts()
@@ -42,9 +38,9 @@ export function MailFolderList() {
             .catch(err => console.log('Had issues loading folder counts', err))
     }
 
-    // not setParams: it drops every other param, and it has to leave /mail/:mailId
-    function onSetStatus(status) {
-        navigate(`/mail?status=${status}`)
+    // mailId is a route segment, so only a path change leaves an open mail
+    function onSetFolder(folder) {
+        navigate(`/mail?folder=${folder}`)
     }
 
     function onOpenCompose() {
@@ -59,14 +55,14 @@ export function MailFolderList() {
         </button>
 
         <div className="mail-folders">
-            {MAIL_FOLDERS.map(status => {
-                const { label, icon } = FOLDER_DISPLAY[status]
-                const badge = getBadge(status, counts[status])
+            {MAIL_FOLDERS.map(folder => {
+                const { label, icon } = FOLDER_DISPLAY[folder]
+                const badge = getBadge(folder, counts[folder])
 
                 return <button
-                    key={status}
-                    className={`mail-folder ${status === activeStatus ? 'is-active' : ''}`}
-                    onClick={() => onSetStatus(status)}>
+                    key={folder}
+                    className={`mail-folder ${folder === activeFolder ? 'is-active' : ''}`}
+                    onClick={() => onSetFolder(folder)}>
 
                     <span className="material-symbols-outlined">{icon}</span>
                     <span className="mail-folder-label">{label}</span>

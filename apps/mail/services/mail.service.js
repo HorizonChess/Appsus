@@ -116,14 +116,14 @@ function _notifyChange(res) {
 }
 
 // a mail's folder comes from its fields, it is never stored
-function isInFolder(mail, status) {
+function isInFolder(mail, folder) {
     const isTrashed = mail.removedAt !== null
-    if (status === 'trash') return isTrashed
+    if (folder === 'trash') return isTrashed
     if (isTrashed) return false
 
     const isSent = Boolean(mail.sentAt)
 
-    switch (status) {
+    switch (folder) {
         case 'draft': return !isSent
         case 'sent': return isSent && mail.from === loggedinUser.email
         case 'inbox': return isSent && mail.to === loggedinUser.email
@@ -138,9 +138,9 @@ function getFolderCounts() {
         .then(mails => {
             const counts = {}
 
-            MAIL_FOLDERS.forEach(status => {
-                const folderMails = mails.filter(mail => isInFolder(mail,status))
-                counts[status] = {
+            MAIL_FOLDERS.forEach(folder => {
+                const folderMails = mails.filter(mail => isInFolder(mail, folder))
+                counts[folder] = {
                     total: folderMails.length,
                     unread: folderMails.filter(mail => !mail.isRead).length,
                 }
@@ -181,7 +181,7 @@ function getReplyPrefill(mail) {
 
 function getDefaultFilter() {
     return {
-        status: 'inbox',
+        folder: 'inbox',
         txt: '',
         isRead: null,     // null = show all
         isStared: null,   // null = show all
@@ -213,7 +213,7 @@ function formatMailDate(timestamp) {
 // ---------------------------------------------------------------- privates
 
 function _filterMails(mails, criteria) {
-    mails = mails.filter(mail => isInFolder(mail,criteria.status))
+    mails = mails.filter(mail => isInFolder(mail, criteria.folder))
 
     if (criteria.txt) {
         const txt = criteria.txt.toLowerCase()
