@@ -90,7 +90,7 @@ export function NoteList({ notes, updateNote, onRemoveNote,
                                 <button onClick={() => onDuplicateNote(note)} className="toolbar-btn"><i className="fa-regular fa-clone"></i></button>
                             </div>
 
-                            <ColorPicker isPickerShown={note.id === colorPickerId} pickerKey={`${note.id}-colorpicker`} style={note.style} onChangeStyle={ev => onChangeStyle(ev, note)} />
+                            <ColorPicker isPickerShown={note.id === colorPickerId} pickerKey={`${note.id}-colorpicker`} style={note.style} onChangeStyle={ev => onChangeStyle(ev, note.id)} />
 
                             <button onClick={ev => onTogglePinNote(note.id)} className="note-pin unpinned">
                                 <i className="fa-solid fa-thumbtack-slash"></i>                            </button>

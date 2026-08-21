@@ -22,7 +22,7 @@ export function NoteIndex() {
 
     const [isShown, setIsShown] = useState(false)
     const [editedNote, setEditedNote] = useState(null)
-    console.log('editedNote',editedNote)
+
     useEffect(() => {
         loadNotes()
     }, [])
