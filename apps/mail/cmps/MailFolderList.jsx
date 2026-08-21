@@ -1,8 +1,9 @@
 import { MAIL_FOLDERS, mailService } from '../services/mail.service.js'
 import { eventBusService } from '../../../services/event-bus.service.js'
+import { useMailParams } from '../custom-hooks/useMailParams.js'
 
 const { useState, useEffect } = React
-const { useSearchParams, useNavigate } = ReactRouterDOM
+const { useNavigate } = ReactRouterDOM
 
 // icon names are material symbols ligatures - the same set gmail draws from
 const FOLDER_DISPLAY = {
@@ -25,7 +26,7 @@ function getBadge(status, { total = 0, unread = 0 } = {}) {
 // passing it down from each of them was the whole reason details had to nest
 export function MailFolderList() {
     const [counts, setCounts] = useState({})
-    const [searchParams] = useSearchParams()
+    const [searchParams, setParams] = useMailParams()
     const navigate = useNavigate()
 
     const activeStatus = searchParams.get('status') || 'inbox'
@@ -41,15 +42,13 @@ export function MailFolderList() {
             .catch(err => console.log('Had issues loading folder counts', err))
     }
 
-    // switching folder always lands on the list, even from an open mail
+    // not setParams: it drops every other param, and it has to leave /mail/:mailId
     function onSetStatus(status) {
         navigate(`/mail?status=${status}`)
     }
 
     function onOpenCompose() {
-        const nextParams = new URLSearchParams(searchParams)
-        nextParams.set('compose', 'new')
-        navigate({ search: `?${nextParams}` })
+        setParams({ compose: 'new' })
     }
 
     return <nav className="mail-folder-list">

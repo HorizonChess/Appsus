@@ -2,14 +2,15 @@ import { mailService } from '../services/mail.service.js'
 import { MailCompose } from '../cmps/MailCompose.jsx'
 import { MailFolderList } from '../cmps/MailFolderList.jsx'
 import { MailFilter } from '../cmps/MailFilter.jsx'
+import { useMailParams } from '../custom-hooks/useMailParams.js'
 
 const { useState, useEffect } = React
-const { useParams, useNavigate, useSearchParams } = ReactRouterDOM
+const { useParams, useNavigate } = ReactRouterDOM
 
 export function MailDetails() {
     const [mail, setMail] = useState(null)
     const { mailId } = useParams()
-    const [searchParams, setSearchParams] = useSearchParams()
+    const [searchParams, setParams] = useMailParams()
     const navigate = useNavigate()
 
     useEffect(() => {
@@ -37,10 +38,7 @@ export function MailDetails() {
 
     // compose is a sibling, so the url is the only way to reach it
     function onReply() {
-        const nextParams = new URLSearchParams(searchParams)
-        nextParams.set('compose', 'new')
-        nextParams.set('src', mailId)
-        setSearchParams(nextParams)
+        setParams({ compose: 'new', src: mailId })
     }
 
     function onStarClick() {
@@ -68,7 +66,6 @@ export function MailDetails() {
             .catch(err => console.log('Had issues removing mail', err))
     }
 
-    // the sidebar renders either way, so it does not blink out while the mail loads
     if (!mail) return <section className="mail-index">
         <MailFilter />
         <MailFolderList />
@@ -78,7 +75,6 @@ export function MailDetails() {
     const { subject, body, from, fromName, to, isStared } = mail
     const sentAt = mail.sentAt || mail.createdAt
     const senderName = fromName || from
-    // gmail says 'to me' for your own address and spells out anyone else's
     const recipient = to === mailService.loggedinUser.email ? 'me' : to
 
     return <section className="mail-index">

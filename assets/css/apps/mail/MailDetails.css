@@ -1,6 +1,10 @@
 /* mail details */
 
+/* an open mail scrolls in the same slot the list does */
 .mail-details {
+    flex: 1 1 auto;
+    min-block-size: 0;
+    overflow-y: auto;
     padding: var(--mail-sp-4);
 }
 

@@ -1,4 +1,4 @@
-import { mailService } from '../services/mail.service.js'
+import { mailService, PAGE_SIZE } from '../services/mail.service.js'
 import { eventBusService } from '../../../services/event-bus.service.js'
 import { MailList } from '../cmps/MailList.jsx'
 import { MailCompose } from '../cmps/MailCompose.jsx'
@@ -16,8 +16,15 @@ export function MailIndex() {
 
     const status = searchParams.get('status') || 'inbox'
     const txt = searchParams.get('txt') || ''
-    const sortBy = searchParams.get('sortBy') || 'date'
-    const sortDir = searchParams.get('sortDir') || -1
+    // no defaults here - query merges getDefaultFilter over whatever is missing
+    const sortBy = searchParams.get('sortBy')
+    const sortDir = searchParams.get('sortDir')
+    const pageIdx = +searchParams.get('pageIdx') || 0
+
+    // clamped, so emptying the last page or narrowing the folder cannot strand you
+    const pageCount = mails ? Math.max(Math.ceil(mails.length / PAGE_SIZE), 1) : 1
+    const pageIdxToShow = Math.min(Math.max(pageIdx, 0), pageCount - 1)
+    const pageMails = mails && mails.slice(pageIdxToShow * PAGE_SIZE, (pageIdxToShow + 1) * PAGE_SIZE)
 
     // a folder switch drops the old rows right away - the loader covers the gap
     useEffect(() => {
@@ -29,7 +36,6 @@ export function MailIndex() {
         return eventBusService.on('mails-changed', loadMails)
     }, [status, txt, sortBy, sortDir])
 
-    // a search, a sort or a refresh keeps the old rows up until the new ones land
     function loadMails() {
         mailService.query({ status, txt, sortBy, sortDir })
             .then(setMails)
@@ -92,12 +98,15 @@ export function MailIndex() {
         <MailFolderList />
 
         <main className="mail-content">
-            <MailToolbar />
+            <MailToolbar
+                total={mails ? mails.length : 0}
+                pageIdx={pageIdxToShow}
+                pageCount={pageCount} />
 
             {!mails && <div className="loader"></div>}
 
             {mails && <MailList
-                mails={mails}
+                mails={pageMails}
                 onToggleStar={onToggleStar}
                 onSetRead={onSetRead}
                 onSelectMail={onSelectMail}

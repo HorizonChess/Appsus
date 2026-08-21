@@ -14,6 +14,21 @@ export const loggedinUser = {
 // the join key between the sidebar and getFolderCounts, and the sidebar's order
 export const MAIL_FOLDERS = ['inbox', 'starred', 'sent', 'draft', 'trash']
 
+// 'subject' is the sprint's "title" - the value doubles as the mail field name
+export const SORT_OPTIONS = [
+    { value: 'date', label: 'Date' },
+    { value: 'subject', label: 'Subject' },
+]
+
+// the -1 / 1 _sortMails multiplies by
+export const SORT_DIR_OPTIONS = [
+    { value: '-1', label: 'Newest' },
+    { value: '1', label: 'Oldest' },
+]
+
+// gmail's own page size
+export const PAGE_SIZE = 50
+
 const MAIL_KEY = 'mailDB'
 _createMails()
 
@@ -173,7 +188,7 @@ function getDefaultFilter() {
         from: '',
         subject: '',
         sortBy: 'date',   // date / subject / from
-        sortDir: -1,      // 1 = ascending, -1 = descending (newest first)
+        sortDir: '-1',    // string, like the url always gives. 1 ascending, -1 descending
     }
 }
 

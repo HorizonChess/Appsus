@@ -3,10 +3,12 @@
 }
 
 
+/* the page itself must not scroll, or the header and nav slide away with the list */
 .root-cmp:has(.mail-index){
     display: flex;
     flex-direction: column;
-    min-block-size: 100dvh;
+    block-size: 100dvh;
+    overflow: hidden;
 }
 
 .note-layout{
