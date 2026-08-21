@@ -52,9 +52,9 @@ export function NoteList({ notes, updateNote, onRemoveNote,
                                 isPickerShown={colorPickerId && note.id === colorPickerId}
                                 key={`${note.id}-colorpicker`}
                                 style={note.style}
-                                onChangeStyle={ev => onChangeStyle(ev, note)} />
+                                onChangeStyle={ev => onChangeStyle(ev, note.id)} />
 
-                            <button onClick={ev => onTogglePinNote(note, 'inline')} className="note-pin pinned">
+                            <button onClick={ev => onTogglePinNote(note.id)} className="note-pin pinned">
                                 <i className="fa-solid fa-thumbtack"></i>
                             </button>
 
@@ -92,7 +92,7 @@ export function NoteList({ notes, updateNote, onRemoveNote,
 
                             <ColorPicker isPickerShown={note.id === colorPickerId} pickerKey={`${note.id}-colorpicker`} style={note.style} onChangeStyle={ev => onChangeStyle(ev, note)} />
 
-                            <button onClick={ev => onTogglePinNote(note)} className="note-pin unpinned">
+                            <button onClick={ev => onTogglePinNote(note.id)} className="note-pin unpinned">
                                 <i className="fa-solid fa-thumbtack-slash"></i>                            </button>
                         </article>
 

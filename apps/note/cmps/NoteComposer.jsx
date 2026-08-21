@@ -54,7 +54,7 @@ export function NoteComposer({ note, onChangeInfo, onChangeType, addNote,onToggl
 
     function handleTogglePinChange() {
         setIsPinned(!isPinned)
-        onTogglePinEmptyNote(note)
+        onTogglePinEmptyNote(note.id)
     }
 
     function onSubmit() {
@@ -66,10 +66,11 @@ export function NoteComposer({ note, onChangeInfo, onChangeType, addNote,onToggl
 
     function onExpandComposer(ev) {
         ev.preventDefault()
+onloadEmptyNote()
         setIsExpanded(true)
     }
 
-    if (!isExpanded || note.id) {
+    if (!isExpanded) {
         return < section className="note-composer collapsed">
             <h3 className="composer-placeholder"
                 onClick={onExpandComposer}>Write a note...</h3>

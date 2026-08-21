@@ -16,27 +16,64 @@ const { useState, useRef, useEffect } = React
 const { useSearchParams, useNavigate } = ReactRouterDOM
 
 export function NoteIndex() {
-    const [notes, setNotes] = useState([])
-    const [isShown, setIsShown] = useState(false)
-    const [editedNote, setEditedNote] = useState(noteService.getEmptyNote())
-
     const [searchParams, setSearchParams] = useSearchParams();
     const [filterBy, setFilterBy] = useState(noteService.getFilterFromSearchParams(searchParams))
+    const [notes, setNotes] = useState([])
 
+    const [isShown, setIsShown] = useState(false)
+    const [editedNote, setEditedNote] = useState(null)
 
     useEffect(() => {
-        loadNotes(filterBy)
+        loadNotes()
     }, [])
 
     useEffectUpdate(() => {
-        loadNotes(filterBy)
         // setSearchParams(filterBy)
         setSearchParams(utilService.trimObj(filterBy))
+        loadNotes()
     }, [filterBy])
 
     function loadNotes() {
-        noteService.query(filterBy).then(setNotes)
+        noteService.query(filterBy).
+            then(notes => setfilteredNotes(notes, filterBy))
     }
+
+    function setfilteredNotes(notes, filterBy) {
+        var filteredNotes = [...notes]
+
+        if (filterBy.type) {
+            filteredNotes = filteredNotes.filter(note => note.type === filterBy.type)
+        }
+
+        if (filterBy.txt) {
+            filteredNotes = filterNotesByText(filteredNotes, filterBy.txt)
+
+        }
+
+        if (filterBy.isPinned) {
+            filteredNotes = filteredNotes.filter(note => note.isPinned)
+        }
+
+        setNotes(filteredNotes)
+    }
+
+    function filterNotesByText(notes, text) {
+        const regExp = new RegExp(text, 'i')
+
+        return notes.filter(note => {
+            const { info } = note
+
+            if (!info) return false
+            if (text === '') return true
+            const { title, txt, todos } = note.info
+            if (title && regExp.test(title)) return true
+            if (txt && regExp.test(txt)) return true
+            if (todos && todos.some(todo => regExp.test(todo.txt))) return true
+
+            return false
+        })
+    }
+
 
     function onChangeType(type) {
         const emptyTodo = { txt: '', isDone: false }
@@ -49,31 +86,62 @@ export function NoteIndex() {
 
     }
 
-    function onTogglePinEmptyNote() {
-        const updatedNote = { ...editedNote, isPinned: !editedNote.isPinned }
-        setEditedNote(updatedNote)
-        updateNote(updatedNote)
+    // function onTogglePinEmptyNote() {
+    //     const updatedNote = { ...editedNote, isPinned: !editedNote.isPinned }
+    //     setEditedNote(updatedNote)
+    //     updateNote(updatedNote)
 
-    }
+    // }
 
-    function onTogglePinNote(note) {
-        const updatedNote = { ...note, isPinned: !note.isPinned }
-        const updatedNoteIdx = notes.findIndex(note => note.id === updatedNote.id)
-        notes.splice(updatedNoteIdx, 1)
-        notes.unshift(updatedNote)
+    // function onTogglePinNote(note) {
+    //     const updatedNote = { ...note, isPinned: !note.isPinned }
+    //     const updatedNoteIdx = notes.findIndex(note => note.id === updatedNote.id)
+    //     notes.splice(updatedNoteIdx, 1)
+    //     notes.unshift(updatedNote)
 
-        if (editedNote.id) setEditedNote(updatedNote)
-        updateNote(updatedNote)
+    //     if (editedNote.id) setEditedNote(updatedNote)
+    //     updateNote(updatedNote)
+    // }
+
+    function onTogglePinNote(noteId) {
+        if (noteId || editedNote.id) {
+            const searchNoteId = noteId ? noteId : editedNote.id
+
+            const noteIdx = notes.findIndex(note => note.id === searchNoteId)
+            console.log('noteIdx',noteIdx)
+            const note = notes.at(noteIdx)
+
+            note.isPinned = !note.isPinned
+            noteService.save(note)
+
+            // notes.splice(noteIdx, 1, note)
+
+            notes.splice(noteIdx, 1)
+            notes.unshift(note)
+            setfilteredNotes([...notes], filterBy)
+        }
+
+        if (!noteId) {
+            setEditedNote(prev => ({ ...prev, isPinned: !prev.isPinned }))
+        }
     }
 
     function onChangeInfo(newInfo, noteId) {
-        if (!noteId) {
-            updateNote({ ...editedNote, info: newInfo })
-            setEditedNote(prev => ({ ...prev, info: newInfo }))
-        } else {
-            const note = notes.find(note => note.id === noteId)
-            updateNote({ ...note, info: newInfo })
+        if (noteId || editedNote.id) {
+            const searchNoteId = noteId ? noteId : editedNote.id
 
+            const noteIdx = notes.findIndex(note => note.id === searchNoteId)
+            const note = notes.at(noteIdx)
+
+            note.info = newInfo
+            noteService.save(note)
+
+            notes.splice(noteIdx, 1, note)
+            setfilteredNotes([...notes], filterBy)
+        }
+
+        if (!noteId) {
+            setEditedNote(prev => ({ ...prev, info: newInfo }))
         }
     }
 
@@ -86,37 +154,53 @@ export function NoteIndex() {
             noteService.save(updatednote)
         }
 
-        setNotes(updatedNotes)
+        filterNotesByText(updatedNotes, filterBy)
+    }
+
+    function onloadEmptyNote() {
+        setEditedNote(noteService.getEmptyNote())
     }
 
     function addNote() {
-        if (editedNote.type === filterBy.type) notes.push(editedNote)
-
-        setEditedNote(noteService.getEmptyNote())
-
-        const noteIdx = notes.length - 1
-
-        setNotes(notes.filter(note => note.type === filterBy.type))
-
+        const noteIdx = notes.length
         noteService.save(editedNote)
             .then(note => {
-                const newNotes = [...notes]
-                if (note.type === filterBy.type) newNotes.splice(noteIdx, 1, note)
 
-                setNotes(newNotes.filter(note => note.type === filterBy.type))
+                notes.splice(noteIdx, 1, note)
+                setfilteredNotes([...notes], filterBy)
             })
 
+        notes.push(editedNote)
 
+        setfilteredNotes([...notes], filterBy)
+        setEditedNote(null)
     }
 
-    function onChangeStyle(ev, note) {
+    function onChangeStyle(ev, noteId) {
         const { target } = ev
-        const { style } = note
-        const newStyle = { ...style, backgroundColor: target.value }
-        const updatedNote = { ...note, style: newStyle }
+        var newStyle
 
-        if (editedNote.id) setEditedNote(updatedNote)
-        updateNote(updatedNote)
+        if (noteId || editedNote.id) {
+            const searchNoteId = noteId ? noteId : editedNote.id
+            const noteIdx = notes.findIndex(note => note.id === searchNoteId)
+            const note = notes.at(noteIdx)
+
+            const { style } = note
+            newStyle = { ...style, backgroundColor: target.value }
+            note.style = newStyle
+
+            noteService.save(note)
+
+            // notes.splice(noteIdx, 1, note)
+
+            setfilteredNotes([...notes], filterBy)
+        }
+
+        if (!noteId) {
+            setEditedNote(prev => ({ ...prev, style: newStyle }))
+        }
+        // if (editedNote.id) setEditedNote(updatedNote)
+        // updateNote(updatedNote)
     }
 
     function removeNote(noteId) {
@@ -124,7 +208,7 @@ export function NoteIndex() {
         const updatedNotes = [...notes]
         const removedNoteIsx = notes.findIndex(note => note.id === noteId)
         updatedNotes.splice(removedNoteIsx, 1)
-        setNotes(updatedNotes)
+        setfilteredNotes(updatedNotes, filterBy)
     }
 
     if (!notes || !notes.length) return <section className="container">
@@ -141,7 +225,7 @@ export function NoteIndex() {
     }
 
     function onCloseModal() {
-        setEditedNote(noteService.getEmptyNote())
+        setEditedNote(null)
         setIsShown(false)
     }
 
@@ -173,8 +257,9 @@ export function NoteIndex() {
             note={editedNote}
             onChangeInfo={onChangeInfo}
             onChangeType={onChangeType}
+            onloadEmptyNote={onloadEmptyNote}
             addNote={addNote}
-            onTogglePinEmptyNote={onTogglePinEmptyNote} />
+            onTogglePinEmptyNote={onTogglePinNote} />
 
         <NoteList
             notes={notes}
@@ -191,7 +276,7 @@ export function NoteIndex() {
         <NoteModal
             isShown={isShown}
             onClose={onCloseModal}
-            style={editedNote.style}
+            style={editedNote && editedNote.style}
         >
             {editedNote && editedNote.id ?
 

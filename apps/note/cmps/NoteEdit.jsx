@@ -34,12 +34,12 @@ export function NoteEdit({ note, updateNote, onChangeInfo, onChangeStyle, onTogg
 
     function handleTogglePinChange() {
         setIsPinned(!isPinned)
-        onTogglePinNote(note)
+        onTogglePinNote(note.id)
     }
 
     function handleColorChange(ev) {
         setNoteEditStyle({ backgroundColor: ev.target.value })
-        onChangeStyle(ev, note)
+        onChangeStyle(ev)
     }
 
     return <section className="note-edit" style={noteEditStyle}>
