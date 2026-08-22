@@ -16,6 +16,11 @@
     margin-block-end: var(--mail-sp-4);
 }
 
+/* opens the far-end pair, the same way the date does in the header below */
+.mail-details-prev {
+    margin-inline-start: auto;
+}
+
 /* the chips sit beside the subject and wrap under it once there is no room */
 .mail-details-subject-line {
     display: flex;

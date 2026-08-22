@@ -1,22 +1,52 @@
 import { mailService } from '../services/mail.service.js'
+import { showSuccessMsg, showErrorMsg } from '../../../services/event-bus.service.js'
 import { MailCompose } from '../cmps/MailCompose.jsx'
 import { MailFolderList } from '../cmps/MailFolderList.jsx'
 import { MailFilter } from '../cmps/MailFilter.jsx'
 import { MailLabelChip } from '../cmps/MailLabelChip.jsx'
 import { useMailParams } from '../custom-hooks/useMailParams.js'
+import { useMailFilter } from '../custom-hooks/useMailFilter.js'
 
 const { useState, useEffect } = React
 const { useParams, useNavigate } = ReactRouterDOM
 
 export function MailDetails() {
     const [mail, setMail] = useState(null)
+    const [siblingIds, setSiblingIds] = useState([])
     const { mailId } = useParams()
     const [searchParams, setParams] = useMailParams()
+    const { folder, txt, sortBy, sortDir } = useMailFilter()
     const navigate = useNavigate()
 
+    // prev and next walk the order you came from, and the whole folder rather than
+    // the page you happened to open it from. named for the list order, not for
+    // dates - sorting by subject makes 'older' meaningless, position never is
+    const idx = siblingIds.indexOf(mailId)
+    const prevId = idx > 0 ? siblingIds[idx - 1] : null
+    const nextId = idx !== -1 && idx < siblingIds.length - 1 ? siblingIds[idx + 1] : null
+
+    // same rule as the list and compose - the mail on screen belongs to the id in
+    // the url, so a new id shows the loader rather than the previous mail
     useEffect(() => {
+        setMail(null)
         loadMail()
     }, [mailId])
+
+    // only the filter moves these, so stepping through mails does not refetch them
+    useEffect(() => {
+        loadSiblings()
+    }, [folder, txt, sortBy, sortDir])
+
+    function loadSiblings() {
+        mailService.query({ folder, txt, sortBy, sortDir })
+            .then(mails => setSiblingIds(mails.map(sibling => sibling.id)))
+            .catch(err => console.log('Had issues loading the surrounding mails', err))
+    }
+
+    // the filter rides along, so the mail you land on keeps the same neighbours
+    function onOpenMail(id) {
+        navigate(`/mail/${id}?${searchParams}`)
+    }
 
     // opening a mail reads it - the list used to do this on click, but the click
     // no longer knows whether the mail actually opened
@@ -82,9 +112,18 @@ export function MailDetails() {
     }
 
     function onRemoveClick() {
+        // trash is the one folder where removing is the second, permanent stage
+        const isPermanent = folder === 'trash'
+
         mailService.remove(mailId)
-            .then(onBack)
-            .catch(err => console.log('Had issues removing mail', err))
+            .then(() => {
+                showSuccessMsg(isPermanent ? 'Conversation deleted forever' : 'Conversation moved to Trash')
+                onBack()
+            })
+            .catch(err => {
+                console.log('Had issues removing mail', err)
+                showErrorMsg('Could not remove conversation')
+            })
     }
 
     if (!mail) return <section className="mail-index">
@@ -119,6 +158,22 @@ export function MailDetails() {
 
                     <button className="mail-icon-btn" title="Mark as unread" onClick={onUnreadClick}>
                         <span className="material-symbols-outlined">mark_email_unread</span>
+                    </button>
+
+                    <button
+                        className="mail-icon-btn mail-details-prev"
+                        title="Previous mail"
+                        disabled={!prevId}
+                        onClick={() => onOpenMail(prevId)}>
+                        <span className="material-symbols-outlined">chevron_left</span>
+                    </button>
+
+                    <button
+                        className="mail-icon-btn"
+                        title="Next mail"
+                        disabled={!nextId}
+                        onClick={() => onOpenMail(nextId)}>
+                        <span className="material-symbols-outlined">chevron_right</span>
                     </button>
                 </div>
 

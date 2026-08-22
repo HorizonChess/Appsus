@@ -1,10 +1,11 @@
 import { mailService, PAGE_SIZE } from '../services/mail.service.js'
-import { eventBusService } from '../../../services/event-bus.service.js'
+import { eventBusService, showSuccessMsg, showErrorMsg } from '../../../services/event-bus.service.js'
 import { MailList } from '../cmps/MailList.jsx'
 import { MailCompose } from '../cmps/MailCompose.jsx'
 import { MailFolderList } from '../cmps/MailFolderList.jsx'
 import { MailFilter } from '../cmps/MailFilter.jsx'
 import { MailToolbar } from '../cmps/MailToolbar.jsx'
+import { useMailFilter } from '../custom-hooks/useMailFilter.js'
 
 const { useState, useEffect } = React
 const { useSearchParams, useNavigate } = ReactRouterDOM
@@ -15,11 +16,8 @@ export function MailIndex() {
     const [searchParams] = useSearchParams()
     const navigate = useNavigate()
 
-    const folder = searchParams.get('folder') || 'inbox'
-    const txt = searchParams.get('txt') || ''
-    // no defaults here - query merges getDefaultFilter over whatever is missing
-    const sortBy = searchParams.get('sortBy')
-    const sortDir = searchParams.get('sortDir')
+    const { folder, txt, sortBy, sortDir } = useMailFilter()
+    // not part of the filter - it survives a reload where the four above reset it
     const pageIdx = +searchParams.get('pageIdx') || 0
 
     // clamped, so emptying the last page or narrowing the folder cannot strand you
@@ -85,9 +83,14 @@ export function MailIndex() {
 
         setMails(mails.filter(mail => mail.id !== mailId))
 
+        // trash is the one folder where removing is the second, permanent stage
+        const isPermanent = folder === 'trash'
+
         mailService.remove(mailId)
+            .then(() => showSuccessMsg(isPermanent ? 'Conversation deleted forever' : 'Conversation moved to Trash'))
             .catch(err => {
                 console.log('Had issues removing mail', err)
+                showErrorMsg('Could not remove conversation')
                 setMails(prevMails)
             })
     }

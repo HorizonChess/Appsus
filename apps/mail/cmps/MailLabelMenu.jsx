@@ -1,4 +1,5 @@
 import { mailService } from '../services/mail.service.js'
+import { showSuccessMsg, showErrorMsg } from '../../../services/event-bus.service.js'
 import { useLabels } from '../custom-hooks/useLabels.js'
 import { MailLabelDialog } from './MailLabelDialog.jsx'
 
@@ -15,8 +16,14 @@ export function MailLabelMenu({ mailIds, onClose }) {
 
     function onPickLabel(label) {
         mailService.addLabel(mailIds, label)
-            .then(onClose)
-            .catch(err => console.log('Had issues labeling mails', err))
+            .then(() => {
+                showSuccessMsg(`${mailIds.length} moved to ${mailService.getLabelName(label)}`)
+                onClose()
+            })
+            .catch(err => {
+                console.log('Had issues labeling mails', err)
+                showErrorMsg('Could not apply label')
+            })
     }
 
     return <div className="mail-menu mail-label-menu">
