@@ -41,6 +41,18 @@ export function MailDetails() {
         setParams({ compose: 'new', src: mailId })
     }
 
+    // the note app picks these up off the url. 'txt' and 'type' are its own filter
+    // params, so the contract stays clear of both
+    function onSaveAsNote() {
+        const params = new URLSearchParams({
+            addNote: 'NoteTxt',
+            title: mail.subject,
+            body: mail.body,
+        })
+
+        navigate(`/note?${params}`)
+    }
+
     function onStarClick() {
         const isStared = !mail.isStared
 
@@ -121,6 +133,10 @@ export function MailDetails() {
                         title={isStared ? 'Starred' : 'Not starred'}
                         onClick={onStarClick}>
                         <span className={`material-symbols-outlined ${isStared ? 'is-stared' : ''}`}>star</span>
+                    </button>
+
+                    <button className="mail-icon-btn" title="Save as note" onClick={onSaveAsNote}>
+                        <i className="fa-regular fa-lightbulb"></i>
                     </button>
 
                     <button className="mail-icon-btn" title="Reply" onClick={onReply}>

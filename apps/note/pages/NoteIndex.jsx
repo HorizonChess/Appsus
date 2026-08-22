@@ -24,7 +24,17 @@ export function NoteIndex() {
     const [filterBy, setFilterBy] = useState(noteService.getFilterFromSearchParams(searchParams))
 
 
+    // the addNote branch only runs for a mail handed over from MrEmail:
+    // the saving to the user. every other visit just loads the list
     useEffect(() => {
+        const type = searchParams.get('addNote')
+
+        if (type) {
+            const info = { title: searchParams.get('title') || '', txt: searchParams.get('body') || '' }
+            setEditedNote(noteService.getEmptyNote(type, info))
+            setSearchParams({})
+        }
+
         loadNotes(filterBy)
     }, [])
 
@@ -90,23 +100,25 @@ export function NoteIndex() {
     }
 
     function addNote() {
-        if (editedNote.type === filterBy.type) notes.push(editedNote)
+        // an empty filter type is the All Notes view, where every note belongs.
+        // comparing against it directly matched nothing and emptied the list
+        const isInView = note => !filterBy.type || note.type === filterBy.type
+
+        if (isInView(editedNote)) notes.push(editedNote)
 
         setEditedNote(noteService.getEmptyNote())
 
         const noteIdx = notes.length - 1
 
-        setNotes(notes.filter(note => note.type === filterBy.type))
+        setNotes(notes.filter(isInView))
 
         noteService.save(editedNote)
             .then(note => {
                 const newNotes = [...notes]
-                if (note.type === filterBy.type) newNotes.splice(noteIdx, 1, note)
+                if (isInView(note)) newNotes.splice(noteIdx, 1, note)
 
-                setNotes(newNotes.filter(note => note.type === filterBy.type))
+                setNotes(newNotes.filter(isInView))
             })
-
-
     }
 
     function onChangeStyle(ev, note) {

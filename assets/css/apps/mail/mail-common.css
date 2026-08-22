@@ -14,6 +14,9 @@
     border: none;
     border-radius: 50%;
     background: none;
+    /* the font awesome kit swaps its <i> for an <svg> sized at 1em, so a borrowed
+       icon takes its size from the button rather than from itself */
+    font-size: var(--mail-icon-size);
     color: var(--mail-clr-text-secondary);
     cursor: pointer;
 }

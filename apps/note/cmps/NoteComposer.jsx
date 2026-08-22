@@ -69,7 +69,9 @@ export function NoteComposer({ note, onChangeInfo, onChangeType, addNote,onToggl
         setIsExpanded(true)
     }
 
-    if (!isExpanded || note.id) {
+    const hasPrefill = note.info && (note.info.title || note.info.txt)
+
+    if ((!isExpanded && !hasPrefill) || note.id) {
         return < section className="note-composer collapsed">
             <h3 className="composer-placeholder"
                 onClick={onExpandComposer}>Write a note...</h3>
