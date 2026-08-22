@@ -1,6 +1,6 @@
 import { eventBusService } from "../../../services/event-bus.service.js"
 
-const { useState, useEffect } = React
+const { useState, useEffect, useRef } = React
 import { AudioEditor } from "./AudioEditor.jsx"
 import { TxtEditor } from "./TxtEditor.jsx"
 import { TodosEditor } from "./TodosEditor.jsx"
@@ -8,10 +8,17 @@ import { TitleEditor } from "./TitleEditor.jsx"
 import { ComposerToolbar } from "./ComposerToolbar.jsx"
 import { ImgEditor } from "./ImgEditor.jsx"
 
-export function NoteComposer({ note, onChangeInfo, onChangeType, addNote, onTogglePinEmptyNote }) {
+export function NoteComposer({ note, onChangeInfo, onChangeType, addNote, onTogglePinEmptyNote,onCancelNoteEdit }) {
     // const [noteType, setNoteType] = useState('NoteTxt')
     const [isExpanded, setIsExpanded] = useState(false)
     const [isPinned, setIsPinned] = useState(false)
+    const composerRef = useRef()
+
+    useEffect(() => {
+        eventBusService.on('click', (ev)=>{
+            if (!composerRef.current.contains(ev.target)) onCancelNoteEdit(ev)
+        })
+    }, [])
 
     useEffect(() => {
         eventBusService.on('note-edit', collapseComposer)
@@ -46,7 +53,7 @@ export function NoteComposer({ note, onChangeInfo, onChangeType, addNote, onTogg
     }
 
     if (!note || note.id) {
-        return < section className="note-composer collapsed">
+        return < section className="note-composer collapsed" ref={composerRef}>
             <h3 className="composer-placeholder"
                 onClick={ev => onChangeType('NoteTxt', ev)}>Write a note...</h3>
 
@@ -80,7 +87,7 @@ export function NoteComposer({ note, onChangeInfo, onChangeType, addNote, onTogg
     }
 
 
-    return < section className="note-composer expanded">
+    return < section className="note-composer expanded" ref={composerRef}>
         <TitleEditor info={note.info} onChangeTitle={handleChange} isEditMode={true} />
 
 
