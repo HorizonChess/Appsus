@@ -205,10 +205,16 @@
 
 .miskeep-logo {
     grid-row: 1;
-    width: 24px;
-    aspect-ratio: 109/150;
-    justify-self: start;
-
+    width: 40px;
+    height:40px;
+    font-size: 1.5em;
+    background-color: rgb(254, 239, 195);
+    color: rgba(116, 97, 97, 0.91);
+    justify-content: center;
+    align-content: center;
+    text-align: center;
+    border-radius: 50%;
+    border: 3px solid rgba(116, 97, 97, 0.91);
 }
 
 .clear-search-btn {

@@ -47,8 +47,8 @@ export function NoteFilter({ filterBy, onSetFilterBy }) {
                 </button>
 
 
-
-                <img className="miskeep-logo" src="../../../assets/Google_Keep_2020_Logo.svg" alt="" />
+                <div className="miskeep-logo" ><i class="fa-solid fa-lightbulb"></i>
+                </div>
 
                 <h2>
                     {title}
