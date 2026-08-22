@@ -66,7 +66,7 @@ export function NoteComposer({ note, onChangeInfo, onChangeType, addNote, onTogg
                         onChangeType('NoteImg', ev)
                     }}
                 />
-                <label htmlFor="note-img-input"><i class="fa-regular fa-image"></i></label>
+                <label className="toolbar-btn" htmlFor="note-img-input"><i class="fa-regular fa-image"></i></label>
 
                 <button
                     className="toolbar-btn"

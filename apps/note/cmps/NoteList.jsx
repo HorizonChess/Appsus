@@ -12,6 +12,8 @@ export function NoteList({ notes, updateNote, onRemoveNote,
     const pinnedNotes = notes.filter(note => note.isPinned)
     const unpinnedNotes = notes.filter(note => !note.isPinned)
 
+    console.log('pinned notes', pinnedNotes)
+
     function handleColorPickerOpen(ev, colorPickerId) {
         ev.stopPropagation()
         setColoPickerId(colorPickerId)
@@ -30,7 +32,7 @@ export function NoteList({ notes, updateNote, onRemoveNote,
             <div className="pin-label">Pinned</div>
 
             <ul className="note-list" >
-                {pinnedNotes.map(note => {
+                {(pinnedNotes.length > 0) && pinnedNotes.map(note => {
 
                     return <li key={note.id}>
                         <article key={note.id} className="note" style={note.style} >
@@ -63,6 +65,8 @@ export function NoteList({ notes, updateNote, onRemoveNote,
                     </li>
 
                 })}
+
+                {pinnedNotes.length === 0 && <div><p>No matching notes...</p></div>}
                 <div className="color-picker-backdrop" onClick={handleColorPickerClose} ref={backdropRef}></div>
             </ul>
         </section>
@@ -72,7 +76,7 @@ export function NoteList({ notes, updateNote, onRemoveNote,
             <div className="pin-label">Un-Pinned</div>
 
             <ul className="note-list" >
-                {unpinnedNotes.map(note => {
+                {(unpinnedNotes.length>0) && unpinnedNotes.map(note => {
 
                     return <li key={note.id}>
                         <article key={note.id} className="note" style={note.style} >
@@ -100,7 +104,7 @@ export function NoteList({ notes, updateNote, onRemoveNote,
 
                 })}
                 <div className="color-picker-backdrop" onClick={handleColorPickerClose} ref={backdropRef}></div>
-
+                {(unpinnedNotes.length === 0 )&& <div><p>No matching notes...</p></div>}
             </ul>
         </section>
 

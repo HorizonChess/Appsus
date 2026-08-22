@@ -34,7 +34,7 @@ export function NoteIndex() {
     }, [filterBy])
 
     function loadNotes() {
-        noteService.query(filterBy).
+        noteService.query({ txt: '', type: filterBy.type }).
             then(notes => setfilteredNotes(notes, filterBy))
     }
 
@@ -217,10 +217,7 @@ export function NoteIndex() {
         setfilteredNotes(updatedNotes, filterBy)
     }
 
-    if (!notes || !notes.length) return <section className="container">
-        <div className="loader"></div>
 
-    </section>
 
     function onOpenModal(noteId) {
         setEditedNote(notes.find(note => note.id === noteId))
@@ -254,10 +251,19 @@ export function NoteIndex() {
 
     }
 
+    if (!notes) return <section className="notes-container note-layout">
+        <div className="loader"></div>
+    </section>
+
+
+
     return <section className="notes-container note-layout">
         {/* <SearchNote onSetFilterBy={setFilterBy} filterBy={queryOptions} /> */}
 
-        <NoteFilter filterBy={filterBy} onSetFilterBy={setFilterBy} onClearFilter={''} />
+        <NoteFilter
+            filterBy={filterBy}
+            onSetFilterBy={setFilterBy}
+            onClearFilter={''} />
 
         <NoteComposer
             note={editedNote}

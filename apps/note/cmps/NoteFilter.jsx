@@ -14,13 +14,13 @@ export function NoteFilter({ filterBy, onSetFilterBy }) {
         onSetFilterBy(filterByToEdit)
     }, [filterByToEdit])
 
-    function handleChange(value) {
-        setFilterByToEdit(prev => ({ ...prev, type: value }))
+    function handleChange(value,name) {
+        setFilterByToEdit(prev => ({ ...prev, [name]: value }))
     }
 
 
     return <div class='note-filter'>
-        {/* <div className="note-search">
+        <div className="note-search">
 
             <span className="material-symbols-outlined note-search-icon">search</span>
 
@@ -39,7 +39,7 @@ export function NoteFilter({ filterBy, onSetFilterBy }) {
                 <span className="material-symbols-outlined">close</span>
             </button>}
 
-        </div> */}
+        </div>
 
         <aside className="note-sidebar">
             <nav className="note-tabs">
