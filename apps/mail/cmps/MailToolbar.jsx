@@ -4,9 +4,7 @@ import { useMailParams } from '../custom-hooks/useMailParams.js'
 import { MailMoveTo } from './MailMoveTo.jsx'
 import { MailPager } from './MailPager.jsx'
 
-// the box has three states, not two: empty, a dash once part of the page is
-// ticked, a tick once all of it is. keyed by aria-checked, whose third value
-// for that middle state is 'mixed'
+
 const CHECK_ICONS = {
     true: 'check_box',
     mixed: 'indeterminate_check_box',
@@ -24,8 +22,10 @@ export function MailToolbar({ total, pageIdx, pageCount, pageIds, selectedIds, o
     // the control needs the resolved value, so the service's default stands in
     const sortBy = searchParams.get('sortBy') || mailService.getDefaultFilter().sortBy
 
+    // the direction does not carry across - '-1' means newest on a date and Z
+    // first on a subject, so it goes back to whatever the new field opens at
     function onSortByChange({ target }) {
-        setParams({ sortBy: target.value })
+        setParams({ sortBy: target.value, sortDir: null })
     }
 
     // select all covers the page you are looking at, never the whole folder

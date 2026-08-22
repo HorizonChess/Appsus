@@ -8,9 +8,17 @@ const { useState, useEffect } = React
 export function useLabels() {
     const [labels, setLabels] = useState([])
 
+    // both signals - destroying the last mail carrying a label is a delete, and
+    // a delete only announces itself to the counts
     useEffect(() => {
         loadLabels()
-        return eventBusService.on('mails-changed', loadLabels)
+
+        const unsubs = [
+            eventBusService.on('mails-changed', loadLabels),
+            eventBusService.on('mail-counts-changed', loadLabels),
+        ]
+
+        return () => unsubs.forEach(unsub => unsub())
     }, [])
 
     function loadLabels() {

@@ -29,9 +29,17 @@ export function MailFolderList() {
     const activeFolder = searchParams.get('folder') || 'inbox'
     const isRail = searchParams.get('nav') === 'rail'
 
+    // both signals, because the numbers move whether or not the list already
+    // knows - see _notifyCounts in the service
     useEffect(() => {
         loadCounts()
-        return eventBusService.on('mails-changed', loadCounts)
+
+        const unsubs = [
+            eventBusService.on('mails-changed', loadCounts),
+            eventBusService.on('mail-counts-changed', loadCounts),
+        ]
+
+        return () => unsubs.forEach(unsub => unsub())
     }, [])
 
     function loadCounts() {

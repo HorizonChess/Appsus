@@ -1,4 +1,4 @@
-import { mailService, PAGE_SIZE, SORT_DIR_OPTIONS } from '../services/mail.service.js'
+import { mailService, PAGE_SIZE } from '../services/mail.service.js'
 import { useMailParams } from '../custom-hooks/useMailParams.js'
 import { useKeyListener } from '../custom-hooks/useKeyListener.js'
 
@@ -10,8 +10,11 @@ export function MailPager({ total, pageIdx, pageCount }) {
 
     useKeyListener('Escape', () => setIsDirMenuOpen(false))
 
-    // the control needs the resolved value, so the service's default stands in
-    const sortDir = searchParams.get('sortDir') || mailService.getDefaultFilter().sortDir
+    // both the options and the default depend on what is being sorted - ordering
+    // subjects by 'Newest' would be meaningless, and they open at A, not at Z
+    const sortBy = searchParams.get('sortBy') || mailService.getDefaultFilter().sortBy
+    const dirOptions = mailService.getSortDirOptions(sortBy)
+    const sortDir = searchParams.get('sortDir') || mailService.getDefaultSortDir(sortBy)
 
     const firstIdx = pageIdx * PAGE_SIZE + 1
     const lastIdx = Math.min(firstIdx + PAGE_SIZE - 1, total)
@@ -23,10 +26,10 @@ export function MailPager({ total, pageIdx, pageCount }) {
 
     return <div className="mail-pager">
 
-        {/* gmail hangs the date order off the range itself */}
+        {/* gmail hangs the sort order off the range itself */}
         <button
             className="mail-pager-range"
-            title="Date order"
+            title="Sort order"
             onClick={() => setIsDirMenuOpen(!isDirMenuOpen)}>
             {firstIdx.toLocaleString()}–{lastIdx.toLocaleString()} of {total.toLocaleString()}
         </button>
@@ -37,7 +40,7 @@ export function MailPager({ total, pageIdx, pageCount }) {
             onClick={() => setIsDirMenuOpen(false)}></div>}
 
         {isDirMenuOpen && <ul className="mail-menu mail-dir-menu">
-            {SORT_DIR_OPTIONS.map(option => (
+            {dirOptions.map(option => (
                 <li key={option.value}>
                     <button
                         className="mail-menu-option mail-dir-option"
