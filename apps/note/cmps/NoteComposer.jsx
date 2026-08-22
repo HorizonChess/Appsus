@@ -5,56 +5,67 @@ import { AudioEditor } from "./AudioEditor.jsx"
 import { TxtEditor } from "./TxtEditor.jsx"
 import { TodosEditor } from "./TodosEditor.jsx"
 import { TitleEditor } from "./TitleEditor.jsx"
-import { ComposerToolbar } from "./ComposerToolbar.jsx"
 import { ImgEditor } from "./ImgEditor.jsx"
 
-export function NoteComposer({ note, onChangeInfo, onChangeType, addNote, onTogglePinEmptyNote,onCancelNoteEdit }) {
-    // const [noteType, setNoteType] = useState('NoteTxt')
-    const [isExpanded, setIsExpanded] = useState(false)
+export function NoteComposer({ note, addNote }) {
     const [isPinned, setIsPinned] = useState(false)
-
+    const [draftNote, setDraftNote] = useState({ ...note, type: '' })
+    const composerRef = useRef()
 
     useEffect(() => {
-        eventBusService.on('note-edit', collapseComposer)
+        eventBusService.on('click', (ev) => {
+            if (composerRef.current && !composerRef.current.contains(ev.target)) {
+                setDraftNote({ ...note, type: '' })
+            }
+        })
     }, [])
 
-    function collapseComposer(msg) {
-        // setNoteType('NoteTxt')
-        setIsExpanded(false)
+    function handleChange(newInfo) {
+        setDraftNote(prev => ({ ...prev, info: newInfo }))
     }
 
-    function handleChange(info) {
-        onChangeInfo(info)
-    }
+    function onChangeDraftType(type, ev) {
+        if (type === 'NoteTodos') {
+            setDraftNote(prev => ({ ...prev, type, info: { title: '', todos: [] } }))
+        
+        } else if ((type) === 'NoteImg') {
+            const reader = new FileReader()
+            reader.readAsDataURL(ev.target.files[0])
+            reader.onload = function (event) {
+                const img = new Image()
 
+                img.onload = () => {
+                    setDraftNote({ ...draftNote, type: 'NoteImg', info: { ...note.info, url: img.src } })
+                }
+
+                img.src = event.target.result
+            }
+        } else {
+            setDraftNote(prev => ({ ...prev, type }))
+        }
+    }
 
     function handleTogglePinChange() {
         setIsPinned(!isPinned)
-        onTogglePinEmptyNote(note.id)
+        setDraftNote({ ...draftNote, isPinned: !note.isPinned })
     }
 
     function onSubmit() {
-        setIsExpanded(!isExpanded)
-        addNote()
-        // setNoteType('NoteTxt')
+        addNote(draftNote)
+        setDraftNote({ ...note, type: '' })
         setIsPinned(false)
     }
 
-    function onExpandComposer(ev) {
-        ev.preventDefault()
-        onloadEmptyNote()
-        setIsExpanded(true)
-    }
 
-    if (!note || note.id) {
+    if (!draftNote.type) {
         return < section className="note-composer collapsed" >
             <h3 className="composer-placeholder"
-                onClick={ev => onChangeType('NoteTxt', ev)}>Write a note...</h3>
+                onClick={ev => onChangeDraftType('NoteTxt', ev)}>Write a note...</h3>
 
             <div className="composer-toolbar">
                 <button
                     className="toolbar-btn"
-                    onClick={ev => onChangeType('NoteTodos')}>
+                    onClick={ev => onChangeDraftType('NoteTodos')}>
                     <i className="fa-regular fa-square-check"></i>
                 </button>
 
@@ -64,14 +75,14 @@ export function NoteComposer({ note, onChangeInfo, onChangeType, addNote, onTogg
                     name="note-img-input"
                     className="toolbar-btn" onChange={ev => {
                         ev.preventDefault()
-                        onChangeType('NoteImg', ev)
+                        onChangeDraftType('NoteImg', ev)
                     }}
                 />
                 <label className="toolbar-btn" htmlFor="note-img-input"><i class="fa-regular fa-image"></i></label>
 
                 <button
                     className="toolbar-btn"
-                    onClick={ev => onChangeType('NoteAudio')}>
+                    onClick={ev => onChangeDraftType('NoteAudio')}>
                     <i class="fa-solid fa-microphone"></i>
                 </button>
 
@@ -81,14 +92,14 @@ export function NoteComposer({ note, onChangeInfo, onChangeType, addNote, onTogg
     }
 
 
-    return < section className="note-composer expanded">
-        <TitleEditor info={note.info} onChangeTitle={handleChange} isEditMode={true} />
+    return < section className="note-composer expanded" ref={composerRef}>
+        <TitleEditor info={draftNote.info} onChangeTitle={handleChange} isEditMode={true} />
 
 
         <DynamicEditor
-            key={`note#${note.id}-editor`}
-            cmpType={note.type}
-            info={note.info}
+            key={`note#${draftNote.id}-editor`}
+            cmpType={draftNote.type}
+            info={draftNote.info}
             isEditMode={true}
             onChangeVal={handleChange} />
 

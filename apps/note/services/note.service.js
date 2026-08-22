@@ -14,7 +14,8 @@ export const noteService = {
     getEmptyNote,
     save,
     remove,
-    getFilterFromSearchParams
+    getFilterFromSearchParams,
+    getFilteredNotes
 
 }
 
@@ -22,21 +23,7 @@ window.ns = noteService
 
 function query(filterBy = {}) {
     return storageService.query(NOTES_KEY)
-        .then(notes => {
-            if (filterBy.txt) {
-                notes = _filterByText(notes, filterBy.txt)
-            }
-
-            if (filterBy.isPinned) {
-                notes = notes.filter(note => note.isPinned)
-            }
-
-            if (filterBy.type) {
-                notes = notes.filter(note => note.type === filterBy.type)
-            }
-
-            return notes
-        })
+        .then(notes => getFilteredNotes(notes, filterBy))
 }
 
 function get(noteId) {
@@ -133,4 +120,23 @@ function getFilterFromSearchParams(searchParams) {
         filterBy[field] = searchParams.get(field) || ''
     }
     return filterBy
+}
+
+
+function getFilteredNotes(notes, filterBy) {
+    var filteredNotes = [...notes]
+    if (filterBy.txt) {
+        filteredNotes = _filterByText(notes, filterBy.txt)
+    }
+
+    if (filterBy.isPinned) {
+        filteredNotes = notes.filter(note => note.isPinned)
+    }
+
+    if (filterBy.type) {
+        filteredNotes = notes.filter(note => note.type === filterBy.type)
+    }
+
+    return filteredNotes
+
 }

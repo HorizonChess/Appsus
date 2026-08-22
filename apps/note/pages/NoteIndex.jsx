@@ -20,8 +20,11 @@ export function NoteIndex() {
     const [filterBy, setFilterBy] = useState(noteService.getFilterFromSearchParams(searchParams))
     const [notes, setNotes] = useState([])
 
-    const [isShown, setIsShown] = useState(false)
     const [editedNote, setEditedNote] = useState(null)
+
+    const openNoteId = searchParams.get('noteId')
+    const openNote = notes.find(note => note.id === openNoteId)
+    const visibleNotes = noteService.getFilteredNotes(notes, filterBy)
 
     // the addNote branch only runs for a mail handed over from MrEmail:
     // the saving to the user. every other visit just loads the list
@@ -30,186 +33,49 @@ export function NoteIndex() {
     }, [])
 
     useEffectUpdate(() => {
-        // setSearchParams(filterBy)
         setSearchParams(utilService.trimObj(filterBy))
         loadNotes()
     }, [filterBy])
 
     function loadNotes() {
         noteService.query({ txt: '', type: filterBy.type }).
-            then(notes => setfilteredNotes(notes, filterBy))
+            then(notes => setNotes([...notes]))
     }
 
-    function setfilteredNotes(notes, filterBy) {
-        var filteredNotes = [...notes]
+    function onUpdateNote(noteId, func, newInfo) {
+        const note = noteId ? notes.find(note => note.id === noteId) : openNote
 
-        if (filterBy.type) {
-            filteredNotes = filteredNotes.filter(note => note.type === filterBy.type)
-        }
+        func(note, newInfo)
 
-        if (filterBy.txt) {
-            filteredNotes = filterNotesByText(filteredNotes, filterBy.txt)
-
-        }
-
-        if (filterBy.isPinned) {
-            filteredNotes = filteredNotes.filter(note => note.isPinned)
-        }
-
-        setNotes(filteredNotes)
+        noteService.save(note)
+        setNotes([...notes])
     }
 
-    function filterNotesByText(notes, text) {
-        const regExp = new RegExp(text, 'i')
-
-        return notes.filter(note => {
-            const { info } = note
-
-            if (!info) return false
-            if (text === '') return true
-            const { title, txt, todos } = note.info
-            if (title && regExp.test(title)) return true
-            if (txt && regExp.test(txt)) return true
-            if (todos && todos.some(todo => regExp.test(todo.txt))) return true
-
-            return false
-        })
+    function onTogglePinNote(note) {
+        note.isPinned = !note.isPinned
     }
 
-
-    function onChangeType(type, ev) {
-        var note
-        if (!editedNote) note = noteService.getEmptyNote()
-        else note = editedNote
-
-        const emptyTodo = { txt: '', isDone: false }
-
-        if ((type) === 'NoteImg') {
-
-            const reader = new FileReader()
-
-            reader.readAsDataURL(ev.target.files[0])
-
-            reader.onload = function (event) {
-                const img = new Image()
-
-                img.onload = () => {
-                    const newInfo = { ...note.info, url: img.src }
-                    note.info = newInfo
-                    note.type = 'NoteImg'
-                    setEditedNote(note)
-                }
-                img.src = event.target.result
-            }
-
-        } else {
-            setEditedNote({
-                ...note,
-                type,
-                info: type === 'NoteTodos' ? ({ title: '', todos: [emptyTodo] }) : ({ title: '', txt: '' })
-            })
-        }
+    function onChangeInfo(note, newInfo) {
+        note.info = newInfo
     }
 
-    function onTogglePinNote(noteId) {
-        if (noteId || editedNote.id) {
-            const searchNoteId = noteId ? noteId : editedNote.id
-
-            const noteIdx = notes.findIndex(note => note.id === searchNoteId)
-            console.log('noteIdx', noteIdx)
-            const note = notes.at(noteIdx)
-
-            note.isPinned = !note.isPinned
-            noteService.save(note)
-
-            // notes.splice(noteIdx, 1, note)
-
-            notes.splice(noteIdx, 1)
-            notes.unshift(note)
-            setfilteredNotes([...notes], filterBy)
-        }
-
-        if (!noteId) {
-            setEditedNote(prev => ({ ...prev, isPinned: !prev.isPinned }))
-        }
+    function onChangeStyle(note, backgroundColor) {
+        const newStyle = { ...note.style, backgroundColor }
+        note.style = newStyle
     }
 
-    function onChangeInfo(newInfo, noteId) {
-        if (noteId || editedNote.id) {
-            const searchNoteId = noteId ? noteId : editedNote.id
-
-            const noteIdx = notes.findIndex(note => note.id === searchNoteId)
-            const note = notes.at(noteIdx)
-
-            note.info = newInfo
-            noteService.save(note)
-
-            notes.splice(noteIdx, 1, note)
-            setfilteredNotes([...notes], filterBy)
-        }
-
-        if (!noteId) {
-            setEditedNote(prev => ({ ...prev, info: newInfo }))
-        }
-    }
-
-    function updateNote(updatednote) {
-        const updatedNotes = [...notes]
-
-        if (updatednote.id) {
-            const updatedNoteIsx = notes.findIndex(note => note.id === updatednote.id)
-            updatedNotes.splice(updatedNoteIsx, 1, updatednote)
-            noteService.save(updatednote)
-        }
-
-        filterNotesByText(updatedNotes, filterBy)
-    }
-
-    function onloadEmptyNote() {
-        setEditedNote(noteService.getEmptyNote())
-    }
-
-
-    function addNote() {
+    function addNote(draftNote) {
         const noteIdx = notes.length
-        noteService.save(editedNote)
+        noteService.save(draftNote)
             .then(note => {
-
                 notes.splice(noteIdx, 1, note)
-                setfilteredNotes([...notes], filterBy)
+                setNotes([...notes])
             })
 
-        notes.push(editedNote)
+        notes.push(draftNote)
 
-        setfilteredNotes([...notes], filterBy)
+        setNotes([...notes])
         setEditedNote(null)
-    }
-
-    function onChangeStyle(ev, noteId) {
-        const { target } = ev
-        var newStyle
-
-        if (noteId || editedNote.id) {
-            const searchNoteId = noteId ? noteId : editedNote.id
-            const noteIdx = notes.findIndex(note => note.id === searchNoteId)
-            const note = notes.at(noteIdx)
-
-            const { style } = note
-            newStyle = { ...style, backgroundColor: target.value }
-            note.style = newStyle
-
-            noteService.save(note)
-
-            // notes.splice(noteIdx, 1, note)
-
-            setfilteredNotes([...notes], filterBy)
-        }
-
-        if (!noteId) {
-            setEditedNote(prev => ({ ...prev, style: newStyle }))
-        }
-        // if (editedNote.id) setEditedNote(updatedNote)
-        // updateNote(updatedNote)
     }
 
     function removeNote(noteId) {
@@ -217,22 +83,16 @@ export function NoteIndex() {
         const updatedNotes = [...notes]
         const removedNoteIsx = notes.findIndex(note => note.id === noteId)
         updatedNotes.splice(removedNoteIsx, 1)
-        setfilteredNotes(updatedNotes, filterBy)
+        setNotes(updatedNotes)
     }
 
-
-
     function onOpenModal(noteId) {
-        setEditedNote(notes.find(note => note.id === noteId))
-        eventBusService.emit('note-edit')
-        noteService.get(noteId)
-        setIsShown(true)
-
+        setFilterBy({ ...filterBy, noteId })
     }
 
     function onCloseModal() {
-        setEditedNote(null)
-        setIsShown(false)
+        setFilterBy({ ...filterBy, noteId: '' })
+
     }
 
     function onDuplicateNote(note) {
@@ -241,7 +101,6 @@ export function NoteIndex() {
 
         duplicatedNote.id = null
         notes.splice(duplicatedNoteIdx, 0, duplicatedNote)
-        // const noteIdx = notes.length - 1
 
         setNotes([...notes])
 
@@ -259,7 +118,7 @@ export function NoteIndex() {
     </section>
 
 
-    return <section className="notes-container note-layout" >
+    return <section className="notes-container note-layout" onClick={ev => eventBusService.emit('click', ev)}>
 
         <NoteFilter
             filterBy={filterBy}
@@ -268,16 +127,12 @@ export function NoteIndex() {
 
 
         <NoteComposer
-            note={editedNote}
-            onChangeInfo={onChangeInfo}
-            onChangeType={onChangeType}
-            onloadEmptyNote={onloadEmptyNote}
+            note={noteService.getEmptyNote()}
             addNote={addNote}
-            onTogglePinEmptyNote={onTogglePinNote}
-         />
+        />
 
         <NoteList
-            notes={notes}
+            notes={visibleNotes}
             onTogglePinNote={onTogglePinNote}
             editedNote={editedNote}
             onRemoveNote={removeNote}
@@ -285,18 +140,20 @@ export function NoteIndex() {
             onOpenModal={onOpenModal}
             onChangeInfo={onChangeInfo}
             onDuplicateNote={onDuplicateNote}
+            onUpdateNote={onUpdateNote}
         />
 
 
         <NoteModal
-            isShown={isShown}
+            isShown={openNoteId}
             onClose={onCloseModal}
             style={editedNote && editedNote.style}
         >
-            {editedNote && editedNote.id ?
+            {openNoteId ?
 
                 <NoteEdit
-                    note={{ ...editedNote }}
+                    note={openNote}
+                    onUpdateNote={onUpdateNote}
                     onChangeInfo={onChangeInfo}
                     onChangeStyle={onChangeStyle}
                     onTogglePinNote={onTogglePinNote} />

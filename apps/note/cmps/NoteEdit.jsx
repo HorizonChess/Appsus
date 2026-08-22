@@ -9,15 +9,16 @@ import { ImgEditor } from "./ImgEditor.jsx"
 import { VideoEditor } from "./VideoEditor.jsx"
 import { AudioEditor } from "./AudioEditor.jsx"
 
-export function NoteEdit({ note, updateNote, onChangeInfo, onChangeStyle, onTogglePinNote }) {
+export function NoteEdit({ note, updateNote, onChangeInfo, onChangeStyle, onTogglePinNote, onUpdateNote }) {
     const [isColorPickerShown, setIsColorPickerShown] = useState(null)
     const [noteEditStyle, setNoteEditStyle] = useState(note.style)
     const [isPinned, setIsPinned] = useState(note.isPinned)
 
+    console.log('note', note)
     const backdropRef = useRef()
 
     function handleChange(info, noteId) {
-        onChangeInfo(info, noteId)
+        onUpdateNote(noteId, onChangeInfo, info)
     }
 
     function handleColorPickerOpen(ev) {
@@ -34,12 +35,12 @@ export function NoteEdit({ note, updateNote, onChangeInfo, onChangeStyle, onTogg
 
     function handleTogglePinChange() {
         setIsPinned(!isPinned)
-        onTogglePinNote(note.id)
+        onUpdateNote(note.id, onTogglePinNote)
     }
 
     function handleColorChange(ev) {
         setNoteEditStyle({ backgroundColor: ev.target.value })
-        onChangeStyle(ev)
+        onUpdateNote(note.id, onChangeStyle,ev.target.value)
     }
 
     return <section className="note-edit" style={noteEditStyle}>
@@ -49,7 +50,7 @@ export function NoteEdit({ note, updateNote, onChangeInfo, onChangeStyle, onTogg
             key={`note#${note.id}-editor`}
             cmpType={note.type}
             info={note.info}
-            isEditMode={note.type==='NoteTxt' || note.type==='NoteTodos' }
+            isEditMode={note.type === 'NoteTxt' || note.type === 'NoteTodos'}
             onChangeVal={handleChange}
             noteId={note.id}
         />
