@@ -42,6 +42,7 @@
 @import './apps/mail/mail-responsive.css';
 
 
+@import "./apps/books/BookIndex.css";
 @import "./apps/books/BookList.css";
 @import "./apps/books/BookPreview.css";
 @import "./apps/books/BookDetails.css";

@@ -40,7 +40,7 @@ export function BookIndex() {
     }
 
 
-    return <section>
+    return <section className="books-layout">
         <BookFilter
             filterBy={filterBy}
             onSetFilterBy={onSetFilterBy}

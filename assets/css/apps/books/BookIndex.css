@@ -1,0 +1,88 @@
+.book-layout {
+    --gutter-width: 1.6em;
+
+    display: grid;
+    grid-template-columns:
+        var(--gutter-width) 1fr var(--gutter-width);
+}
+
+.book-layout>* {
+    grid-column: 2;
+}
+
+.book-layout .full {
+    grid-column: 1 / -1;
+}
+
+.container {
+    --content-width: 800px;
+    --gutter-width: 1em;
+
+    max-width: var(--content-width);
+    padding: var(--gutter-width);
+    margin: auto;
+}
+
+
+.book-layout *,
+.book-layout *::before,
+.book-layout *::after {
+    box-sizing: border-box;
+}
+
+
+
+@media (prefers-reduced-motion: no-preference) {
+    .book-layout {
+        scroll-behavior: smooth;
+        interpolate-size: allow-keywords;
+    }
+}
+
+.book-layout {
+    color-scheme: light dark;
+}
+
+.book-layout h1,
+.book-layout h2,
+.book-layout h3,
+.book-layout h4,
+.book-layout h5,
+.book-layout h6 {
+    margin: 0 0 1em;
+    text-wrap: balance;
+}
+
+.book-layout p {
+    max-width: 65ch;
+    margin: 0 0 1em;
+    text-wrap: pretty;
+}
+
+.book-layout img,
+.book-layout picture,
+.book-layout video,
+.book-layout canvas,
+.book-layout svg {
+    display: block;
+    max-width: 100%;
+}
+
+.book-layout ul,
+.book-layout ol {
+    padding: 0;
+    list-style: none;
+}
+
+.book-layout a[class] {
+    text-decoration: none;
+    color: inherit;
+}
+
+.book-layout input,
+.book-layout button,
+.book-layout textarea,
+.book-layout select {
+    max-width: 100%;
+    font: inherit;
+}
