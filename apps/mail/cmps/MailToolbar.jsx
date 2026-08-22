@@ -1,32 +1,36 @@
 import { eventBusService } from '../../../services/event-bus.service.js'
-import { mailService, PAGE_SIZE, SORT_OPTIONS, SORT_DIR_OPTIONS } from '../services/mail.service.js'
+import { mailService, SORT_OPTIONS } from '../services/mail.service.js'
 import { useMailParams } from '../custom-hooks/useMailParams.js'
-import { useKeyListener } from '../custom-hooks/useKeyListener.js'
+import { MailMoveTo } from './MailMoveTo.jsx'
+import { MailPager } from './MailPager.jsx'
 
-const { useState } = React
 
-// the sort and the page ride in the url - the folder size is all it needs told
-export function MailToolbar({ total, pageIdx, pageCount }) {
+const CHECK_ICONS = {
+    true: 'check_box',
+    mixed: 'indeterminate_check_box',
+    false: 'check_box_outline_blank',
+}
+
+// the sort rides in the url - the folder size is all it needs told. the
+// selection cannot, it belongs to the rows on screen, so it comes as a prop
+export function MailToolbar({ total, pageIdx, pageCount, pageIds, selectedIds, onSetSelectedIds }) {
     const [searchParams, setParams] = useMailParams()
-    const [isDirMenuOpen, setIsDirMenuOpen] = useState(false)
 
-    useKeyListener('Escape', () => setIsDirMenuOpen(false))
+    const isAllSelected = pageIds.length > 0 && pageIds.every(id => selectedIds.includes(id))
+    const checkState = isAllSelected ? 'true' : (selectedIds.length > 0 ? 'mixed' : 'false')
 
-    // the controls need the resolved value, so the service's defaults stand in
-    const defaults = mailService.getDefaultFilter()
-    const sortBy = searchParams.get('sortBy') || defaults.sortBy
-    const sortDir = searchParams.get('sortDir') || defaults.sortDir
+    // the control needs the resolved value, so the service's default stands in
+    const sortBy = searchParams.get('sortBy') || mailService.getDefaultFilter().sortBy
 
-    const firstIdx = pageIdx * PAGE_SIZE + 1
-    const lastIdx = Math.min(firstIdx + PAGE_SIZE - 1, total)
-
+    // the direction does not carry across - '-1' means newest on a date and Z
+    // first on a subject, so it goes back to whatever the new field opens at
     function onSortByChange({ target }) {
-        setParams({ sortBy: target.value })
+        setParams({ sortBy: target.value, sortDir: null })
     }
 
-    function onSetSortDir(value) {
-        setIsDirMenuOpen(false)
-        setParams({ sortDir: value })
+    // select all covers the page you are looking at, never the whole folder
+    function onToggleSelectAll() {
+        onSetSelectedIds(isAllSelected ? [] : pageIds)
     }
 
     // the list and the sidebar counts both listen, so neither needs telling twice
@@ -37,7 +41,14 @@ export function MailToolbar({ total, pageIdx, pageCount }) {
     return <div className="mail-toolbar">
 
         <div className="mail-toolbar-actions">
-            <input type="checkbox" className="mail-select-all" title="Select all" />
+            <button
+                className="mail-check mail-select-all"
+                role="checkbox"
+                aria-checked={checkState}
+                title="Select all"
+                onClick={onToggleSelectAll}>
+                <span className="material-symbols-outlined">{CHECK_ICONS[checkState]}</span>
+            </button>
 
             <button className="mail-icon-btn mail-icon-btn-sm" title="Select all">
                 <span className="material-symbols-outlined">arrow_drop_down</span>
@@ -46,6 +57,11 @@ export function MailToolbar({ total, pageIdx, pageCount }) {
             <button className="mail-icon-btn" title="Refresh" onClick={onRefresh}>
                 <span className="material-symbols-outlined">refresh</span>
             </button>
+
+            {/* nothing to move until something is ticked, so gmail hides it */}
+            {selectedIds.length > 0 && <MailMoveTo
+                mailIds={selectedIds}
+                onMoved={() => onSetSelectedIds([])} />}
 
             <button className="mail-icon-btn mail-hide-mobile" title="Mark as unread">
                 <span className="material-symbols-outlined">mark_email_unread</span>
@@ -68,49 +84,7 @@ export function MailToolbar({ total, pageIdx, pageCount }) {
                 </select>
             </label>
 
-            {total > 0 && <div className="mail-pager">
-                {/* gmail hangs the date order off the range itself */}
-                <button
-                    className="mail-pager-range"
-                    title="Date order"
-                    onClick={() => setIsDirMenuOpen(!isDirMenuOpen)}>
-                    {firstIdx.toLocaleString()}–{lastIdx.toLocaleString()} of {total.toLocaleString()}
-                </button>
-
-                {/* catches the outside click that closes the menu */}
-                {isDirMenuOpen && <div
-                    className="mail-menu-backdrop"
-                    onClick={() => setIsDirMenuOpen(false)}></div>}
-
-                {isDirMenuOpen && <ul className="mail-dir-menu">
-                    {SORT_DIR_OPTIONS.map(option => (
-                        <li key={option.value}>
-                            <button
-                                className="mail-dir-option"
-                                disabled={option.value === sortDir}
-                                onClick={() => onSetSortDir(option.value)}>
-                                {option.label}
-                            </button>
-                        </li>
-                    ))}
-                </ul>}
-
-                <button
-                    className="mail-icon-btn"
-                    title="Newer"
-                    disabled={pageIdx === 0}
-                    onClick={() => setParams({ pageIdx: pageIdx - 1 })}>
-                    <span className="material-symbols-outlined">chevron_left</span>
-                </button>
-
-                <button
-                    className="mail-icon-btn"
-                    title="Older"
-                    disabled={pageIdx >= pageCount - 1}
-                    onClick={() => setParams({ pageIdx: pageIdx + 1 })}>
-                    <span className="material-symbols-outlined">chevron_right</span>
-                </button>
-            </div>}
+            {total > 0 && <MailPager total={total} pageIdx={pageIdx} pageCount={pageCount} />}
 
         </div>
 

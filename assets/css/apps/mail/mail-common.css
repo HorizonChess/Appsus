@@ -14,6 +14,9 @@
     border: none;
     border-radius: 50%;
     background: none;
+    /* the font awesome kit swaps its <i> for an <svg> sized at 1em, so a borrowed
+       icon takes its size from the button rather than from itself */
+    font-size: var(--mail-icon-size);
     color: var(--mail-clr-text-secondary);
     cursor: pointer;
 }
@@ -32,6 +35,79 @@
 }
 
 .mail-icon-btn .material-symbols-outlined {
+    font-size: var(--mail-icon-size);
+}
+
+/* the sort menu and the move to menu are the same card - only their width and
+   what is inside them differs */
+.mail-menu {
+    position: absolute;
+    z-index: 16;
+    inset-block-start: calc(100% + var(--mail-sp-1));
+    inset-inline-start: 0;
+    border-radius: var(--mail-radius-sm);
+    background-color: var(--mail-clr-surface);
+    box-shadow: var(--mail-shadow-modal);
+}
+
+/* and every row in either of them is the same row, bar its padding */
+.mail-menu-option {
+    display: block;
+    inline-size: 100%;
+    block-size: var(--mail-nav-item-h);
+    border: none;
+    background: none;
+    font-family: inherit;
+    font-size: var(--mail-fs-body);
+    color: var(--mail-clr-text);
+    text-align: start;
+    cursor: pointer;
+}
+
+.mail-menu-option:hover {
+    background-color: var(--mail-clr-hover);
+}
+
+/* catches any outside click, paints nothing */
+.mail-menu-backdrop {
+    position: fixed;
+    z-index: 15;
+    inset: 0;
+}
+
+/* the toolbar's select all and the row ticks are the same control - only where
+   they sit differs, and that lives with each of them */
+/* gmail draws its checkbox as an image, not as a form control - so the box, the
+   tick and the dash are three glyphs, and nothing here paints a border. that is
+   also why the ticked one is not filled blue: only the row behind it is */
+.mail-check {
+    display: grid;
+    place-items: center;
+    inline-size: var(--mail-col-check-w);
+    block-size: var(--mail-col-check-w);
+    padding: 0;
+    border: none;
+    border-radius: 50%;
+    background: none;
+    color: var(--mail-clr-text-secondary);
+    cursor: pointer;
+}
+
+/* a ticked box reads a step darker than an empty one, the same way gmail's does */
+.mail-check[aria-checked="true"],
+.mail-check[aria-checked="mixed"] {
+    color: var(--mail-clr-text);
+}
+
+/* the box is the glyph, so it cannot grow on hover - the halo is a shadow
+   spread, and round because the box itself is */
+.mail-check:hover {
+    box-shadow: 0 0 0 var(--mail-sp-1) var(--mail-clr-hover);
+    background-color: var(--mail-clr-hover);
+}
+
+/* the class rule sets 24px, so the box has to be sized back down here */
+.mail-check .material-symbols-outlined {
     font-size: var(--mail-icon-size);
 }
 

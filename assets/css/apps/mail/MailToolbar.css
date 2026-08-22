@@ -23,97 +23,9 @@
     gap: var(--mail-sp-3);
 }
 
-/* relative so the dir menu can hang off it */
-.mail-pager {
-    position: relative;
-    display: flex;
-    align-items: center;
-    gap: var(--mail-sp-1);
-}
-
-.mail-pager-range {
-    block-size: var(--mail-nav-item-h);
-    padding-inline: var(--mail-sp-2);
-    border: none;
-    border-radius: var(--mail-radius-sm);
-    background: none;
-    font-family: inherit;
-    font-size: var(--mail-fs-small);
-    color: var(--mail-clr-text-secondary);
-    white-space: nowrap;
-    cursor: pointer;
-}
-
-.mail-pager-range:hover {
-    background-color: var(--mail-clr-hover);
-}
-
-/* catches any outside click, paints nothing */
-.mail-menu-backdrop {
-    position: fixed;
-    z-index: 15;
-    inset: 0;
-}
-
-.mail-dir-menu {
-    position: absolute;
-    z-index: 16;
-    inset-block-start: calc(100% + var(--mail-sp-1));
-    inset-inline-start: 0;
-    min-inline-size: 112px;
-    margin: 0;
-    padding-block: var(--mail-sp-1);
-    list-style: none;
-    border-radius: var(--mail-radius-sm);
-    background-color: var(--mail-clr-surface);
-    box-shadow: var(--mail-shadow-modal);
-}
-
-/* base.css pads every li, which would inset the row and break the hover */
-.mail-dir-menu li {
-    padding: 0;
-}
-
-.mail-dir-option {
-    display: block;
-    inline-size: 100%;
-    block-size: var(--mail-nav-item-h);
-    padding-inline: var(--mail-sp-4);
-    border: none;
-    background: none;
-    font-family: inherit;
-    font-size: var(--mail-fs-body);
-    color: var(--mail-clr-text);
-    text-align: start;
-    cursor: pointer;
-}
-
-.mail-dir-option:hover {
-    background-color: var(--mail-clr-hover);
-}
-
-/* the order you are already in - listed, but nothing to switch to */
-.mail-dir-option:disabled {
-    color: var(--mail-clr-text-muted);
-    cursor: default;
-}
-
-.mail-dir-option:disabled:hover {
-    background: none;
-}
-
+/* the look is .mail-check in mail-common, this only places it */
 .mail-select-all {
-    inline-size: 18px;
-    block-size: 18px;
     margin-inline-start: var(--mail-sp-2);
-    border-radius: var(--mail-radius-sm);
-    accent-color: var(--mail-clr-accent);
-    cursor: pointer;
-}
-
-/* native checkboxes ignore padding, so the halo is a shadow spread */
-.mail-select-all:hover {
-    box-shadow: 0 0 0 var(--mail-sp-2) var(--mail-clr-hover);
 }
 
 /* the caret hugs the checkbox instead of taking a full button footprint */

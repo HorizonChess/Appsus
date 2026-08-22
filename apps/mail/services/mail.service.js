@@ -20,11 +20,19 @@ export const SORT_OPTIONS = [
     { value: 'subject', label: 'Subject' },
 ]
 
-// the -1 / 1 _sortMails multiplies by
-export const SORT_DIR_OPTIONS = [
-    { value: '-1', label: 'Newest' },
-    { value: '1', label: 'Oldest' },
-]
+// the -1 / 1 _sortMails multiplies by. one multiplier, but it reads differently
+// per field and opens differently too - a date wants the newest end first, text
+// wants A. the first entry of a list is that field's default
+export const SORT_DIR_OPTIONS = {
+    date: [
+        { value: '-1', label: 'Newest' },
+        { value: '1', label: 'Oldest' },
+    ],
+    subject: [
+        { value: '1', label: 'A-Z' },
+        { value: '-1', label: 'Z-A' },
+    ],
+}
 
 // gmail's own page size
 export const PAGE_SIZE = 50
@@ -40,9 +48,15 @@ export const mailService = {
     send,
     toggleStar,
     toggleRead,
+    getLabels,
+    getLabelName,
+    addLabel,
+    removeLabel,
     getEmptyMail,
     getReplyPrefill,
     getDefaultFilter,
+    getSortDirOptions,
+    getDefaultSortDir,
     getFolderCounts,
     isInFolder,
     formatMailDate,
@@ -53,12 +67,20 @@ export const mailService = {
 window.ms = mailService
 
 function query(filterBy = {}) {
-    const criteria = { ...getDefaultFilter(), ...filterBy }
+    const defaults = getDefaultFilter()
+    const criteria = { ...defaults, ...filterBy }
+
+    // the url hands over a null for every param it is not carrying, and a spread
+    // lets those nulls overwrite the defaults they were merged onto - so the sort
+    // resolves here rather than in the merge. the direction's default depends on
+    // the field, which is why getDefaultFilter cannot hold one at all
+    const sortBy = criteria.sortBy || defaults.sortBy
+    const sortDir = criteria.sortDir || getDefaultSortDir(sortBy)
 
     return storageService.query(MAIL_KEY)
         .then(mails => {
             mails = _filterMails(mails, criteria)
-            return _sortMails(mails, criteria.sortBy, criteria.sortDir)
+            return _sortMails(mails, sortBy, sortDir)
         })
 }
 
@@ -74,7 +96,7 @@ function remove(mailId) {
             if (mail.removedAt) return storageService.remove(MAIL_KEY, mailId)
             return storageService.put(MAIL_KEY, { ...mail, removedAt: Date.now() })
         })
-        .then(_notifyChange)
+        .then(_notifyCounts)
 }
 
 function save(mail) {
@@ -99,23 +121,69 @@ function send(mail) {
 function toggleStar(mailId, isStared) {
     return storageService.get(MAIL_KEY, mailId)
         .then(mail => storageService.put(MAIL_KEY, { ...mail, isStared }))
-        .then(_notifyChange)
+        .then(_notifyCounts)
 }
 
 function toggleRead(mailId, isRead) {
     return storageService.get(MAIL_KEY, mailId)
         .then(mail => storageService.put(MAIL_KEY, { ...mail, isRead }))
+        .then(_notifyCounts)
+}
+
+// the whole selection is read and written in one pass - a put per mail would
+// have them all patch the same snapshot and lose everything but the last
+function addLabel(mailIds, label) {
+    return storageService.query(MAIL_KEY)
+        .then(mails => {
+            const updated = mails.map(mail => {
+                if (!mailIds.includes(mail.id)) return mail
+                const labels = mail.labels || []
+                if (labels.includes(label)) return mail
+                return { ...mail, labels: [...labels, label] }
+            })
+
+            utilService.saveToStorage(MAIL_KEY, updated)
+        })
+        .then(_notifyChange)
+}
+
+// the list of labels is derived, so a label stops existing on its own once the
+// last mail carrying it has been stripped here
+function removeLabel(mailIds, label) {
+    return storageService.query(MAIL_KEY)
+        .then(mails => {
+            const updated = mails.map(mail => {
+                if (!mailIds.includes(mail.id)) return mail
+                return { ...mail, labels: (mail.labels || []).filter(name => name !== label) }
+            })
+
+            utilService.saveToStorage(MAIL_KEY, updated)
+        })
         .then(_notifyChange)
 }
 
 // the folder counts live in the sidebar now, which has no way of knowing a write
-// happened somewhere else in the app
+// happened somewhere else in the app.
+// two signals, because the list is not always the one that is behind. a star, a
+// read or a delete was applied to the row before the write even started, so
+// reloading the list over it puts a snapshot from before that click back on
+// screen - which is the flicker you get when a second click lands inside the
+// first one's storage round trip. those emit counts only, and the sidebar takes
+// both because its numbers are stale either way
 function _notifyChange(res) {
     eventBusService.emit('mails-changed')
     return res
 }
 
-// a mail's folder comes from its fields, it is never stored
+// the row on screen is already right, only the sidebar is behind
+function _notifyCounts(res) {
+    eventBusService.emit('mail-counts-changed')
+    return res
+}
+
+// a mail's folder comes from its fields, it is never stored. anything that is
+// not one of MAIL_FOLDERS is a label, and a label is a folder as far as gmail
+// is concerned - which is what lets ?folder=Work reuse the whole list
 function isInFolder(mail, folder) {
     const isTrashed = mail.removedAt !== null
     if (folder === 'trash') return isTrashed
@@ -128,8 +196,19 @@ function isInFolder(mail, folder) {
         case 'sent': return isSent && mail.from === loggedinUser.email
         case 'inbox': return isSent && mail.to === loggedinUser.email
         case 'starred': return mail.isStared
-        default: return true
+        default: return (mail.labels || []).includes(folder)
     }
+}
+
+// there is no label entity - the list is whatever the mails carry, the same way
+// a folder is whatever a mail's fields add up to
+function getLabels() {
+    return storageService.query(MAIL_KEY).then(_extractLabels)
+}
+
+// 'Friends/Memories' -> 'Memories'. the path only matters where a label is picked
+function getLabelName(label) {
+    return label.slice(label.lastIndexOf('/') + 1)
 }
 
 // Feeds the badges in the folder list: { inbox: { total, unread }, ... }
@@ -137,8 +216,9 @@ function getFolderCounts() {
     return storageService.query(MAIL_KEY)
         .then(mails => {
             const counts = {}
+            const folders = [...MAIL_FOLDERS, ..._extractLabels(mails)]
 
-            MAIL_FOLDERS.forEach(folder => {
+            folders.forEach(folder => {
                 const folderMails = mails.filter(mail => isInFolder(mail, folder))
                 counts[folder] = {
                     total: folderMails.length,
@@ -163,6 +243,7 @@ function getEmptyMail({ to = '', subject = '', body = '' } = {}) {
         removedAt: null,
         isRead: true,
         isStared: false,
+        labels: [],
     }
 }
 
@@ -188,8 +269,18 @@ function getDefaultFilter() {
         from: '',
         subject: '',
         sortBy: 'date',   // date / subject / from
-        sortDir: '-1',    // string, like the url always gives. 1 ascending, -1 descending
+        // no sortDir - what it defaults to depends on sortBy, so getDefaultSortDir owns it
     }
+}
+
+// falls back to the date pair so an unknown sortBy still has a direction to use
+function getSortDirOptions(sortBy) {
+    return SORT_DIR_OPTIONS[sortBy] || SORT_DIR_OPTIONS.date
+}
+
+// how a field opens before anyone touches the direction control
+function getDefaultSortDir(sortBy) {
+    return getSortDirOptions(sortBy)[0].value
 }
 
 // Gmail's date rule: today -> 14:32, this year -> Sep 12, older -> 12/09/2019
@@ -211,6 +302,18 @@ function formatMailDate(timestamp) {
 }
 
 // ---------------------------------------------------------------- privates
+
+function _extractLabels(mails) {
+    const labels = new Set()
+
+    mails.forEach(mail => (mail.labels || []).forEach(label => {
+        labels.add(label)
+        // a nested label implies its parent, so the tree never has a hole in it
+        if (label.includes('/')) labels.add(label.slice(0, label.indexOf('/')))
+    }))
+
+    return [...labels].sort((label1, label2) => label1.localeCompare(label2))
+}
 
 function _filterMails(mails, criteria) {
     mails = mails.filter(mail => isInFolder(mail, criteria.folder))
@@ -238,7 +341,8 @@ function _filterMails(mails, criteria) {
 }
 
 function _sortMails(mails, sortBy, sortDir) {
-    const dir = +sortDir || -1
+    // query resolves this per field before we get here, so it is always ±1
+    const dir = +sortDir
 
     return mails.sort((mail1, mail2) => {
         switch (sortBy) {

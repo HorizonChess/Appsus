@@ -23,6 +23,8 @@ export function NoteIndex() {
     const [isShown, setIsShown] = useState(false)
     const [editedNote, setEditedNote] = useState(null)
 
+    // the addNote branch only runs for a mail handed over from MrEmail:
+    // the saving to the user. every other visit just loads the list
     useEffect(() => {
         loadNotes()
     }, [])

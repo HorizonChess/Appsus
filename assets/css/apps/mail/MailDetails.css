@@ -16,6 +16,14 @@
     margin-block-end: var(--mail-sp-4);
 }
 
+/* the chips sit beside the subject and wrap under it once there is no room */
+.mail-details-subject-line {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--mail-sp-2);
+}
+
 .mail-details-subject {
     font-size: var(--mail-fs-title);
     font-weight: var(--mail-fw-read);

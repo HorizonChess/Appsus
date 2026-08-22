@@ -6,7 +6,7 @@
 @media (max-width: 1000px) {
     .mail-index {
         --mail-sidebar-w: var(--mail-rail-w);
-        --mail-col-sender-indent: var(--mail-sp-3);
+        --mail-col-sender-gap: var(--mail-sp-3);
     }
 
     /* hamburger and mark together are wider than the rail, so the brand stops
@@ -24,12 +24,19 @@
 @container mail-nav (max-width: 120px) {
     .mail-compose-btn span:not(.material-symbols-outlined),
     .mail-folder-label,
-    .mail-folder-count {
+    .mail-folder-count,
+    .mail-labels-title {
         display: none;
     }
 
-    .mail-folders {
+    .mail-folders,
+    .mail-labels {
         align-items: center;
+    }
+
+    /* nothing left to indent under once the names are gone */
+    .mail-label.is-nested {
+        padding-inline-start: 0;
     }
 
     .mail-compose-btn {

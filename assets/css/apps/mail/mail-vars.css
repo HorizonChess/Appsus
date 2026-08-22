@@ -7,6 +7,9 @@
     --mail-fs-title: 22px;
     --mail-fs-message: 13px;
     --mail-fs-search: 16px;
+    /* gmail's .aAv - a step up from the nav rows it sits over, not down. the
+       .6875rem uppercase rule on that class is overridden, so it never lands */
+    --mail-fs-section: 16px;
     --mail-lh-body: 20px;
     --mail-lh-title: 28px;
     --mail-fw-read: 400;
@@ -27,6 +30,16 @@
     --mail-clr-compose-bg: rgb(194, 231, 255);
     --mail-clr-compose-header: rgb(242, 246, 252);
 
+    /* snapped off gmail's move to menu */
+    --mail-clr-menu-divider: rgb(235, 235, 235);
+    --mail-clr-menu-action: rgb(51, 51, 51);
+    --mail-clr-menu-search-icon: rgb(119, 119, 119);
+    /* the row behind a ticked checkbox. UNVERIFIED - reusing the nav pill */
+    --mail-clr-row-selected: var(--mail-clr-nav-active);
+    /* gmail's default label chip, the one you get before picking a colour */
+    --mail-clr-chip-bg: rgb(221, 221, 221);
+    --mail-clr-chip-txt: rgb(102, 102, 102);
+
     --mail-clr-text: rgb(32, 33, 36);
     /* gmail uses one grey for both the date and the snippet - same value as
        --mail-clr-text-muted, kept separate only so the names stay meaningful */
@@ -40,7 +53,6 @@
     --mail-clr-star-on: rgb(244, 180, 0);
     --mail-clr-star-off: var(--mail-clr-text-secondary);
 
-    --mail-clr-border: ;
     --mail-clr-row-line: rgba(100, 121, 143, .12);
     --mail-clr-row-edge: rgb(218, 220, 224); /* UNVERIFIED - snap it */
     --mail-shadow-row-line: inset 0 -1px 0 0 var(--mail-clr-row-line);
@@ -53,11 +65,12 @@
     --mail-shadow-btn-hover: 0 1px 2px 0 rgba(60, 64, 67, .3), 0 1px 3px 1px rgba(60, 64, 67, .15); /* UNVERIFIED - snap it */
     --mail-shadow-modal: rgba(0, 0, 0, .14) 0 8px 10px 1px, rgba(0, 0, 0, .12) 0 3px 14px 2px, rgba(0, 0, 0, .2) 0 5px 5px -3px;
     --mail-shadow-search-focus: rgba(65, 69, 73, .3) 0 1px 1px 0, rgba(65, 69, 73, .15) 0 1px 3px 1px;
+    /* the underline under the move to menu's search field - a shadow, not a border */
+    --mail-shadow-menu-input: rgba(0, 0, 0, .12) 0 -1px 0 0 inset;
     --mail-transition-btn: box-shadow .08s linear;
 
     --mail-radius-sm: 4px;
     --mail-radius-md: 8px;
-    --mail-radius-lg: ;
     --mail-radius-pill: 18px;
     --mail-radius-btn: 16px;
     --mail-radius-search: 24px;
@@ -89,8 +102,28 @@
     /* gives ground continuously as the window narrows, instead of holding 168 until
        a breakpoint takes it away */
     --mail-col-sender-w: clamp(104px, 16vw, 168px);
-    --mail-col-sender-indent: 32px;
+    /* gmail pads every cell 10px to the right, which is the row's only gap */
+    --mail-row-col-gap: 10px;
+    /* and the sender cell pads 32 instead of 10, so 22 on top of the gap */
+    --mail-col-sender-gap: 22px;
     --mail-col-date-w: 56px;
+    --mail-col-check-w: 20px;
+
+    /* all snapped off gmail's move to menu. the row is 20px of text inside 6px
+       of padding, which lands on --mail-nav-item-h like every other menu row */
+    --mail-menu-w: 261px;
+    --mail-menu-max-h: 600px;
+    --mail-menu-list-max-h: 240px;
+    /* the wide inline padding is the gutter gmail keeps for a checkmark */
+    --mail-menu-row-pad-inline: 48px;
+    --mail-menu-divider-w: .8px;
+    /* UNVERIFIED - snap the New label dialog the same way */
+    --mail-dialog-w: 500px;
+    --mail-dialog-radius: 16px;
+    --mail-clr-scrim: rgba(32, 33, 36, .32);
+
+    --mail-chip-h: 16px;
+    --mail-fs-chip: 11px;
 
     --mail-sp-1: 4px;
     --mail-sp-2: 8px;

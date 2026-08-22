@@ -11,6 +11,7 @@ const { useSearchParams, useNavigate } = ReactRouterDOM
 
 export function MailIndex() {
     const [mails, setMails] = useState(null)
+    const [selectedIds, setSelectedIds] = useState([])
     const [searchParams] = useSearchParams()
     const navigate = useNavigate()
 
@@ -30,6 +31,12 @@ export function MailIndex() {
     useEffect(() => {
         setMails(null)
     }, [folder])
+
+    // the ticks belong to the rows on screen, so anything that changes which
+    // rows those are lets them go
+    useEffect(() => {
+        setSelectedIds([])
+    }, [folder, txt, pageIdx])
 
     useEffect(() => {
         loadMails()
@@ -61,8 +68,14 @@ export function MailIndex() {
             .filter(mail => mailService.isInFolder(mail, folder)))
     }
 
+    function onToggleSelect(mailId) {
+        setSelectedIds(prevIds => prevIds.includes(mailId)
+            ? prevIds.filter(id => id !== mailId)
+            : [...prevIds, mailId])
+    }
+
     // the folder rides along in the query string so details can hand it back
-    function onSelectMail(mailId) {
+    function onClickMail(mailId) {
         navigate(`/mail/${mailId}?${searchParams}`)
     }
 
@@ -101,15 +114,20 @@ export function MailIndex() {
             <MailToolbar
                 total={mails ? mails.length : 0}
                 pageIdx={pageIdxToShow}
-                pageCount={pageCount} />
+                pageCount={pageCount}
+                pageIds={pageMails ? pageMails.map(mail => mail.id) : []}
+                selectedIds={selectedIds}
+                onSetSelectedIds={setSelectedIds} />
 
             {!mails && <div className="loader"></div>}
 
             {mails && <MailList
                 mails={pageMails}
+                selectedIds={selectedIds}
+                onToggleSelect={onToggleSelect}
                 onToggleStar={onToggleStar}
                 onSetRead={onSetRead}
-                onSelectMail={onSelectMail}
+                onClickMail={onClickMail}
                 onRemoveMail={onRemoveMail} />}
         </main>
 
