@@ -1,0 +1,23 @@
+.book-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, 200px);
+    justify-content: center;
+    gap: 1em;
+}
+
+.book-list .book-card {
+    width:200px;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1em;
+    padding:1em;
+    background-color: beige;
+}
+
+.book-list .book-card>*:not(.card-action-btn) {
+    grid-column: 1/-1;
+}
+
+.book-list .book-card>.card-action-btn:last-of-type{
+    grid-column: 3;
+}

@@ -40,3 +40,13 @@
 @import './apps/mail/MailCompose.css';
 @import './apps/mail/MailLabels.css';
 @import './apps/mail/mail-responsive.css';
+
+
+@import "./apps/books/BookList.css";
+@import "./apps/books/BookPreview.css";
+@import "./apps/books/BookDetails.css";
+@import "./apps/books/BookFilter.css";
+@import "./apps/books/BookEdit.css";
+@import "./apps/books/AddReview.css";
+@import "./apps/books/ReviewList.css";
+@import "./apps/books/RateByStars.css";

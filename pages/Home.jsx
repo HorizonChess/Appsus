@@ -18,8 +18,9 @@ const APPS = [
         ink: 'rgb(158, 118, 12)',
     },
     {
-        name: 'Coming soon',
-        tagline: 'MissBooks lands here.',
+        path: '/book',
+        name: 'missBooks',
+        tagline: 'Browse and review books.',
         icon: 'fa-solid fa-plus',
         tint: 'rgb(232, 234, 237)',
         ink: 'rgb(95, 99, 104)',

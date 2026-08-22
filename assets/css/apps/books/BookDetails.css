@@ -1,0 +1,154 @@
+.book-details {
+    position: relative;
+    width: 100%;
+    display: grid;
+    grid-auto-rows: min-content;
+    grid-template-columns: auto 1fr;
+    justify-items: start;
+    grid-template-areas:
+        'img hgroup'
+        'img description'
+        'img price'
+        'reviews reviews';
+
+    border: none;
+    background-color: rgb(226, 223, 223);
+    color: black;
+    border: 2px solid grey;
+    box-shadow: 1px 1px 10px black,
+        -1px -1px 10px black;
+    padding: 20px;
+}
+
+.book-details>.book-price {
+    grid-area: price;
+    align-self: end;
+    margin-block-end:1em;
+}
+
+.book-details>img {
+    grid-area: img;
+    justify-self: start;
+    width: 90%;
+    margin-block-end: 1em;
+}
+
+.book-details>hgroup {
+    grid-area: hgroup;
+    display: grid;
+    grid-template-columns: auto 1fr;
+
+    grid-auto-rows: min-content;
+    align-items: center;
+
+}
+
+.book-details>p {
+    grid-area: description;
+
+}
+
+.book-details .back-btn {
+    position: absolute;
+    right: 1em;
+    top:1em;
+}
+
+.book-details>a {
+    height: fit-content
+}
+
+.book-details h1 {
+    height: fit-content;
+    width:fit-content;
+    line-height: 100%;
+    margin-block: 0;
+    grid-column: 1;
+    grid-row: 1;
+}
+
+.book-details>hgroup>.book-information {
+    grid-row: 3;
+    font-size: 0.8em;
+    font-style: italic;
+}
+
+.book-details>hgroup>.book-subtitle {
+    height: fit-content;
+    margin-block-start:0.5em;
+    font-weight: bold;
+    grid-column: 1/3;
+}
+
+.book-categories {
+    justify-self: start;
+    align-self: center;
+    grid-row: 1;
+    margin-inline-start: 1em;
+}
+
+.category-label {
+    font-size: 0.8em;
+    grid-column: 1/3;
+    border: 2px solid black;
+    border-radius: 10px;
+    padding: 0.2em;
+}
+
+.category-love {
+    border-color: red;
+    background-color: rgba(255, 0, 0, 0.321);
+    color: red;
+}
+
+.category-fiction {
+    border-color: blue;
+    background-color: rgba(0, 0, 255, 0.303);
+    color: blue;
+}
+
+.category-poetry {
+    border-color: purple;
+    background-color: rgba(128, 0, 128, 0.4);
+    color: purple;
+}
+
+.category-computers {
+    border-color: greenyellow;
+    background-color: black;
+    color: greenyellow;
+}
+
+.category-religion {
+    border-color: gold;
+    background-color: white;
+    color: gold;
+}
+
+
+.book-details::backdrop {
+    background-color: black;
+    opacity: 0.5;
+}
+
+.sale-label {
+    margin-inline-start: 0.8em;
+    align-self: center;
+    border: 2px solid green;
+    padding: 0.2em;
+    color: green;
+    text-align: center;
+    border-radius: 10px;
+}
+
+.currency-symbol {
+    font-size: 0.8em;
+}
+
+a:has(.pagination-btn){
+    grid-row:5;
+}
+a:has(.next-book-btn) {
+    justify-self: end;
+    grid-column: 2;
+}

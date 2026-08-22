@@ -1,0 +1,7 @@
+.rate-by-stars label:has( ~ input:checked){
+    color:gold;
+}
+
+.rate-by-stars input{
+    display: none;
+}

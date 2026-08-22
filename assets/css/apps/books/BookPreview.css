@@ -1,0 +1,7 @@
+.book-preview{
+    display: grid;
+    padding:1em;
+    justify-items: center;
+    /* background-color: beige; */
+    color:black;
+}

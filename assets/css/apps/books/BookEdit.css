@@ -1,0 +1,14 @@
+.edit-book  {
+    background-color: white;
+
+       box-shadow: 1px 1px 10px grey,
+                -1px -1px 10px grey;
+}
+
+.edit-book form {
+    display: flex;
+    flex-direction: column;
+    gap:10px;
+    color:black;
+    background-color: white;
+}

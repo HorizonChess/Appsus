@@ -1,0 +1,12 @@
+.add-review {
+    grid-area: add-review;
+    background-color: white;
+    gap: 0.5em;
+}
+
+.add-review form {
+    color:black;
+    display: grid;
+    grid-auto-flow: row;
+    gap: 0.5em;
+}
