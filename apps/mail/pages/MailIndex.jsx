@@ -6,14 +6,15 @@ import { MailFolderList } from '../cmps/MailFolderList.jsx'
 import { MailFilter } from '../cmps/MailFilter.jsx'
 import { MailToolbar } from '../cmps/MailToolbar.jsx'
 import { useMailFilter } from '../custom-hooks/useMailFilter.js'
+import { useMailParams } from '../custom-hooks/useMailParams.js'
 
 const { useState, useEffect } = React
-const { useSearchParams, useNavigate } = ReactRouterDOM
+const { useNavigate } = ReactRouterDOM
 
 export function MailIndex() {
     const [mails, setMails] = useState(null)
     const [selectedIds, setSelectedIds] = useState([])
-    const [searchParams] = useSearchParams()
+    const [searchParams, setParams] = useMailParams()
     const navigate = useNavigate()
 
     const { folder, txt, sortBy, sortDir } = useMailFilter()
@@ -73,8 +74,12 @@ export function MailIndex() {
     }
 
     // the folder rides along in the query string so details can hand it back
+    // a draft is unfinished, so it opens in the editor rather than as a read mail
     function onClickMail(mailId) {
-        navigate(`/mail/${mailId}?${searchParams}`)
+        const mail = mails.find(currMail => currMail.id === mailId)
+
+        if (mailService.isInFolder(mail, 'draft')) setParams({ compose: mailId })
+        else navigate(`/mail/${mailId}?${searchParams}`)
     }
 
     // the service decides trash-vs-destroy, we just drop it from the current view

@@ -54,6 +54,7 @@ export const mailService = {
     removeLabel,
     getEmptyMail,
     getReplyPrefill,
+    getDraftReplyTo,
     getDefaultFilter,
     getSortDirOptions,
     getDefaultSortDir,
@@ -231,11 +232,12 @@ function getFolderCounts() {
 }
 
 // no sentAt puts it in Draft; removedAt must be null, not missing
-function getEmptyMail({ to = '', subject = '', body = '' } = {}) {
+function getEmptyMail({ to = '', subject = '', body = '', replyTo = null } = {}) {
     return {
         to,
         subject,
         body,
+        replyTo, // the mail being answered, null when composed from scratch
         from: loggedinUser.email,
         fromName: loggedinUser.fullname,
         createdAt: Date.now(),
@@ -257,7 +259,14 @@ function getReplyPrefill(mail) {
         // skipped when it is already a reply, or the prefixes stack
         subject: mail.subject.startsWith('Re: ') ? mail.subject : `Re: ${mail.subject}`,
         body: `\n\nOn ${formatMailDate(sentAt)}, ${sender} <${mail.from}> wrote:\n${mail.body}`,
+        replyTo: mail.id,
     }
+}
+
+// sent and trashed ones are done with, so they never match
+function getDraftReplyTo(srcId) {
+    return storageService.query(MAIL_KEY)
+        .then(mails => mails.find(mail => mail.replyTo === srcId && !mail.sentAt && !mail.removedAt))
 }
 
 function getDefaultFilter() {
