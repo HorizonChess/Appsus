@@ -1,6 +1,7 @@
 import { MAIL_FOLDERS, mailService } from '../services/mail.service.js'
 import { eventBusService } from '../../../services/event-bus.service.js'
 import { useMailParams } from '../custom-hooks/useMailParams.js'
+import { useMailFilter } from '../custom-hooks/useMailFilter.js'
 import { MailLabels } from './MailLabels.jsx'
 
 const { useState, useEffect } = React
@@ -26,7 +27,7 @@ export function MailFolderList() {
     const [searchParams, setParams] = useMailParams()
     const navigate = useNavigate()
 
-    const activeFolder = searchParams.get('folder') || 'inbox'
+    const { folder: activeFolder } = useMailFilter()
     const isRail = searchParams.get('nav') === 'rail'
 
     // both signals, because the numbers move whether or not the list already

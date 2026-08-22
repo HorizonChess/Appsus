@@ -1,6 +1,7 @@
 import { eventBusService } from '../../../services/event-bus.service.js'
-import { mailService, SORT_OPTIONS } from '../services/mail.service.js'
+import { SORT_OPTIONS } from '../services/mail.service.js'
 import { useMailParams } from '../custom-hooks/useMailParams.js'
+import { useMailFilter } from '../custom-hooks/useMailFilter.js'
 import { MailMoveTo } from './MailMoveTo.jsx'
 import { MailPager } from './MailPager.jsx'
 
@@ -11,19 +12,15 @@ const CHECK_ICONS = {
     false: 'check_box_outline_blank',
 }
 
-// the sort rides in the url - the folder size is all it needs told. the
-// selection cannot, it belongs to the rows on screen, so it comes as a prop
+
 export function MailToolbar({ total, pageIdx, pageCount, pageIds, selectedIds, onSetSelectedIds }) {
-    const [searchParams, setParams] = useMailParams()
+    const [, setParams] = useMailParams()
+    const { sortBy } = useMailFilter()
 
     const isAllSelected = pageIds.length > 0 && pageIds.every(id => selectedIds.includes(id))
     const checkState = isAllSelected ? 'true' : (selectedIds.length > 0 ? 'mixed' : 'false')
 
-    // the control needs the resolved value, so the service's default stands in
-    const sortBy = searchParams.get('sortBy') || mailService.getDefaultFilter().sortBy
 
-    // the direction does not carry across - '-1' means newest on a date and Z
-    // first on a subject, so it goes back to whatever the new field opens at
     function onSortByChange({ target }) {
         setParams({ sortBy: target.value, sortDir: null })
     }

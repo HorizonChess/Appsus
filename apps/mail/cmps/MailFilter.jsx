@@ -1,12 +1,12 @@
 import { useMailParams } from '../custom-hooks/useMailParams.js'
+import { useMailFilter } from '../custom-hooks/useMailFilter.js'
 
 const { useState, useEffect } = React
 
 // no props, like the sidebar - it renders on both pages
 export function MailFilter() {
     const [searchParams, setParams] = useMailParams()
-
-    const txtParam = searchParams.get('txt') || ''
+    const { txt: txtParam } = useMailFilter()
     // local state so typing is instant, the url catches up on a pause
     const [txt, setTxt] = useState(txtParam)
 
