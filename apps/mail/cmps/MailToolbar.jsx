@@ -4,12 +4,22 @@ import { useMailParams } from '../custom-hooks/useMailParams.js'
 import { MailMoveTo } from './MailMoveTo.jsx'
 import { MailPager } from './MailPager.jsx'
 
+// the box has three states, not two: empty, a dash once part of the page is
+// ticked, a tick once all of it is. keyed by aria-checked, whose third value
+// for that middle state is 'mixed'
+const CHECK_ICONS = {
+    true: 'check_box',
+    mixed: 'indeterminate_check_box',
+    false: 'check_box_outline_blank',
+}
+
 // the sort rides in the url - the folder size is all it needs told. the
 // selection cannot, it belongs to the rows on screen, so it comes as a prop
 export function MailToolbar({ total, pageIdx, pageCount, pageIds, selectedIds, onSetSelectedIds }) {
     const [searchParams, setParams] = useMailParams()
 
     const isAllSelected = pageIds.length > 0 && pageIds.every(id => selectedIds.includes(id))
+    const checkState = isAllSelected ? 'true' : (selectedIds.length > 0 ? 'mixed' : 'false')
 
     // the control needs the resolved value, so the service's default stands in
     const sortBy = searchParams.get('sortBy') || mailService.getDefaultFilter().sortBy
@@ -19,8 +29,8 @@ export function MailToolbar({ total, pageIdx, pageCount, pageIds, selectedIds, o
     }
 
     // select all covers the page you are looking at, never the whole folder
-    function onToggleSelectAll({ target }) {
-        onSetSelectedIds(target.checked ? pageIds : [])
+    function onToggleSelectAll() {
+        onSetSelectedIds(isAllSelected ? [] : pageIds)
     }
 
     // the list and the sidebar counts both listen, so neither needs telling twice
@@ -31,14 +41,14 @@ export function MailToolbar({ total, pageIdx, pageCount, pageIds, selectedIds, o
     return <div className="mail-toolbar">
 
         <div className="mail-toolbar-actions">
-            {/* the half ticked look is a dom property, there is no attribute for it */}
-            <input
-                type="checkbox"
+            <button
                 className="mail-check mail-select-all"
+                role="checkbox"
+                aria-checked={checkState}
                 title="Select all"
-                checked={isAllSelected}
-                ref={el => { if (el) el.indeterminate = selectedIds.length > 0 && !isAllSelected }}
-                onChange={onToggleSelectAll} />
+                onClick={onToggleSelectAll}>
+                <span className="material-symbols-outlined">{CHECK_ICONS[checkState]}</span>
+            </button>
 
             <button className="mail-icon-btn mail-icon-btn-sm" title="Select all">
                 <span className="material-symbols-outlined">arrow_drop_down</span>

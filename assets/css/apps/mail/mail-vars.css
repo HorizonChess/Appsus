@@ -7,6 +7,9 @@
     --mail-fs-title: 22px;
     --mail-fs-message: 13px;
     --mail-fs-search: 16px;
+    /* gmail's .aAv - a step up from the nav rows it sits over, not down. the
+       .6875rem uppercase rule on that class is overridden, so it never lands */
+    --mail-fs-section: 16px;
     --mail-lh-body: 20px;
     --mail-lh-title: 28px;
     --mail-fw-read: 400;
@@ -26,10 +29,6 @@
     --mail-clr-nav-active: rgb(211, 227, 253);
     --mail-clr-compose-bg: rgb(194, 231, 255);
     --mail-clr-compose-header: rgb(242, 246, 252);
-
-    /* sampled out of gmail's own checkbox sprites - the ticked fill came back
-       as rgb(11, 87, 208), which is --mail-clr-accent already */
-    --mail-clr-check-border: rgb(68, 71, 70);
 
     /* snapped off gmail's move to menu */
     --mail-clr-menu-divider: rgb(235, 235, 235);
@@ -109,8 +108,6 @@
     --mail-col-sender-gap: 22px;
     --mail-col-date-w: 56px;
     --mail-col-check-w: 20px;
-    --mail-check-border-w: 2px;
-    --mail-check-radius: 2px;
 
     /* all snapped off gmail's move to menu. the row is 20px of text inside 6px
        of padding, which lands on --mail-nav-item-h like every other menu row */

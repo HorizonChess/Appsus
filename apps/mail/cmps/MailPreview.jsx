@@ -6,6 +6,11 @@ export function MailPreview({ mail, isSelected, onToggleSelect, onToggleStar, on
     const sentAt = mail.sentAt || mail.createdAt
     const labels = mail.labels || []
 
+    function onSelectClick(ev) {
+        ev.stopPropagation()
+        onToggleSelect(mail.id)
+    }
+
     function onStarClick(ev) {
         ev.stopPropagation()
         onToggleStar(mail.id)
@@ -25,13 +30,14 @@ export function MailPreview({ mail, isSelected, onToggleSelect, onToggleStar, on
         className={`mail-preview ${isRead ? 'is-read' : 'is-unread'} ${isSelected ? 'is-selected' : ''}`}
         onClick={() => onClickMail(mail.id)}>
 
-        <input
-            type="checkbox"
+        <button
             className="mail-check mail-preview-check"
+            role="checkbox"
+            aria-checked={isSelected}
             title="Select"
-            checked={isSelected}
-            onClick={ev => ev.stopPropagation()}
-            onChange={() => onToggleSelect(mail.id)} />
+            onClick={onSelectClick}>
+            <span className="material-symbols-outlined">{isSelected ? 'check_box' : 'check_box_outline_blank'}</span>
+        </button>
 
         <button
             className="star-btn"

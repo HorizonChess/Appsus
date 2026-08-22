@@ -59,13 +59,17 @@
     padding-block-start: var(--mail-sp-2);
 }
 
+/* sits on a folder row's height and indent, but reads a step larger and heavier
+   than the rows under it - gmail makes this a heading, not a caption */
 .mail-labels-title {
+    display: flex;
+    align-items: center;
+    block-size: var(--mail-nav-item-h);
     margin: 0;
     padding-inline: var(--mail-sp-5);
-    padding-block: var(--mail-sp-1);
-    font-size: var(--mail-fs-small);
-    font-weight: var(--mail-fw-read);
-    color: var(--mail-clr-text-secondary);
+    font-size: var(--mail-fs-section);
+    font-weight: 500;
+    color: var(--mail-clr-text);
 }
 
 /* a nested label sits under its parent, so its icon starts where the parent's
