@@ -21,6 +21,10 @@ export function NoteList({ notes, onUpdateNote, onRemoveNote,
 
     }
 
+    function handlePinChange(noteId){
+         onUpdateNote(noteId, onTogglePinNote)
+    }
+
     function handleColorPickerOpen(ev, colorPickerId) {
         eventBusService.emit('click', ev)
         ev.stopPropagation()
@@ -64,7 +68,7 @@ export function NoteList({ notes, onUpdateNote, onRemoveNote,
                                 style={note.style}
                                 onChangeStyle={ev => handleColorChange(ev, note.id)} />
 
-                            <button onClick={ev => onTogglePinNote(note.id)} className="note-pin pinned">
+                            <button onClick={ev => handlePinChange(note.id)} className="note-pin pinned">
                                 <i className="fa-solid fa-thumbtack"></i>
                             </button>
 
@@ -104,7 +108,7 @@ export function NoteList({ notes, onUpdateNote, onRemoveNote,
 
                             <ColorPicker isPickerShown={note.id === colorPickerId} pickerKey={`${note.id}-colorpicker`} style={note.style} onChangeStyle={ev => handleColorChange(ev, note.id)} />
 
-                            <button onClick={ev => onTogglePinNote(note.id)} className="note-pin unpinned">
+                            <button onClick={ev => handlePinChange(note.id)} className="note-pin unpinned">
                                 <i className="fa-solid fa-thumbtack-slash"></i>                            </button>
                         </article>
 
