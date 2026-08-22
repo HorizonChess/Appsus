@@ -1,8 +1,10 @@
 import { mailService } from '../services/mail.service.js'
+import { MailLabelChip } from './MailLabelChip.jsx'
 
-export function MailPreview({ mail, onToggleStar, onSetRead, onSelectMail, onRemoveMail }) {
+export function MailPreview({ mail, isSelected, onToggleSelect, onToggleStar, onSetRead, onClickMail, onRemoveMail }) {
     const { subject, body, from, fromName, isRead, isStared } = mail
     const sentAt = mail.sentAt || mail.createdAt
+    const labels = mail.labels || []
 
     function onStarClick(ev) {
         ev.stopPropagation()
@@ -20,8 +22,16 @@ export function MailPreview({ mail, onToggleStar, onSetRead, onSelectMail, onRem
     }
 
     return <li
-        className={`mail-preview ${isRead ? 'is-read' : 'is-unread'}`}
-        onClick={() => onSelectMail(mail.id)}>
+        className={`mail-preview ${isRead ? 'is-read' : 'is-unread'} ${isSelected ? 'is-selected' : ''}`}
+        onClick={() => onClickMail(mail.id)}>
+
+        <input
+            type="checkbox"
+            className="mail-check mail-preview-check"
+            title="Select"
+            checked={isSelected}
+            onClick={ev => ev.stopPropagation()}
+            onChange={() => onToggleSelect(mail.id)} />
 
         <button
             className="star-btn"
@@ -33,6 +43,8 @@ export function MailPreview({ mail, onToggleStar, onSetRead, onSelectMail, onRem
         <span className="mail-sender">{fromName || from}</span>
 
         <div className="mail-txt">
+            {labels.map(label => <MailLabelChip key={label} label={label} />)}
+
             <span className="mail-subject">{subject}</span>
             <span className="mail-snippet"> - {body}</span>
         </div>

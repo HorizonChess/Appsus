@@ -1,12 +1,13 @@
 .mail-preview {
     display: grid;
     grid-template-columns:
-        var(--mail-star-size) calc(var(--mail-col-sender-w) + var(--mail-col-sender-indent)) minmax(0, 1fr) auto;
+        var(--mail-col-check-w) var(--mail-star-size) calc(var(--mail-col-sender-w) + var(--mail-col-sender-gap)) minmax(0, 1fr) auto;
+    column-gap: var(--mail-row-col-gap);
     align-items: center;
     min-height: var(--mail-row-h);
-    /* the star halo spills 8px past its column, so the start padding has to
-       clear that before the row edge shows any gap */
-    padding-inline: var(--mail-sp-4) var(--mail-sp-2);
+    /* gmail runs a 3px cell then 13px of padding before the checkbox, and pads
+       the same 16 past the date */
+    padding-inline: var(--mail-sp-4);
     box-shadow: var(--mail-shadow-row-line);
     white-space: nowrap;
     cursor: pointer;
@@ -22,9 +23,19 @@
     font-weight: var(--mail-fw-read);
 }
 
+/* after both, so a ticked row wins over read and unread alike */
+.mail-preview.is-selected {
+    background-color: var(--mail-clr-row-selected);
+}
+
 .mail-preview:hover {
     box-shadow: var(--mail-shadow-row-hover);
     z-index: 1;
+}
+
+/* the look is .mail-check in mail-common, this only places it */
+.mail-preview-check {
+    justify-self: center;
 }
 
 /* overflows its grid column rather than widening it */
@@ -61,8 +72,10 @@
     text-overflow: ellipsis;
 }
 
+/* the sender's own gap sits after it, not before - the name starts right where
+   the star's column ends */
 .mail-preview .mail-sender {
-    padding-inline-start: var(--mail-col-sender-indent);
+    padding-inline-end: var(--mail-col-sender-gap);
 }
 
 .mail-preview .mail-txt {

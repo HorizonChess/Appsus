@@ -40,6 +40,10 @@ export const mailService = {
     send,
     toggleStar,
     toggleRead,
+    getLabels,
+    getLabelName,
+    addLabel,
+    removeLabel,
     getEmptyMail,
     getReplyPrefill,
     getDefaultFilter,
@@ -108,6 +112,38 @@ function toggleRead(mailId, isRead) {
         .then(_notifyChange)
 }
 
+// the whole selection is read and written in one pass - a put per mail would
+// have them all patch the same snapshot and lose everything but the last
+function addLabel(mailIds, label) {
+    return storageService.query(MAIL_KEY)
+        .then(mails => {
+            const updated = mails.map(mail => {
+                if (!mailIds.includes(mail.id)) return mail
+                const labels = mail.labels || []
+                if (labels.includes(label)) return mail
+                return { ...mail, labels: [...labels, label] }
+            })
+
+            utilService.saveToStorage(MAIL_KEY, updated)
+        })
+        .then(_notifyChange)
+}
+
+// the list of labels is derived, so a label stops existing on its own once the
+// last mail carrying it has been stripped here
+function removeLabel(mailIds, label) {
+    return storageService.query(MAIL_KEY)
+        .then(mails => {
+            const updated = mails.map(mail => {
+                if (!mailIds.includes(mail.id)) return mail
+                return { ...mail, labels: (mail.labels || []).filter(name => name !== label) }
+            })
+
+            utilService.saveToStorage(MAIL_KEY, updated)
+        })
+        .then(_notifyChange)
+}
+
 // the folder counts live in the sidebar now, which has no way of knowing a write
 // happened somewhere else in the app
 function _notifyChange(res) {
@@ -115,7 +151,9 @@ function _notifyChange(res) {
     return res
 }
 
-// a mail's folder comes from its fields, it is never stored
+// a mail's folder comes from its fields, it is never stored. anything that is
+// not one of MAIL_FOLDERS is a label, and a label is a folder as far as gmail
+// is concerned - which is what lets ?folder=Work reuse the whole list
 function isInFolder(mail, folder) {
     const isTrashed = mail.removedAt !== null
     if (folder === 'trash') return isTrashed
@@ -128,8 +166,19 @@ function isInFolder(mail, folder) {
         case 'sent': return isSent && mail.from === loggedinUser.email
         case 'inbox': return isSent && mail.to === loggedinUser.email
         case 'starred': return mail.isStared
-        default: return true
+        default: return (mail.labels || []).includes(folder)
     }
+}
+
+// there is no label entity - the list is whatever the mails carry, the same way
+// a folder is whatever a mail's fields add up to
+function getLabels() {
+    return storageService.query(MAIL_KEY).then(_extractLabels)
+}
+
+// 'Friends/Memories' -> 'Memories'. the path only matters where a label is picked
+function getLabelName(label) {
+    return label.slice(label.lastIndexOf('/') + 1)
 }
 
 // Feeds the badges in the folder list: { inbox: { total, unread }, ... }
@@ -137,8 +186,9 @@ function getFolderCounts() {
     return storageService.query(MAIL_KEY)
         .then(mails => {
             const counts = {}
+            const folders = [...MAIL_FOLDERS, ..._extractLabels(mails)]
 
-            MAIL_FOLDERS.forEach(folder => {
+            folders.forEach(folder => {
                 const folderMails = mails.filter(mail => isInFolder(mail, folder))
                 counts[folder] = {
                     total: folderMails.length,
@@ -163,6 +213,7 @@ function getEmptyMail({ to = '', subject = '', body = '' } = {}) {
         removedAt: null,
         isRead: true,
         isStared: false,
+        labels: [],
     }
 }
 
@@ -211,6 +262,18 @@ function formatMailDate(timestamp) {
 }
 
 // ---------------------------------------------------------------- privates
+
+function _extractLabels(mails) {
+    const labels = new Set()
+
+    mails.forEach(mail => (mail.labels || []).forEach(label => {
+        labels.add(label)
+        // a nested label implies its parent, so the tree never has a hole in it
+        if (label.includes('/')) labels.add(label.slice(0, label.indexOf('/')))
+    }))
+
+    return [...labels].sort((label1, label2) => label1.localeCompare(label2))
+}
 
 function _filterMails(mails, criteria) {
     mails = mails.filter(mail => isInFolder(mail, criteria.folder))

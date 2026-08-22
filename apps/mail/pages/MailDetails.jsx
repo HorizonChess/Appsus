@@ -2,6 +2,7 @@ import { mailService } from '../services/mail.service.js'
 import { MailCompose } from '../cmps/MailCompose.jsx'
 import { MailFolderList } from '../cmps/MailFolderList.jsx'
 import { MailFilter } from '../cmps/MailFilter.jsx'
+import { MailLabelChip } from '../cmps/MailLabelChip.jsx'
 import { useMailParams } from '../custom-hooks/useMailParams.js'
 
 const { useState, useEffect } = React
@@ -53,6 +54,14 @@ export function MailDetails() {
         navigate(`/note?${params}`)
     }
 
+    // dropping the last mail off a label is what makes that label stop existing
+    function onRemoveLabel(label) {
+        setMail(prevMail => ({ ...prevMail, labels: prevMail.labels.filter(name => name !== label) }))
+
+        mailService.removeLabel([mailId], label)
+            .catch(err => console.log('Had issues removing label', err))
+    }
+
     function onStarClick() {
         const isStared = !mail.isStared
 
@@ -85,6 +94,7 @@ export function MailDetails() {
     </section>
 
     const { subject, body, from, fromName, to, isStared } = mail
+    const labels = mail.labels || []
     const sentAt = mail.sentAt || mail.createdAt
     const senderName = fromName || from
     const recipient = to === mailService.loggedinUser.email ? 'me' : to
@@ -112,7 +122,14 @@ export function MailDetails() {
                     </button>
                 </div>
 
-                <h2 className="mail-details-subject">{subject}</h2>
+                <div className="mail-details-subject-line">
+                    <h2 className="mail-details-subject">{subject}</h2>
+
+                    {labels.map(label => <MailLabelChip
+                        key={label}
+                        label={label}
+                        onRemove={() => onRemoveLabel(label)} />)}
+                </div>
 
                 <header className="mail-details-header">
                     <div className="mail-details-avatar">{senderName.charAt(0).toUpperCase()}</div>

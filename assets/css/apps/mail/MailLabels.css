@@ -1,0 +1,282 @@
+/* everything label - the chip, the sidebar section, the move to menu and the
+   new label dialog */
+
+/* ---------------------------------------------------------------- the chip */
+
+.mail-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--mail-sp-1);
+    /* the subject column is flex, and a chip must never be the thing that gives */
+    flex: 0 0 auto;
+    block-size: var(--mail-chip-h);
+    padding-inline: var(--mail-sp-1);
+    border-radius: var(--mail-radius-sm);
+    background-color: var(--mail-clr-chip-bg);
+    font-size: var(--mail-fs-chip);
+    font-weight: var(--mail-fw-read);
+    line-height: var(--mail-chip-h);
+    color: var(--mail-clr-chip-txt);
+}
+
+.mail-chip-name {
+    /* a long label truncates rather than eating the subject */
+    max-inline-size: 12ch;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.mail-chip-remove {
+    display: grid;
+    place-items: center;
+    inline-size: var(--mail-chip-h);
+    block-size: var(--mail-chip-h);
+    padding: 0;
+    border: none;
+    border-radius: 50%;
+    background: none;
+    color: inherit;
+    cursor: pointer;
+}
+
+.mail-chip-remove:hover {
+    background-color: var(--mail-clr-hover);
+}
+
+.mail-chip-remove .material-symbols-outlined {
+    font-size: var(--mail-fs-chip);
+}
+
+/* ------------------------------------------------------ the sidebar section */
+
+.mail-labels {
+    display: flex;
+    flex-direction: column;
+    /* the folders above are a fixed block, this one takes what is left and
+       scrolls once there are more labels than room */
+    min-block-size: 0;
+    overflow-y: auto;
+    padding-block-start: var(--mail-sp-2);
+}
+
+.mail-labels-title {
+    margin: 0;
+    padding-inline: var(--mail-sp-5);
+    padding-block: var(--mail-sp-1);
+    font-size: var(--mail-fs-small);
+    font-weight: var(--mail-fw-read);
+    color: var(--mail-clr-text-secondary);
+}
+
+/* a nested label sits under its parent, so its icon starts where the parent's
+   text did */
+.mail-label.is-nested {
+    padding-inline-start: calc(var(--mail-sp-5) + var(--mail-sp-4));
+}
+
+/* gmail draws the tag solid, unlike the folder icons above it */
+.mail-label .material-symbols-outlined {
+    font-variation-settings: 'FILL' 1;
+}
+
+/* --------------------------------------------------------- the move to menu */
+
+.mail-move {
+    position: relative;
+}
+
+/* the card itself is .mail-menu in mail-common */
+.mail-label-menu {
+    inline-size: var(--mail-menu-w);
+    max-block-size: var(--mail-menu-max-h);
+    padding-block: var(--mail-sp-2);
+}
+
+.mail-label-menu-title {
+    margin: 0;
+    padding-block-start: var(--mail-sp-2);
+    padding-inline: var(--mail-sp-2);
+    font-size: var(--mail-fs-body);
+    font-weight: var(--mail-fw-read);
+    line-height: var(--mail-lh-body);
+    color: var(--mail-clr-text);
+}
+
+.mail-label-search {
+    display: flex;
+    align-items: center;
+    margin-inline: var(--mail-sp-2);
+}
+
+.mail-label-search-input {
+    flex-grow: 1;
+    /* the field is a bare line, not a box - that underline is the whole border */
+    min-inline-size: 0;
+    padding-block: 1px var(--mail-sp-1);
+    border: none;
+    background: none;
+    box-shadow: var(--mail-shadow-menu-input);
+    font-family: inherit;
+    font-size: var(--mail-fs-body);
+    line-height: var(--mail-lh-body);
+    color: var(--mail-clr-text);
+}
+
+.mail-label-search-input:focus {
+    outline: none;
+}
+
+.mail-label-search .material-symbols-outlined {
+    /* sits on the field rather than beside it, the way gmail's magnifier does */
+    margin-inline-start: calc(var(--mail-icon-size) * -1);
+    font-size: var(--mail-icon-size);
+    color: var(--mail-clr-menu-search-icon);
+    pointer-events: none;
+}
+
+.mail-label-options {
+    max-block-size: var(--mail-menu-list-max-h);
+    margin: 0;
+    margin-block-start: var(--mail-sp-2);
+    padding: 0;
+    overflow-y: auto;
+    list-style: none;
+}
+
+/* base.css pads every li, which would inset the row and break the hover */
+.mail-label-options li {
+    padding: 0;
+}
+
+/* a long path truncates rather than widening the menu */
+.mail-label-option {
+    padding-inline: var(--mail-menu-row-pad-inline);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.mail-label-menu-actions {
+    margin-block-start: var(--mail-sp-2);
+    border-block-start: var(--mail-menu-divider-w) solid var(--mail-clr-menu-divider);
+    padding-block-start: var(--mail-sp-2);
+}
+
+.mail-label-action {
+    padding-inline: var(--mail-menu-row-pad-inline);
+    color: var(--mail-clr-menu-action);
+}
+
+/* ----------------------------------------------------- the new label dialog */
+
+.mail-dialog-backdrop {
+    position: fixed;
+    /* over the menu and its own backdrop, both of which stay open behind it */
+    z-index: 20;
+    inset: 0;
+    display: grid;
+    place-items: center;
+    background-color: var(--mail-clr-scrim);
+}
+
+.mail-dialog {
+    display: flex;
+    flex-direction: column;
+    inline-size: min(var(--mail-dialog-w), 90vw);
+    padding: var(--mail-sp-5);
+    border-radius: var(--mail-dialog-radius);
+    background-color: var(--mail-clr-surface);
+    box-shadow: var(--mail-shadow-modal);
+}
+
+.mail-dialog-title {
+    margin: 0 0 var(--mail-sp-5);
+    font-size: var(--mail-fs-title);
+    font-weight: var(--mail-fw-read);
+    line-height: var(--mail-lh-title);
+    color: var(--mail-clr-text);
+}
+
+.mail-dialog-prompt {
+    font-size: var(--mail-fs-body);
+    color: var(--mail-clr-text);
+}
+
+.mail-dialog-input,
+.mail-dialog-select {
+    block-size: var(--mail-search-h);
+    margin-block-start: var(--mail-sp-2);
+    padding-inline: var(--mail-sp-3);
+    border: 1px solid var(--mail-clr-row-edge);
+    border-radius: var(--mail-radius-sm);
+    background: none;
+    font-family: inherit;
+    font-size: var(--mail-fs-body);
+    color: var(--mail-clr-text);
+}
+
+.mail-dialog-input:focus,
+.mail-dialog-select:focus {
+    outline: none;
+    border-color: var(--mail-clr-accent);
+}
+
+.mail-dialog-nest {
+    display: flex;
+    align-items: center;
+    gap: var(--mail-sp-2);
+    margin-block-start: var(--mail-sp-5);
+    font-size: var(--mail-fs-body);
+    color: var(--mail-clr-text);
+    cursor: pointer;
+}
+
+.mail-dialog-nest input {
+    accent-color: var(--mail-clr-accent);
+    cursor: pointer;
+}
+
+.mail-dialog-select:disabled {
+    color: var(--mail-clr-placeholder);
+    cursor: default;
+}
+
+.mail-dialog-actions {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: var(--mail-sp-2);
+    margin-block-start: var(--mail-sp-5);
+}
+
+.mail-dialog-cancel,
+.mail-dialog-create {
+    block-size: var(--mail-btn-h);
+    padding-inline: var(--mail-sp-5);
+    border: none;
+    border-radius: var(--mail-radius-btn);
+    font-family: inherit;
+    font-size: var(--mail-fs-body);
+    font-weight: 500;
+    cursor: pointer;
+}
+
+.mail-dialog-cancel {
+    background: none;
+    color: var(--mail-clr-accent);
+}
+
+.mail-dialog-cancel:hover {
+    background-color: var(--mail-clr-hover);
+}
+
+.mail-dialog-create {
+    background-color: var(--mail-clr-accent);
+    color: var(--mail-clr-surface);
+}
+
+.mail-dialog-create:disabled {
+    background-color: var(--mail-clr-surface-read);
+    color: var(--mail-clr-row-edge);
+    cursor: default;
+}

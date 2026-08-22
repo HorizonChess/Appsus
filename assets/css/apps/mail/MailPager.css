@@ -1,0 +1,53 @@
+/* the range, the date order hanging off it and the two chevrons */
+
+/* relative so the dir menu can hang off it */
+.mail-pager {
+    position: relative;
+    display: flex;
+    align-items: center;
+    gap: var(--mail-sp-1);
+}
+
+.mail-pager-range {
+    block-size: var(--mail-nav-item-h);
+    padding-inline: var(--mail-sp-2);
+    border: none;
+    border-radius: var(--mail-radius-sm);
+    background: none;
+    font-family: inherit;
+    font-size: var(--mail-fs-small);
+    color: var(--mail-clr-text-secondary);
+    white-space: nowrap;
+    cursor: pointer;
+}
+
+.mail-pager-range:hover {
+    background-color: var(--mail-clr-hover);
+}
+
+/* the card itself is .mail-menu in mail-common */
+.mail-dir-menu {
+    min-inline-size: 112px;
+    margin: 0;
+    padding-block: var(--mail-sp-1);
+    list-style: none;
+}
+
+/* base.css pads every li, which would inset the row and break the hover */
+.mail-dir-menu li {
+    padding: 0;
+}
+
+.mail-dir-option {
+    padding-inline: var(--mail-sp-4);
+}
+
+/* the order you are already in - listed, but nothing to switch to */
+.mail-dir-option:disabled {
+    color: var(--mail-clr-text-muted);
+    cursor: default;
+}
+
+.mail-dir-option:disabled:hover {
+    background: none;
+}

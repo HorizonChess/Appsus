@@ -1,6 +1,7 @@
 import { MAIL_FOLDERS, mailService } from '../services/mail.service.js'
 import { eventBusService } from '../../../services/event-bus.service.js'
 import { useMailParams } from '../custom-hooks/useMailParams.js'
+import { MailLabels } from './MailLabels.jsx'
 
 const { useState, useEffect } = React
 const { useNavigate } = ReactRouterDOM
@@ -39,9 +40,10 @@ export function MailFolderList() {
             .catch(err => console.log('Had issues loading folder counts', err))
     }
 
-    // mailId is a route segment, so only a path change leaves an open mail
+    // mailId is a route segment, so only a path change leaves an open mail.
+    // labels come through here too, and those can hold spaces and slashes
     function onSetFolder(folder) {
-        navigate(`/mail?folder=${folder}`)
+        navigate(`/mail?folder=${encodeURIComponent(folder)}`)
     }
 
     function onOpenCompose() {
@@ -72,6 +74,11 @@ export function MailFolderList() {
                 </button>
             })}
         </div>
+
+        <MailLabels
+            counts={counts}
+            activeFolder={activeFolder}
+            onSetFolder={onSetFolder} />
 
     </nav>
 }

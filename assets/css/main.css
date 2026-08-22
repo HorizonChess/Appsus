@@ -31,9 +31,11 @@
 @import './apps/mail/MailIndex.css';
 @import './apps/mail/MailFilter.css';
 @import './apps/mail/MailToolbar.css';
+@import './apps/mail/MailPager.css';
 @import './apps/mail/MailFolderList.css';
 @import './apps/mail/MailList.css';
 @import './apps/mail/MailPreview.css';
 @import './apps/mail/MailDetails.css';
 @import './apps/mail/MailCompose.css';
+@import './apps/mail/MailLabels.css';
 @import './apps/mail/mail-responsive.css';
