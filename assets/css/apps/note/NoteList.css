@@ -115,3 +115,7 @@
      background-color: rgba(128, 128, 128, 0.188);
 
  }
+
+ .note .toolbar-btn{
+    z-index: 1000;
+ }

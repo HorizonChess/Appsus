@@ -167,6 +167,7 @@ export function NoteIndex() {
         setEditedNote(noteService.getEmptyNote())
     }
 
+
     function addNote() {
         const noteIdx = notes.length
         noteService.save(editedNote)
@@ -264,12 +265,12 @@ export function NoteIndex() {
     }
 
     return <section className="notes-container note-layout" onClick={onEmitClick}>
-        {/* <SearchNote onSetFilterBy={setFilterBy} filterBy={queryOptions} /> */}
 
         <NoteFilter
             filterBy={filterBy}
             onSetFilterBy={setFilterBy}
             onClearFilter={''} />
+
 
         <NoteComposer
             note={editedNote}

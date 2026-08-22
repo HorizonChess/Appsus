@@ -15,6 +15,7 @@ export function NoteList({ notes, updateNote, onRemoveNote,
     console.log('pinned notes', pinnedNotes)
 
     function handleColorPickerOpen(ev, colorPickerId) {
+        eventBusService.emit('click', ev)
         ev.stopPropagation()
         setColoPickerId(colorPickerId)
         backdropRef.current.style.display = 'unset'
@@ -35,7 +36,7 @@ export function NoteList({ notes, updateNote, onRemoveNote,
                 {(pinnedNotes.length > 0) && pinnedNotes.map(note => {
 
                     return <li key={note.id}>
-                        <article key={note.id} className="note" style={note.style} >
+                        <article key={note.id} className="note" style={note.style} draggable={true} >
                             <NotePreview
                                 note={note}
                                 onChangeInfo={onChangeInfo} />
@@ -46,7 +47,11 @@ export function NoteList({ notes, updateNote, onRemoveNote,
 
                             <div className='note-toolbar'>
                                 <button onClick={ev => handleColorPickerOpen(ev, note.id)} className="toolbar-btn"><i className="fa-solid fa-palette"></i></button>
-                                <button onClick={() => onOpenModal(note.id)} className="toolbar-btn"><i className="fa-solid fa-pencil"></i></button>
+                                <button onClick={ev => {
+                                    ev.stopPropagation()
+                                    eventBusService.emit('click', ev)
+                                    onOpenModal(note.id)
+                                }} className="toolbar-btn" id='open-edit'><i className="fa-solid fa-pencil"></i></button>
                                 <button onClick={ev => onDuplicateNote(note)} className="toolbar-btn"><i className="fa-regular fa-clone"></i></button>
                             </div>
 
@@ -76,7 +81,7 @@ export function NoteList({ notes, updateNote, onRemoveNote,
             <div className="pin-label">Un-Pinned</div>
 
             <ul className="note-list" >
-                {(unpinnedNotes.length>0) && unpinnedNotes.map(note => {
+                {(unpinnedNotes.length > 0) && unpinnedNotes.map(note => {
 
                     return <li key={note.id}>
                         <article key={note.id} className="note" style={note.style} >
@@ -104,7 +109,7 @@ export function NoteList({ notes, updateNote, onRemoveNote,
 
                 })}
                 <div className="color-picker-backdrop" onClick={handleColorPickerClose} ref={backdropRef}></div>
-                {(unpinnedNotes.length === 0 )&& <div><p>No matching notes...</p></div>}
+                {(unpinnedNotes.length === 0) && <div><p>No matching notes...</p></div>}
             </ul>
         </section>
 
