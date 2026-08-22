@@ -12,13 +12,7 @@ export function NoteComposer({ note, onChangeInfo, onChangeType, addNote, onTogg
     // const [noteType, setNoteType] = useState('NoteTxt')
     const [isExpanded, setIsExpanded] = useState(false)
     const [isPinned, setIsPinned] = useState(false)
-    const composerRef = useRef()
 
-    useEffect(() => {
-        eventBusService.on('click', (ev)=>{
-            if (!composerRef.current.contains(ev.target)) onCancelNoteEdit(ev)
-        })
-    }, [])
 
     useEffect(() => {
         eventBusService.on('note-edit', collapseComposer)
@@ -53,7 +47,7 @@ export function NoteComposer({ note, onChangeInfo, onChangeType, addNote, onTogg
     }
 
     if (!note || note.id) {
-        return < section className="note-composer collapsed" ref={composerRef}>
+        return < section className="note-composer collapsed" >
             <h3 className="composer-placeholder"
                 onClick={ev => onChangeType('NoteTxt', ev)}>Write a note...</h3>
 
@@ -87,7 +81,7 @@ export function NoteComposer({ note, onChangeInfo, onChangeType, addNote, onTogg
     }
 
 
-    return < section className="note-composer expanded" ref={composerRef}>
+    return < section className="note-composer expanded">
         <TitleEditor info={note.info} onChangeTitle={handleChange} isEditMode={true} />
 
 

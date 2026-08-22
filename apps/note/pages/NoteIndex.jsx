@@ -256,15 +256,8 @@ export function NoteIndex() {
         <div className="loader"></div>
     </section>
 
-    function onCancelNoteEdit(ev) {
-        setEditedNote(null)
-    }
 
-    function onEmitClick(ev) {
-        eventBusService.emit('click', ev)
-    }
-
-    return <section className="notes-container note-layout" onClick={onEmitClick}>
+    return <section className="notes-container note-layout" >
 
         <NoteFilter
             filterBy={filterBy}
@@ -279,7 +272,7 @@ export function NoteIndex() {
             onloadEmptyNote={onloadEmptyNote}
             addNote={addNote}
             onTogglePinEmptyNote={onTogglePinNote}
-        onCancelNoteEdit={onCancelNoteEdit} />
+         />
 
         <NoteList
             notes={notes}
