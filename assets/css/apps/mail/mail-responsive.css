@@ -1,0 +1,66 @@
+/* mail responsive - every breakpoint in one place, loaded last so it wins.
+   most of it re-points the tokens in mail-vars.css rather than restyling anything */
+
+/* the window can no longer afford a 256px nav. the hamburger reaches the same
+   width through .is-rail instead, and the container query below covers both */
+@media (max-width: 1000px) {
+    .mail-index {
+        --mail-sidebar-w: var(--mail-rail-w);
+        --mail-col-sender-indent: var(--mail-sp-3);
+    }
+
+    /* hamburger and mark together are wider than the rail, so the brand stops
+       matching the nav here and takes only what it needs */
+    .mail-brand {
+        flex: 0 0 auto;
+    }
+
+    .mail-logo-txt {
+        display: none;
+    }
+}
+
+/* whatever narrowed the nav, it loses its text and the pills become circles */
+@container mail-nav (max-width: 120px) {
+    .mail-compose-btn span:not(.material-symbols-outlined),
+    .mail-folder-label,
+    .mail-folder-count {
+        display: none;
+    }
+
+    .mail-folders {
+        align-items: center;
+    }
+
+    .mail-compose-btn {
+        align-self: center;
+        justify-content: center;
+        inline-size: var(--mail-compose-btn-h);
+        margin-inline: 0;
+        padding-inline: 0;
+        border-radius: 50%;
+    }
+
+    .mail-folder {
+        justify-content: center;
+        inline-size: var(--mail-icon-btn-size);
+        block-size: var(--mail-icon-btn-size);
+        margin-inline-end: 0;
+        padding-inline: 0;
+        border-radius: 50%;
+    }
+}
+
+/* the toolbar runs out of room before the list does */
+@media (max-width: 720px) {
+    .mail-toolbar {
+        padding-inline: 0;
+    }
+
+    .mail-select-all,
+    .mail-icon-btn-sm,
+    .mail-hide-mobile,
+    .mail-sort-label {
+        display: none;
+    }
+}

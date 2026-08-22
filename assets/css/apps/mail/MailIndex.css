@@ -10,6 +10,8 @@
     /* claim the rest of the viewport, so the nav and the list surface run to the
        bottom instead of stopping under the last row */
     flex-grow: 1;
+    /* without this the 1fr row is as tall as all 50 rows, not the space left */
+    min-block-size: 0;
     font-family: var(--mail-font-main);
     font-size: var(--mail-fs-body);
     font-size-adjust: var(--mail-x-height-adjust);
@@ -28,6 +30,10 @@
 /* the list is a surface floating on the app background - gmail rounds only the
    corner that faces the nav */
 .mail-content {
+    /* a column so the toolbar holds its height and whatever is below it scrolls */
+    display: flex;
+    flex-direction: column;
+    min-block-size: 0;
     background-color: var(--mail-clr-surface);
     border-start-start-radius: var(--mail-radius-md);
 }

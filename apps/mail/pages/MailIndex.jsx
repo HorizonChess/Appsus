@@ -1,4 +1,4 @@
-import { mailService } from '../services/mail.service.js'
+import { mailService, PAGE_SIZE } from '../services/mail.service.js'
 import { eventBusService } from '../../../services/event-bus.service.js'
 import { MailList } from '../cmps/MailList.jsx'
 import { MailCompose } from '../cmps/MailCompose.jsx'
@@ -14,24 +14,30 @@ export function MailIndex() {
     const [searchParams] = useSearchParams()
     const navigate = useNavigate()
 
-    const status = searchParams.get('status') || 'inbox'
+    const folder = searchParams.get('folder') || 'inbox'
     const txt = searchParams.get('txt') || ''
-    const sortBy = searchParams.get('sortBy') || 'date'
-    const sortDir = searchParams.get('sortDir') || -1
+    // no defaults here - query merges getDefaultFilter over whatever is missing
+    const sortBy = searchParams.get('sortBy')
+    const sortDir = searchParams.get('sortDir')
+    const pageIdx = +searchParams.get('pageIdx') || 0
+
+    // clamped, so emptying the last page or narrowing the folder cannot strand you
+    const pageCount = mails ? Math.max(Math.ceil(mails.length / PAGE_SIZE), 1) : 1
+    const pageIdxToShow = Math.min(Math.max(pageIdx, 0), pageCount - 1)
+    const pageMails = mails && mails.slice(pageIdxToShow * PAGE_SIZE, (pageIdxToShow + 1) * PAGE_SIZE)
 
     // a folder switch drops the old rows right away - the loader covers the gap
     useEffect(() => {
         setMails(null)
-    }, [status])
+    }, [folder])
 
     useEffect(() => {
         loadMails()
         return eventBusService.on('mails-changed', loadMails)
-    }, [status, txt, sortBy, sortDir])
+    }, [folder, txt, sortBy, sortDir])
 
-    // a search, a sort or a refresh keeps the old rows up until the new ones land
     function loadMails() {
-        mailService.query({ status, txt, sortBy, sortDir })
+        mailService.query({ folder, txt, sortBy, sortDir })
             .then(setMails)
             .catch(err => console.log('Had issues loading mails', err))
     }
@@ -52,7 +58,7 @@ export function MailIndex() {
     function applyChange(mailId, changes) {
         setMails(mails
             .map(mail => (mail.id === mailId ? { ...mail, ...changes } : mail))
-            .filter(mail => mailService.isInFolder(mail, status)))
+            .filter(mail => mailService.isInFolder(mail, folder)))
     }
 
     // the folder rides along in the query string so details can hand it back
@@ -92,12 +98,15 @@ export function MailIndex() {
         <MailFolderList />
 
         <main className="mail-content">
-            <MailToolbar />
+            <MailToolbar
+                total={mails ? mails.length : 0}
+                pageIdx={pageIdxToShow}
+                pageCount={pageCount} />
 
             {!mails && <div className="loader"></div>}
 
             {mails && <MailList
-                mails={mails}
+                mails={pageMails}
                 onToggleStar={onToggleStar}
                 onSetRead={onSetRead}
                 onSelectMail={onSelectMail}

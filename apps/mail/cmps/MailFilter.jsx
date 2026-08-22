@@ -1,9 +1,10 @@
+import { useMailParams } from '../custom-hooks/useMailParams.js'
+
 const { useState, useEffect } = React
-const { useSearchParams } = ReactRouterDOM
 
 // no props, like the sidebar - it renders on both pages
 export function MailFilter() {
-    const [searchParams, setSearchParams] = useSearchParams()
+    const [searchParams, setParams] = useMailParams()
 
     const txtParam = searchParams.get('txt') || ''
     // local state so typing is instant, the url catches up on a pause
@@ -18,26 +19,36 @@ export function MailFilter() {
     useEffect(() => {
         if (txt === txtParam) return
 
-        const timeoutId = setTimeout(() => setParam('txt', txt), 300)
+        const timeoutId = setTimeout(() => setParams({ txt }), 300)
         return () => clearTimeout(timeoutId)
     }, [txt])
-
-    function setParam(key, value) {
-        const nextParams = new URLSearchParams(searchParams)
-
-        if (value) nextParams.set(key, value)
-        else nextParams.delete(key)
-
-        setSearchParams(nextParams)
-    }
 
     // skips the debounce
     function onClearTxt() {
         setTxt('')
-        setParam('txt', '')
+        setParams({ txt: '' })
+    }
+
+    // the sidebar reads this off the url, so the two never have to be wired together
+    function onToggleNav() {
+        setParams({ nav: searchParams.get('nav') ? '' : 'rail' })
     }
 
     return <div className="mail-filter">
+
+        <div className="mail-brand">
+            <button
+                type="button"
+                className="mail-icon-btn"
+                title="Main menu"
+                onClick={onToggleNav}>
+                <span className="material-symbols-outlined">menu</span>
+            </button>
+
+            <img className="mail-logo" src="assets/MrEmail-icon.png" alt="" />
+            <span className="mail-logo-txt">MrEmail</span>
+        </div>
+
         <div className="mail-search">
 
             <span className="material-symbols-outlined mail-search-icon">search</span>

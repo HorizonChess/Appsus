@@ -1,22 +1,17 @@
 import { mailService } from '../services/mail.service.js'
 import { showSuccessMsg, showErrorMsg } from '../../../services/event-bus.service.js'
 import { MailEditor } from './MailEditor.jsx'
+import { useMailParams } from '../custom-hooks/useMailParams.js'
 
 const { useState, useEffect } = React
-const { useSearchParams } = ReactRouterDOM
-
-// everything compose puts in the url, so closing it can clear the lot
-const COMPOSE_PARAMS = ['compose', 'to', 'subject', 'body', 'src']
 
 // self sufficient like the sidebar - both pages render it and it decides for
 // itself whether the url says it should be open
 export function MailCompose() {
     const [mailToEdit, setMailToEdit] = useState(null)
-    const [searchParams, setSearchParams] = useSearchParams()
+    const [searchParams, setParams] = useMailParams()
 
-    // 'new' | a draft id | null when the modal is closed
     const composeId = searchParams.get('compose')
-    // the mail being replied to - its presence is what makes this a reply
     const srcId = searchParams.get('src')
 
     useEffect(() => {
@@ -33,9 +28,7 @@ export function MailCompose() {
 
     // the prefill params go too, or reopening compose refills the old values
     function onCloseCompose() {
-        const nextParams = new URLSearchParams(searchParams)
-        COMPOSE_PARAMS.forEach(param => nextParams.delete(param))
-        setSearchParams(nextParams)
+        setParams({ compose: '', to: '', subject: '', body: '', src: '' })
     }
 
     // 'new' builds an empty mail locally, anything else is a draft id to fetch

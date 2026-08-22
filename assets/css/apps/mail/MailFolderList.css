@@ -5,10 +5,19 @@
     flex-direction: column;
     gap: var(--mail-sp-2);
     inline-size: var(--mail-sidebar-w);
+    transition: inline-size .15s ease;
+    /* what is inside collapses off how wide this ended up, so it makes no
+       difference whether the hamburger or the viewport narrowed it */
+    container-type: inline-size;
+    container-name: mail-nav;
     padding-block: var(--mail-sp-2);
     /* the nav sits on the app background, not on a surface - that is what makes
        the translucent hover and the active pill read the way gmail's do */
     background-color: var(--mail-clr-bg-app);
+}
+
+.mail-folder-list.is-rail {
+    inline-size: var(--mail-rail-w);
 }
 
 .mail-compose-btn {

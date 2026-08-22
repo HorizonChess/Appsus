@@ -63,6 +63,7 @@
     --mail-radius-search: 24px;
     --mail-radius-nav: 0 16px 16px 0;
     --mail-sidebar-w: 256px;
+    --mail-rail-w: 72px;
     --mail-search-w: 720px;
     --mail-search-h: 48px;
     --mail-row-h: 40px;
@@ -81,8 +82,13 @@
     --mail-btn-h: 36px;
     --mail-star-size: 20px;
     --mail-icon-size: 20px;
+    /* the top bar runs at search height, so its icons are a size up from the rest */
+    --mail-icon-size-lg: 24px;
+    --mail-logo-h: 40px;
     --mail-compose-icon-size: 24px;
-    --mail-col-sender-w: 168px;
+    /* gives ground continuously as the window narrows, instead of holding 168 until
+       a breakpoint takes it away */
+    --mail-col-sender-w: clamp(104px, 16vw, 168px);
     --mail-col-sender-indent: 32px;
     --mail-col-date-w: 56px;
 

@@ -14,6 +14,21 @@ export const loggedinUser = {
 // the join key between the sidebar and getFolderCounts, and the sidebar's order
 export const MAIL_FOLDERS = ['inbox', 'starred', 'sent', 'draft', 'trash']
 
+// 'subject' is the sprint's "title" - the value doubles as the mail field name
+export const SORT_OPTIONS = [
+    { value: 'date', label: 'Date' },
+    { value: 'subject', label: 'Subject' },
+]
+
+// the -1 / 1 _sortMails multiplies by
+export const SORT_DIR_OPTIONS = [
+    { value: '-1', label: 'Newest' },
+    { value: '1', label: 'Oldest' },
+]
+
+// gmail's own page size
+export const PAGE_SIZE = 50
+
 const MAIL_KEY = 'mailDB'
 _createMails()
 
@@ -101,14 +116,14 @@ function _notifyChange(res) {
 }
 
 // a mail's folder comes from its fields, it is never stored
-function isInFolder(mail, status) {
+function isInFolder(mail, folder) {
     const isTrashed = mail.removedAt !== null
-    if (status === 'trash') return isTrashed
+    if (folder === 'trash') return isTrashed
     if (isTrashed) return false
 
     const isSent = Boolean(mail.sentAt)
 
-    switch (status) {
+    switch (folder) {
         case 'draft': return !isSent
         case 'sent': return isSent && mail.from === loggedinUser.email
         case 'inbox': return isSent && mail.to === loggedinUser.email
@@ -123,9 +138,9 @@ function getFolderCounts() {
         .then(mails => {
             const counts = {}
 
-            MAIL_FOLDERS.forEach(status => {
-                const folderMails = mails.filter(mail => isInFolder(mail,status))
-                counts[status] = {
+            MAIL_FOLDERS.forEach(folder => {
+                const folderMails = mails.filter(mail => isInFolder(mail, folder))
+                counts[folder] = {
                     total: folderMails.length,
                     unread: folderMails.filter(mail => !mail.isRead).length,
                 }
@@ -166,14 +181,14 @@ function getReplyPrefill(mail) {
 
 function getDefaultFilter() {
     return {
-        status: 'inbox',
+        folder: 'inbox',
         txt: '',
         isRead: null,     // null = show all
         isStared: null,   // null = show all
         from: '',
         subject: '',
         sortBy: 'date',   // date / subject / from
-        sortDir: -1,      // 1 = ascending, -1 = descending (newest first)
+        sortDir: '-1',    // string, like the url always gives. 1 ascending, -1 descending
     }
 }
 
@@ -198,7 +213,7 @@ function formatMailDate(timestamp) {
 // ---------------------------------------------------------------- privates
 
 function _filterMails(mails, criteria) {
-    mails = mails.filter(mail => isInFolder(mail,criteria.status))
+    mails = mails.filter(mail => isInFolder(mail, criteria.folder))
 
     if (criteria.txt) {
         const txt = criteria.txt.toLowerCase()

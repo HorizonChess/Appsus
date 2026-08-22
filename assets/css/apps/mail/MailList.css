@@ -1,6 +1,10 @@
 /* mail list */
 
+/* the one scrolling element in the whole app */
 .mail-list {
+    flex: 1 1 auto;
+    min-block-size: 0;
+    overflow-y: auto;
     margin: 0;
     padding: 0;
     list-style: none;

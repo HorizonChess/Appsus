@@ -6,7 +6,8 @@
 
 @import './setup/typography.css';
 
-@import './cmps/home.css';
+@import './cmps/Home.css';
+@import './cmps/About.css';
 @import './cmps/UserMsg.css';
 @import './cmps/AppHeader.css';
 
@@ -36,3 +37,4 @@
 @import './apps/mail/MailPreview.css';
 @import './apps/mail/MailDetails.css';
 @import './apps/mail/MailCompose.css';
+@import './apps/mail/mail-responsive.css';
