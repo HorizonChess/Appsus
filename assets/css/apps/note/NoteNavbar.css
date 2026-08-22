@@ -70,7 +70,7 @@
 }
 
 .note-sidebar.open .note-tab:has(.note-tab-btn.active) {
-    background-color: rgb(254, 239, 195);
+    background-color: var(--note-clr-brand)
 
 }
 
@@ -85,7 +85,7 @@
 }
 
 .note-sidebar .note-tab-btn.active {
-    background-color: rgb(254, 239, 195);
+    background-color: var(--note-clr-brand)
 
 }
 
@@ -151,7 +151,7 @@
 
 
 .note-open-nav-btn {
-    color: rgb(95, 99, 104);
+    color: var( --note-clr-txt-1);
     cursor: pointer;
     border-radius: 50%;
     font-size: 1.5em;
@@ -196,7 +196,7 @@
     margin-inline-start: 0.4em;
     /* padding-inline: 1em; */
     font-size: 22px;
-    color: rgb(95, 99, 104);
+    color: var( --note-clr-txt-1);
     grid-row: 1;
     text-wrap: nowrap;
 
@@ -208,7 +208,7 @@
     width: 40px;
     height:40px;
     font-size: 1.5em;
-    background-color: rgb(254, 239, 195);
+    background-color: var(--note-clr-brand);
     color: rgba(116, 97, 97, 0.91);
     justify-content: center;
     align-content: center;

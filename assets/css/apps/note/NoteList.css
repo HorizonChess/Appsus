@@ -14,7 +14,7 @@
 
 
  .pin-label {
-     color: rgb(95, 99, 104);
+     color: var( --note-clr-txt-1);
      font-size: .6875rem;
      margin-block-end: 0.5em;
  }

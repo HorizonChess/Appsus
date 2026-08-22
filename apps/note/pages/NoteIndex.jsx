@@ -255,7 +255,7 @@ export function NoteIndex() {
     }
 
     if (!notes) return <section className="notes-container note-layout">
-        <div className="loader"></div>
+        <div class="loader"></div>
     </section>
 
 
@@ -274,7 +274,7 @@ export function NoteIndex() {
             onloadEmptyNote={onloadEmptyNote}
             addNote={addNote}
             onTogglePinEmptyNote={onTogglePinNote}
-         />
+        />
 
         <NoteList
             notes={notes}
