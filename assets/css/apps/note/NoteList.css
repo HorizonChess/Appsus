@@ -2,6 +2,7 @@
 
  .notes {
         margin:49.5px;
+        min-width: 250px
 
      /* columns: auto 250px; */
      /* padding: 2em; */
