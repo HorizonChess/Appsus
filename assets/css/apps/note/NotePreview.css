@@ -41,12 +41,7 @@ figure {
     align-items: center;
 }
 
-.note-todo-txt:has(+ .note-todo-checkbox:checked)
-.note-txt:has(+ .note-todo-checkbox:checked),
-input:has(+ .note-todo-checkbox:checked) {
-    text-decoration: line-through;
 
-}
 
 .note-txt:focus,
 .note-title:focus {
@@ -81,10 +76,7 @@ input:has(+ .note-todo-checkbox:checked) {
 
 
 
-.note-todo-checkbox:checked::before {
-    display: grid;
-    justify-self: center;
-}
+
 
 .note-media {
     justify-self: center;

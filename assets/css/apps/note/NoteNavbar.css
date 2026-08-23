@@ -14,6 +14,8 @@
 }
 
 .note-sidebar {
+    transform: scale(0%);
+
     z-index: 1000;
     background-color: white;
     position: absolute;
@@ -51,6 +53,8 @@
 }
 
 .note-sidebar.open {
+    transform: scale(100%);
+
     width: 16rem;
     box-shadow: 0px 16px 10px 0px rgba(0, 0, 0, 0.14);
 
@@ -70,8 +74,7 @@
 }
 
 .note-sidebar.open .note-tab:has(.note-tab-btn.active) {
-    background-color: rgb(254, 239, 195);
-
+    background-color: var(--note-clr-brand)
 }
 
 .note-sidebar .note-tab:has(.note-tab-btn.active) {
@@ -85,8 +88,7 @@
 }
 
 .note-sidebar .note-tab-btn.active {
-    background-color: rgb(254, 239, 195);
-
+    background-color: var(--note-clr-brand)
 }
 
 .note-tab-btn {
@@ -123,18 +125,41 @@
 }
 
 .note-search {
+    justify-self: end;
     display: flex;
     grid-column: 2;
     grid-row: 1;
+    width: fit-content;
+    /* flex-basis: fit-content; */
+    flex-grow: 1;
+    flex-shrink: 1;
     background-color: rgb(240, 244, 249);
     border-radius: 8px;
 }
 
+
+.note-search:hover input {
+    transform: scale(100%) translate(-97%, 0);
+    width: 70%;
+    opacity: 1;
+    padding-block-end: 14px;
+    padding-inline-start: 1rem;
+    border-radius: 8px;
+    /* z-index: 2000; */
+}
+
 .note-search input {
+    position: absolute;
+    /* transform: scale(0%); */
+    flex-shrink: 1;
+    width: 0%;
+    opacity: 0;
+
     padding-block: 11px;
     margin-inline-start: 0;
     border: none;
-    background-color: rgb(240, 244, 249)
+    background-color: rgb(240, 244, 249);
+    transition: 200ms ease
 }
 
 .note-search input:focus {
@@ -150,8 +175,42 @@
 }
 
 
+
+@media (min-width:590px) {
+    .note-sidebar {
+        transform: scale(100%);
+
+    }
+
+    .note-top-bar {
+        grid-template-columns: minmax(250px, auto) minmax(330px, 1fr) minmax(5rem, auto);
+
+    }
+
+    .note-search:hover input {
+        transform: scale(100%) translate(0, 0);
+        width: 100%;
+        opacity: 1;
+
+        /* z-index: 2000; */
+    }
+
+
+    .note-search {
+        width: 100%;
+    }
+
+    .note-search input {
+        width: 100%;
+        opacity: 1;
+
+        position: static;
+        /* transform: scale(100%); */
+    }
+}
+
 .note-open-nav-btn {
-    color: rgb(95, 99, 104);
+    color: var(--note-clr-txt-1);
     cursor: pointer;
     border-radius: 50%;
     font-size: 1.5em;
@@ -166,7 +225,7 @@
 
 .note-top-bar {
     display: grid;
-    grid-template-columns: minmax(250px, auto) minmax(330px, 1fr) minmax(5rem, auto);
+    grid-template-columns: minmax(250px, auto) minmax(1rem, 1fr) minmax(1rem, auto);
 
     ;
     gap: 4px;
@@ -196,7 +255,7 @@
     margin-inline-start: 0.4em;
     /* padding-inline: 1em; */
     font-size: 22px;
-    color: rgb(95, 99, 104);
+    color: var(--note-clr-txt-1);
     grid-row: 1;
     text-wrap: nowrap;
 
@@ -206,9 +265,9 @@
 .miskeep-logo {
     grid-row: 1;
     width: 40px;
-    height:40px;
+    height: 40px;
     font-size: 1.5em;
-    background-color: rgb(254, 239, 195);
+    background-color: var(--note-clr-brand);
     color: rgba(116, 97, 97, 0.91);
     justify-content: center;
     align-content: center;

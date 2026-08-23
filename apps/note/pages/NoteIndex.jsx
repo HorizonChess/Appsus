@@ -114,7 +114,7 @@ export function NoteIndex() {
     }
 
     if (!notes) return <section className="notes-container note-layout">
-        <div className="loader"></div>
+        <div class="loader"></div>
     </section>
 
 

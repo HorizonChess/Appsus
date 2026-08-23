@@ -55,7 +55,7 @@ export function NoteFilter({ filterBy, onSetFilterBy }) {
                 </h2>
             </div>
 
-            <div className="note-search">
+            <div className="note-search" >
 
                 <span className="material-symbols-outlined note-search-icon">search</span>
 

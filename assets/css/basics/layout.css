@@ -18,22 +18,32 @@
 
 
 /* the page itself must not scroll, or the header and nav slide away with the list */
-.root-cmp:has(.mail-index){
+.root-cmp:has(.mail-index) {
     display: flex;
     flex-direction: column;
     block-size: 100dvh;
     overflow: hidden;
 }
 
-.note-layout{
+.note-layout {
     display: grid;
     grid-template-rows: min-content min-content;
-    grid-template-columns: minmax(5rem,auto) 1fr minmax(5rem,auto);
+    grid-template-columns: minmax(1rem, auto) minmax(5rem, 1fr) minmax(1rem, auto);
 }
 
-.note-layout>*:not(.note-sidebar){
+.note-layout>*:not(.note-sidebar) {
     grid-column: 2;
 }
-.note-layout>.note-sidebar{
+
+.note-layout>.note-sidebar {
     grid-column: 1;
+}
+
+
+@media (min-width:590px) {
+    .note-layout {
+        display: grid;
+        grid-template-rows: min-content min-content;
+        grid-template-columns: minmax(5rem, auto) minmax(5rem, 1fr) minmax(5rem, auto);
+    }
 }
