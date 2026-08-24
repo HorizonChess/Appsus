@@ -87,24 +87,22 @@ function getEmptyNote(type = 'NoteTxt', info = { title: '', txt: '' }, style = {
 function _filterByText(notes, text) {
     const regExp = new RegExp(text, 'i')
 
+    console.log('text',text)
 
     return notes.filter(note => {
         const { info } = note
         if (!info) return false
 
-        var isContainTxt = false
-
         const { title, txt, todos } = note.info
 
-        if (title) isContainTxt = regExp.test(title)
+        if (txt) return true
+        if (title && regExp.test(title)) return true
 
-        if (txt) isContainTxt = regExp.test(txt)
+        if (txt && regExp.test(txt)) return true
 
-        if (todos) isContainTxt = todos.some(todo => {
-            return regExp.test(todo.txt)
-        })
+        if (todos&&  todos.some(todo => regExp.test(todo.txt))) return true
 
-        return isContainTxt
+        return false
     })
 }
 
@@ -125,17 +123,19 @@ function getFilterFromSearchParams(searchParams) {
 
 function getFilteredNotes(notes, filterBy) {
     var filteredNotes = [...notes]
+    if (filterBy.type) {
+        filteredNotes = notes.filter(note => note.type === filterBy.type)
+    }
+
     if (filterBy.txt) {
-        filteredNotes = _filterByText(notes, filterBy.txt)
+        filteredNotes = _filterByText(filteredNotes, filterBy.txt)
     }
 
     if (filterBy.isPinned) {
         filteredNotes = notes.filter(note => note.isPinned)
     }
 
-    if (filterBy.type) {
-        filteredNotes = notes.filter(note => note.type === filterBy.type)
-    }
+
 
     return filteredNotes
 

@@ -38,7 +38,7 @@ export function NoteIndex() {
     }, [filterBy])
 
     function loadNotes() {
-        noteService.query({ txt: '', type: filterBy.type }).
+        noteService.query({ txt: filterBy.txt, type: filterBy.type }).
             then(notes => setNotes([...notes]))
     }
 
