@@ -9,6 +9,10 @@ export function NoteList({ notes, onUpdateNote, onRemoveNote,
     const [colorPickerId, setColoPickerId] = useState(null)
     const backdropRef = useRef()
 
+    if (!notes) return <section className="notes-container note-layout">
+        <div class="loader"></div>
+    </section>
+    
     const pinnedNotes = notes.filter(note => note.isPinned)
     const unpinnedNotes = notes.filter(note => !note.isPinned)
 
@@ -38,9 +42,7 @@ export function NoteList({ notes, onUpdateNote, onRemoveNote,
 
     }
 
-    if (!notes) return <section className="notes-container note-layout">
-        <div class="loader"></div>
-    </section>
+
 
     return <section className="notes">
 
@@ -70,7 +72,7 @@ export function NoteList({ notes, onUpdateNote, onRemoveNote,
                                 isPickerShown={colorPickerId && note.id === colorPickerId}
                                 key={`${note.id}-colorpicker`}
                                 style={note.style}
-                                onChangeStyle={ev => handleColorChange(ev,note)} />
+                                onChangeStyle={ev => handleColorChange(ev, note)} />
 
                             <button onClick={ev => handlePinChange(note)} className="note-pin pinned">
                                 <i className="fa-solid fa-thumbtack"></i>

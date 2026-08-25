@@ -23,7 +23,7 @@ export function NoteIndex() {
     const [editedNote, setEditedNote] = useState(null)
 
     const openNoteId = searchParams.get('noteId')
-    const openNote = openNoteId ? notes.find(note => note.id === openNoteId) : null
+    const openNote = notes ? notes.find(note => note.id === openNoteId) : null
 
     var visibleNotes
     // the addNote branch only runs for a mail handed over from MrEmail:
@@ -36,6 +36,10 @@ export function NoteIndex() {
         setSearchParams(utilService.trimObj(filterBy))
         loadNotes()
     }, [filterBy])
+
+    useEffectUpdate(() => {
+        setNotes(null)
+    }, [filterBy.type])
 
     function loadNotes() {
         noteService.query({ txt: filterBy.txt, type: filterBy.type }).
@@ -116,11 +120,6 @@ export function NoteIndex() {
             })
 
     }
-
-    if (!notes) return <section className="notes-container note-layout">
-        <div class="loader"></div>
-    </section>
-
 
     return <section className="notes-container note-layout" onClick={ev => eventBusService.emit('click', ev)}>
 
