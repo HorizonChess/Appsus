@@ -10,7 +10,7 @@ import { AudioEditor } from "./AudioEditor.jsx"
 export function NotePreview({ note, updateNote, onChangeInfo }) {
 
     function handleChange(info,noteId) {
-        onChangeInfo(info,noteId)
+        onChangeInfo(info,note)
     }
     return <section className="note-preview">
         <TitleEditor info={note.info} isEditMode={false} />

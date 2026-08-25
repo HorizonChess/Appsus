@@ -18,14 +18,14 @@ const { useSearchParams, useNavigate } = ReactRouterDOM
 export function NoteIndex() {
     const [searchParams, setSearchParams] = useSearchParams();
     const [filterBy, setFilterBy] = useState(noteService.getFilterFromSearchParams(searchParams))
-    const [notes, setNotes] = useState([])
+    const [notes, setNotes] = useState(null)
 
     const [editedNote, setEditedNote] = useState(null)
 
     const openNoteId = searchParams.get('noteId')
-    const openNote = notes.find(note => note.id === openNoteId)
-    const visibleNotes = noteService.getFilteredNotes(notes, filterBy)
+    const openNote = openNoteId ? notes.find(note => note.id === openNoteId) : null
 
+    var visibleNotes
     // the addNote branch only runs for a mail handed over from MrEmail:
     // the saving to the user. every other visit just loads the list
     useEffect(() => {
@@ -39,11 +39,15 @@ export function NoteIndex() {
 
     function loadNotes() {
         noteService.query({ txt: filterBy.txt, type: filterBy.type }).
-            then(notes => setNotes([...notes]))
+            then(notes => {
+
+                visibleNotes = noteService.getFilteredNotes(notes, filterBy)
+                setNotes([...visibleNotes])
+            })
     }
 
-    function onUpdateNote(noteId, func, newInfo) {
-        const note = noteId ? notes.find(note => note.id === noteId) : openNote
+    function onUpdateNote(noteToUpdate, func, newInfo) {
+        const note = noteToUpdate ? notes.find(note => note.id === noteToUpdate.id) : openNote
 
         func(note, newInfo)
 
@@ -132,7 +136,7 @@ export function NoteIndex() {
         />
 
         <NoteList
-            notes={visibleNotes}
+            notes={notes}
             onTogglePinNote={onTogglePinNote}
             editedNote={editedNote}
             onRemoveNote={removeNote}
@@ -145,11 +149,11 @@ export function NoteIndex() {
 
 
         <NoteModal
-            isShown={openNoteId}
+            isShown={openNote}
             onClose={onCloseModal}
-            style={editedNote && editedNote.style}
+            style={openNoteId && openNoteId.style}
         >
-            {openNoteId ?
+            {openNote ?
 
                 <NoteEdit
                     note={openNote}

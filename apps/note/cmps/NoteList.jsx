@@ -12,17 +12,17 @@ export function NoteList({ notes, onUpdateNote, onRemoveNote,
     const pinnedNotes = notes.filter(note => note.isPinned)
     const unpinnedNotes = notes.filter(note => !note.isPinned)
 
-    function handleColorChange(ev, noteId) {
-        onUpdateNote(noteId, onChangeStyle, ev.target.value)
+    function handleColorChange(ev, note) {
+        onUpdateNote(note, onChangeStyle, ev.target.value)
     }
 
-    function handleInfoChange(info, noteId) {
-        onUpdateNote(noteId, onChangeInfo, info)
+    function handleInfoChange(info, note) {
+        onUpdateNote(note, onChangeInfo, info)
 
     }
 
-    function handlePinChange(noteId){
-         onUpdateNote(noteId, onTogglePinNote)
+    function handlePinChange(note) {
+        onUpdateNote(note, onTogglePinNote)
     }
 
     function handleColorPickerOpen(ev, colorPickerId) {
@@ -37,6 +37,10 @@ export function NoteList({ notes, onUpdateNote, onRemoveNote,
         backdropRef.current.style.display = 'none'
 
     }
+
+    if (!notes) return <section className="notes-container note-layout">
+        <div class="loader"></div>
+    </section>
 
     return <section className="notes">
 
@@ -66,9 +70,9 @@ export function NoteList({ notes, onUpdateNote, onRemoveNote,
                                 isPickerShown={colorPickerId && note.id === colorPickerId}
                                 key={`${note.id}-colorpicker`}
                                 style={note.style}
-                                onChangeStyle={ev => handleColorChange(ev, note.id)} />
+                                onChangeStyle={ev => handleColorChange(ev,note)} />
 
-                            <button onClick={ev => handlePinChange(note.id)} className="note-pin pinned">
+                            <button onClick={ev => handlePinChange(note)} className="note-pin pinned">
                                 <i className="fa-solid fa-thumbtack"></i>
                             </button>
 

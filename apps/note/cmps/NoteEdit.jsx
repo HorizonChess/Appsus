@@ -10,15 +10,16 @@ import { VideoEditor } from "./VideoEditor.jsx"
 import { AudioEditor } from "./AudioEditor.jsx"
 
 export function NoteEdit({ note, updateNote, onChangeInfo, onChangeStyle, onTogglePinNote, onUpdateNote }) {
+        console.log('note', note)
+
     const [isColorPickerShown, setIsColorPickerShown] = useState(null)
     const [noteEditStyle, setNoteEditStyle] = useState(note.style)
     const [isPinned, setIsPinned] = useState(note.isPinned)
 
-    console.log('note', note)
     const backdropRef = useRef()
 
     function handleChange(info, noteId) {
-        onUpdateNote(noteId, onChangeInfo, info)
+        onUpdateNote(note, onChangeInfo, info)
     }
 
     function handleColorPickerOpen(ev) {
@@ -35,12 +36,12 @@ export function NoteEdit({ note, updateNote, onChangeInfo, onChangeStyle, onTogg
 
     function handleTogglePinChange() {
         setIsPinned(!isPinned)
-        onUpdateNote(note.id, onTogglePinNote)
+        onUpdateNote(note, onTogglePinNote)
     }
 
     function handleColorChange(ev) {
         setNoteEditStyle({ backgroundColor: ev.target.value })
-        onUpdateNote(note.id, onChangeStyle,ev.target.value)
+        onUpdateNote(note, onChangeStyle,ev.target.value)
     }
 
     return <section className="note-edit" style={noteEditStyle}>
