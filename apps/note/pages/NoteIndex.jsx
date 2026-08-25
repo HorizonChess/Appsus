@@ -47,11 +47,11 @@ export function NoteIndex() {
     }
 
     function onUpdateNote(noteToUpdate, func, newInfo) {
-        const note = noteToUpdate ? notes.find(note => note.id === noteToUpdate.id) : openNote
+        // const note = noteToUpdate ? notes.find(note => note.id === noteToUpdate.id) : openNote
 
-        func(note, newInfo)
+        func(noteToUpdate, newInfo)
 
-        noteService.save(note)
+        noteService.save(noteToUpdate)
         setNotes([...notes])
     }
 
