@@ -19,20 +19,14 @@ export function NoteIndex() {
     const [searchParams, setSearchParams] = useSearchParams();
     const [filterBy, setFilterBy] = useState(noteService.getFilterFromSearchParams(searchParams))
     const [notes, setNotes] = useState(null)
-    console.log('notes',notes)
-    console.log('notes',notes)
     const [editedNote, setEditedNote] = useState(null)
 
     const openNoteId = searchParams.get('noteId')
     const openNote = notes ? notes.find(note => {
-       console.log('openNoteId',openNoteId)
-       console.log('note.id',note.id)
-       console.log('note.id === openNoteId',note.id === openNoteId)
-       console.log(' ')
         return openNoteId && note.id === openNoteId
     }) : null
 
-    
+
     var visibleNotes
     // the addNote branch only runs for a mail handed over from MrEmail:
     // the saving to the user. every other visit just loads the list
@@ -58,13 +52,30 @@ export function NoteIndex() {
             })
     }
 
-    function onUpdateNote(noteToUpdate, func, newInfo) {
-        // const note = noteToUpdate ? notes.find(note => note.id === noteToUpdate.id) : openNote
+    // function onUpdateNote(noteToUpdate, func, newInfo) {
+    //     // const note = noteToUpdate ? notes.find(note => note.id === noteToUpdate.id) : openNote
 
-        const newNote = func(noteToUpdate, newInfo)
+    //     const newNote = func(noteToUpdate, newInfo)
 
-        noteService.save(newNote)
-        setNotes(notes.map(n => n.id === noteToUpdate.id ? newNote : n))
+    //     noteService.save(newNote)
+    //     setNotes(notes.map(n => n.id === noteToUpdate.id ? newNote : n))
+    // }
+
+
+    function onUpdateNote(noteToUpdate, changes) {
+        const note = noteToUpdate ? notes.find(note => note.id === noteToUpdate.id) : openNote
+
+        const prevNotes = notes
+        const updatedNote = { ...note, ...changes }
+
+        setNotes(notes.map(note => note.id === noteToUpdate.id ? updatedNote : note))
+
+        noteService.save(updatedNote)
+            .catch(err => {
+                console.log('Had issues saving note', err)
+                setNotes(prevNotes)
+                showErrorMsg('Could not save note')
+            })
     }
 
     function onTogglePinNote(note) {
@@ -78,10 +89,8 @@ export function NoteIndex() {
 
     function onChangeStyle(note, backgroundColor) {
         const newStyle = { ...note.style, backgroundColor }
-        console.log('newStyle',newStyle)
-        console.log('note',note)
-        return { ...note, style: newStyle }
 
+        return { ...note, style: newStyle }
     }
 
     function addNote(draftNote) {

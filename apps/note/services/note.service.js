@@ -15,7 +15,10 @@ export const noteService = {
     save,
     remove,
     getFilterFromSearchParams,
-    getFilteredNotes
+    getFilteredNotes,
+    getStyleChanges,
+    getInfoChanges,
+    getTodoChanges
 
 }
 
@@ -141,4 +144,45 @@ function getFilteredNotes(notes, filterBy) {
 
     return filteredNotes
 
+}
+
+function getStyleChanges(note, backgroundColor) {
+
+    const newStyle = { ...note.style, backgroundColor }
+
+    return { style: newStyle }
+}
+
+function getInfoChanges(note, infoField, value, todoIdx) {
+    let newInfo
+    let newTodos
+    const { todos } = note.info
+
+    if (todoIdx >= 0) {
+        newTodos = todos.map((todo, idx) => idx === todoIdx ? { ...todo, [infoField]: value } : todo)
+
+        newInfo = { ...note.info, todos: newTodos }
+    } else if (!todoIdx && typeof (todoIdx) === 'number') {
+        newTodos = [...todos]
+        newTodos.push({ txt: '', isDone: false })
+        
+        newInfo = { ...note.info, todos: newTodos }
+    } else {
+        newInfo = { ...note.info, [infoField]: value }
+    }
+
+    return { info: newInfo }
+}
+
+function getTodoChanges(note) {
+    const { todos } = note.info
+    let newTodos
+    if (!todoIdx) {
+        newTodos = [...todos]
+        newTodos.push({ txt: '', isDone: false })
+    } else {
+        newTodos = todos.map((todo, idx) => idx === todoIdx ? { ...todo, [infoField]: value } : todo)
+
+    }
+    newInfo = { ...note.info, todos: newTodos }
 }

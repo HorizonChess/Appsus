@@ -1,5 +1,5 @@
 import { eventBusService } from "../../../services/event-bus.service.js"
-
+import { noteService } from "../services/note.service.js"
 import { NotePreview } from "./NotePreview.jsx"
 import { ColorPicker } from "./ColorPicker.jsx"
 const { useState, useRef } = React
@@ -9,24 +9,21 @@ export function NoteList({ notes, onUpdateNote, onRemoveNote,
     const [colorPickerId, setColoPickerId] = useState(null)
     const backdropRef = useRef()
 
-    console.log('notes', notes)
     if (!notes) return <section className="notes-container note-layout">
         <div class="loader"></div>
     </section>
 
-
-
     const pinnedNotes = notes.filter(note => note.isPinned)
     const unpinnedNotes = notes.filter(note => !note.isPinned)
-    console.log('hi')
 
     function handleColorChange(ev, note) {
-        onUpdateNote(note, onChangeStyle, ev.target.value)
+        const styleChanges = noteService.getStyleChanges(note, ev.target.value)
+
+        onUpdateNote(note, styleChanges)
     }
 
-    function handleInfoChange(info, note) {
-        onUpdateNote(note, onChangeInfo, info)
-
+    function handleInfoChange(infoChanges,note) {
+        onUpdateNote(note, infoChanges)
     }
 
     function handlePinChange(note) {
@@ -55,7 +52,6 @@ export function NoteList({ notes, onUpdateNote, onRemoveNote,
 
             <ul className="note-list" >
                 {(pinnedNotes.length > 0) && pinnedNotes.map(note => {
-                    console.log('note-list pinned--> note', note)
                     return <li key={note.id}>
                         <article key={note.id} className="note" style={note.style} draggable={true} >
                             <NotePreview
@@ -99,7 +95,6 @@ export function NoteList({ notes, onUpdateNote, onRemoveNote,
 
             <ul className="note-list" >
                 {(unpinnedNotes.length > 0) && unpinnedNotes.map(note => {
-                    console.log('note-list unpinned--> note', note)
 
                     return <li key={note.id}>
                         <article key={note.id} className="note" style={note.style} >

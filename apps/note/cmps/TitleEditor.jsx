@@ -13,5 +13,5 @@ export function TitleEditor({ info, onChangeTitle, isEditMode }) {
         placeholder={"Enter title..."}
         className="note-title"
         value={info.title}
-        onChange={isEditMode ? ev => onChangeTitle({ ...info, title: ev.target.value }) : ''} />
+        onChange={isEditMode ? ev => onChangeTitle('title', ev.target.value) : ''} />
 }

@@ -1,5 +1,5 @@
 const { useState, useRef, useEffect } = React
-
+import { noteService } from "../services/note.service.js"
 import { TxtEditor } from "./TxtEditor.jsx"
 import { TodosEditor } from "./TodosEditor.jsx"
 import { TitleEditor } from "./TitleEditor.jsx"
@@ -9,9 +9,12 @@ import { AudioEditor } from "./AudioEditor.jsx"
 
 export function NotePreview({ note, updateNote, onChangeInfo }) {
 
-    function handleChange(info,noteId) {
-        onChangeInfo(info,note)
+    function handleChange(infoField, value, todoIdx) {
+        const infoChanges = noteService.getInfoChanges(note, infoField, value, todoIdx)
+
+        onChangeInfo(infoChanges, note)
     }
+
     return <section className="note-preview">
         <TitleEditor info={note.info} isEditMode={false} />
 

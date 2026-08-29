@@ -19,10 +19,7 @@ export function TodosEditor({ info, onChangeVal, isEditMode, noteId }) {
                         checked={todo.isDone}
                         id={`${noteId}-${idx}-checkbox`}
                         className="note-todo-checkbox"
-                        onChange={ev => {
-                            todo.isDone = !todo.isDone
-                            onChangeVal({ ...info }, noteId)
-                        }} />
+                        onChange={ev => onChangeVal('isDone', !todo.isDone, idx)} />
 
                     <label
                         htmlFor={`${noteId}-${idx}-checkbox`}
@@ -54,8 +51,7 @@ export function TodosEditor({ info, onChangeVal, isEditMode, noteId }) {
                         placeholder="Enter task..."
                         className="note-todo-txt"
                         onChange={isEditMode ? ev => {
-                            todo.txt = ev.target.value
-                            onChangeVal({ ...info })
+                            onChangeVal('txt', ev.target.value, idx)
                         } : ''} />
 
                     <input
@@ -63,15 +59,12 @@ export function TodosEditor({ info, onChangeVal, isEditMode, noteId }) {
                         checked={todo.isDone}
                         className="note-todo-checkbox"
                         id={`${noteId}-${idx}-checkbox`}
-                        onChange={ev => {
-                            todo.isDone = !todo.isDone
-                            onChangeVal({ ...info })
-                        }} />
+                        onChange={ev => onChangeVal('isDone', !todo.isDone, idx)} />
 
                     <label
                         htmlFor={`${noteId}-${idx}-checkbox`}
                         style={{ display: `${todo.isDone ? 'none' : 'block'}` }}>
-    
+
                         {<i className="fa-regular fa-square"></i>}
                     </label>
 
@@ -86,7 +79,7 @@ export function TodosEditor({ info, onChangeVal, isEditMode, noteId }) {
         </ul>
         <button onClick={ev => {
             todos.push({ txt: '', isDone: false })
-            onChangeVal({ ...info })
+            onChangeVal(onChangeVal(undefined, undefined, -1))
         }}>+</button>
     </div>
 

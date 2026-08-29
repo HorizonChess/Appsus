@@ -1,6 +1,6 @@
 const { useState, useRef, useEffect } = React
 import { colorOptions } from "../data/note-color-options.js"
-
+import { noteService } from "../services/note.service.js"
 import { ColorPicker } from "./ColorPicker.jsx"
 import { TxtEditor } from "./TxtEditor.jsx"
 import { TodosEditor } from "./TodosEditor.jsx"
@@ -10,16 +10,15 @@ import { VideoEditor } from "./VideoEditor.jsx"
 import { AudioEditor } from "./AudioEditor.jsx"
 
 export function NoteEdit({ note, updateNote, onChangeInfo, onChangeStyle, onTogglePinNote, onUpdateNote }) {
-        console.log('note', note)
-
     const [isColorPickerShown, setIsColorPickerShown] = useState(null)
     const [noteEditStyle, setNoteEditStyle] = useState(note.style)
     const [isPinned, setIsPinned] = useState(note.isPinned)
 
     const backdropRef = useRef()
 
-    function handleChange(info, noteId) {
-        onUpdateNote(note, onChangeInfo, info)
+    function handleInfoChange(infoField, value, idx) {
+        const infoChanges = noteService.getInfoChanges(note, infoField, value, idx)
+        onUpdateNote(note, infoChanges)
     }
 
     function handleColorPickerOpen(ev) {
@@ -31,7 +30,6 @@ export function NoteEdit({ note, updateNote, onChangeInfo, onChangeStyle, onTogg
     function handleColorPickerClose() {
         setIsColorPickerShown(false)
         backdropRef.current.style.display = 'none'
-
     }
 
     function handleTogglePinChange() {
@@ -40,19 +38,21 @@ export function NoteEdit({ note, updateNote, onChangeInfo, onChangeStyle, onTogg
     }
 
     function handleColorChange(ev) {
-        setNoteEditStyle({ backgroundColor: ev.target.value })
-        onUpdateNote(note, onChangeStyle,ev.target.value)
+        const styleChanges = noteService.getStyleChanges(note, ev.target.value)
+
+        setNoteEditStyle(styleChanges.style)
+        onUpdateNote(note, styleChanges)
     }
 
     return <section className="note-edit" style={noteEditStyle}>
-        <TitleEditor info={note.info} isEditMode={true} onChangeTitle={handleChange} />
+        <TitleEditor info={note.info} isEditMode={true} onChangeTitle={handleInfoChange} />
 
         <DynamicNoteEdit
             key={`note#${note.id}-editor`}
             cmpType={note.type}
             info={note.info}
             isEditMode={note.type === 'NoteTxt' || note.type === 'NoteTodos'}
-            onChangeVal={handleChange}
+            onChangeVal={handleInfoChange}
             noteId={note.id}
         />
 

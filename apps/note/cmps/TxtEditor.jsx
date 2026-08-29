@@ -14,7 +14,7 @@ export function TxtEditor({ info, onChangeVal, isEditMode }) {
             placeholder="Enter text..."
             className="note-txt"
             value={info.txt}
-            onChange={isEditMode ? ev => onChangeVal({ ...info, txt: ev.target.value }) : ''} />
+            onChange={isEditMode ? ev => onChangeVal('txt', ev.target.value ) : ''} />
     </div>
 
 }
