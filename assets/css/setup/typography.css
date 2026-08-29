@@ -39,3 +39,10 @@
     line-height: 1;
 }
 
+
+/* GOOGLE-SANS */
+@font-face {
+    font-family: google-sans;
+    font-weight: 400;
+    src: url('../../fonts/google-sans/GoogleSans-Regular.ttf');
+}

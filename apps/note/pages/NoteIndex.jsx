@@ -19,12 +19,20 @@ export function NoteIndex() {
     const [searchParams, setSearchParams] = useSearchParams();
     const [filterBy, setFilterBy] = useState(noteService.getFilterFromSearchParams(searchParams))
     const [notes, setNotes] = useState(null)
-
+    console.log('notes',notes)
+    console.log('notes',notes)
     const [editedNote, setEditedNote] = useState(null)
 
     const openNoteId = searchParams.get('noteId')
-    const openNote = notes ? notes.find(note => note.id === openNoteId) : null
+    const openNote = notes ? notes.find(note => {
+       console.log('openNoteId',openNoteId)
+       console.log('note.id',note.id)
+       console.log('note.id === openNoteId',note.id === openNoteId)
+       console.log(' ')
+        return openNoteId && note.id === openNoteId
+    }) : null
 
+    
     var visibleNotes
     // the addNote branch only runs for a mail handed over from MrEmail:
     // the saving to the user. every other visit just loads the list
@@ -53,23 +61,27 @@ export function NoteIndex() {
     function onUpdateNote(noteToUpdate, func, newInfo) {
         // const note = noteToUpdate ? notes.find(note => note.id === noteToUpdate.id) : openNote
 
-        func(noteToUpdate, newInfo)
+        const newNote = func(noteToUpdate, newInfo)
 
-        noteService.save(noteToUpdate)
-        setNotes([...notes])
+        noteService.save(newNote)
+        setNotes(notes.map(n => n.id === noteToUpdate.id ? newNote : n))
     }
 
     function onTogglePinNote(note) {
-        note.isPinned = !note.isPinned
+        return { ...note, isPinned: !note.isPinned }
     }
 
     function onChangeInfo(note, newInfo) {
+        return { ...note, info: newInfo }
         note.info = newInfo
     }
 
     function onChangeStyle(note, backgroundColor) {
         const newStyle = { ...note.style, backgroundColor }
-        note.style = newStyle
+        console.log('newStyle',newStyle)
+        console.log('note',note)
+        return { ...note, style: newStyle }
+
     }
 
     function addNote(draftNote) {
@@ -83,7 +95,6 @@ export function NoteIndex() {
         notes.push(draftNote)
 
         setNotes([...notes])
-        setEditedNote(null)
     }
 
     function removeNote(noteId) {
@@ -112,6 +123,8 @@ export function NoteIndex() {
 
         setNotes([...notes])
 
+        // setNotes(notes.map(n => n.id === noteToUpdate.id ? newNote : n))
+
         noteService.save(duplicatedNote)
             .then(note => {
                 const newNotes = [...notes]
@@ -137,7 +150,6 @@ export function NoteIndex() {
         <NoteList
             notes={notes}
             onTogglePinNote={onTogglePinNote}
-            editedNote={editedNote}
             onRemoveNote={removeNote}
             onChangeStyle={onChangeStyle}
             onOpenModal={onOpenModal}

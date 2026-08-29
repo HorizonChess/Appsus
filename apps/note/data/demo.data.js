@@ -3,7 +3,7 @@ export const demoNotes = [
         createdAt: 1754812800000,
         type: 'NoteTxt',
         isPinned: true,
-        style: { backgroundColor: '#fff475' },
+        style: { backgroundColor: '#ffffffff' },
         info: {
             txt: 'Finish my Keep app today!'
         }
@@ -12,7 +12,7 @@ export const demoNotes = [
         createdAt: 1754726400000,
         type: 'NoteTxt',
         isPinned: false,
-        style: { backgroundColor: '#ccff90' },
+        style: { backgroundColor: '#E6F6D6' },
         info: {
             txt: 'Remember to buy milk, eggs and coffee.'
         }
@@ -21,7 +21,7 @@ export const demoNotes = [
         createdAt: 1754640000000,
         type: 'NoteTodos',
         isPinned: true,
-        style: { backgroundColor: '#ffcc80' },
+        style: { backgroundColor: '#E7A37D' },
         info: {
             title: 'Things to do this week',
             todos: [
@@ -36,7 +36,7 @@ export const demoNotes = [
         createdAt: 1754553600000,
         type: 'NoteImg',
         isPinned: false,
-        style: { backgroundColor: '#f8bbd0' },
+        style: { backgroundColor: '#F3E3DE' },
         info: {
             url: 'https://images.unsplash.com/photo-1507525428034-b723cf961d3e',
             title: 'Summer vacation'
@@ -46,7 +46,7 @@ export const demoNotes = [
         createdAt: 1754467200000,
         type: 'NoteVideo',
         isPinned: true,
-        style: { backgroundColor: '#b3e5fc' },
+        style: { backgroundColor: '#D7E4EC' },
         info: {
             url: 'https://www.w3schools.com/html/mov_bbb.mp4',
             title: 'Funny video'
@@ -56,7 +56,7 @@ export const demoNotes = [
         createdAt: 1754380800000,
         type: 'NoteAudio',
         isPinned: false,
-        style: { backgroundColor: '#d7aefb' },
+        style: { backgroundColor: '#D0C0D9' },
         info: {
             url: 'https://www.w3schools.com/html/horse.mp3',
             title: 'My favorite audio'
@@ -66,7 +66,7 @@ export const demoNotes = [
         createdAt: 1754294400000,
         type: 'NoteTodos',
         isPinned: false,
-        style: { backgroundColor: '#e6ee9c' },
+        style: { backgroundColor: '#FEF8BF' },
         info: {
             title: 'Shopping list',
             todos: [
@@ -82,7 +82,7 @@ export const demoNotes = [
         createdAt: 1754208000000,
         type: 'NoteTxt',
         isPinned: false,
-        style: { backgroundColor: '#ffffff' },
+        style: { backgroundColor: '#EFEFF1' },
         info: {
             txt: 'A good programmer is not someone who knows everything — it is someone who knows how to find the answer.'
         }
@@ -91,7 +91,7 @@ export const demoNotes = [
         createdAt: 1754121600000,
         type: 'NoteVideo',
         isPinned: false,
-        style: { backgroundColor: '#ff8a80' },
+        style: { backgroundColor: '#EFB2AB' },
         info: {
             url: 'https://www.w3schools.com/html/movie.mp4',
             title: 'Weekend video'
@@ -101,7 +101,7 @@ export const demoNotes = [
         createdAt: 1754035200000,
         type: 'NoteAudio',
         isPinned: true,
-        style: { backgroundColor: '#80cbc4' },
+        style: { backgroundColor: '#BCDCD3' },
         info: {
             url: 'https://fileexamples.com/api/download?file=sample_podcast_episode.mp3&type=audio/mpeg',
             title: 'Morning recording'

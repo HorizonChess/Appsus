@@ -9,12 +9,16 @@ export function NoteList({ notes, onUpdateNote, onRemoveNote,
     const [colorPickerId, setColoPickerId] = useState(null)
     const backdropRef = useRef()
 
+    console.log('notes', notes)
     if (!notes) return <section className="notes-container note-layout">
         <div class="loader"></div>
     </section>
-    
+
+
+
     const pinnedNotes = notes.filter(note => note.isPinned)
     const unpinnedNotes = notes.filter(note => !note.isPinned)
+    console.log('hi')
 
     function handleColorChange(ev, note) {
         onUpdateNote(note, onChangeStyle, ev.target.value)
@@ -51,7 +55,7 @@ export function NoteList({ notes, onUpdateNote, onRemoveNote,
 
             <ul className="note-list" >
                 {(pinnedNotes.length > 0) && pinnedNotes.map(note => {
-
+                    console.log('note-list pinned--> note', note)
                     return <li key={note.id}>
                         <article key={note.id} className="note" style={note.style} draggable={true} >
                             <NotePreview
@@ -95,6 +99,7 @@ export function NoteList({ notes, onUpdateNote, onRemoveNote,
 
             <ul className="note-list" >
                 {(unpinnedNotes.length > 0) && unpinnedNotes.map(note => {
+                    console.log('note-list unpinned--> note', note)
 
                     return <li key={note.id}>
                         <article key={note.id} className="note" style={note.style} >
@@ -112,7 +117,11 @@ export function NoteList({ notes, onUpdateNote, onRemoveNote,
                                 <button onClick={() => onDuplicateNote(note)} className="toolbar-btn"><i className="fa-regular fa-clone"></i></button>
                             </div>
 
-                            <ColorPicker isPickerShown={note.id === colorPickerId} pickerKey={`${note.id}-colorpicker`} style={note.style} onChangeStyle={ev => handleColorChange(ev, note.id)} />
+                            <ColorPicker
+                                isPickerShown={note.id === colorPickerId}
+                                pickerKey={`${note.id}-colorpicker`}
+                                style={note.style}
+                                onChangeStyle={ev => handleColorChange(ev, note)} />
 
                             <button onClick={ev => handlePinChange(note)} className="note-pin unpinned">
                                 <i className="fa-solid fa-thumbtack-slash"></i>                            </button>

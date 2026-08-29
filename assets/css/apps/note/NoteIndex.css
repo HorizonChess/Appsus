@@ -1,48 +1,30 @@
  /* note index */
-
- /* HTML: <div class="loader"></div> */
- .loader {
-   width: 50px;
-   aspect-ratio: 1;
-   border-radius: 50%;
-   border: 8px solid;
-   border-color: #000 #0000;
-   animation: l1 1s infinite;
- }
-
- @keyframes l1 {
-   to {
-     transform: rotate(.5turn)
-   }
- }
-
-
+.pretty-button{
+  background-color: var(--bg3);
+}
  .notes-container {
-   padding: 0 ;
-   font-family: roboto;
+   padding: 0;
+   font-family: google-sans;
    position: relative;
-   height:100vh;
-   box-sizing:border-box
+   height: 100vh;
+   box-sizing: border-box
  }
 
- li{
-  padding: 0;
+ li {
+   padding: 0;
  }
 
  /* HTML: <div class="loader"></div> */
 .loader {
-  width: 50px;
-  padding: 8px;
+  margin: auto;
+  width: 15px;
   aspect-ratio: 1;
   border-radius: 50%;
-  background: #25b09b;
-  --_m: 
-    conic-gradient(#0000 10%,#000),
-    linear-gradient(#000 0 0) content-box;
-  -webkit-mask: var(--_m);
-          mask: var(--_m);
-  -webkit-mask-composite: source-out;
-          mask-composite: subtract;
-  animation: l3 1s infinite linear;
+  animation: l5 1s infinite linear alternate;
 }
-@keyframes l3 {to{transform: rotate(1turn)}}
+@keyframes l5 {
+    0%  {box-shadow: 20px 0 #000, -20px 0 #0002;background: #000 }
+    33% {box-shadow: 20px 0 #000, -20px 0 #0002;background: #0002}
+    66% {box-shadow: 20px 0 #0002,-20px 0 #000; background: #0002}
+    100%{box-shadow: 20px 0 #0002,-20px 0 #000; background: #000 }
+}
