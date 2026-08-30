@@ -1,7 +1,6 @@
 
 import { noteService } from "../services/note.service.js"
 import { eventBusService } from "../../../services/event-bus.service.js"
-import { utilService } from "../../../services/util.service.js"
 
 import { NoteList } from "../cmps/NoteList.jsx"
 import { NoteModal } from "../cmps/NoteModal.jsx"
@@ -10,100 +9,16 @@ import { NoteComposer } from "../cmps/NoteComposer.jsx"
 import { NoteFilter } from "../cmps/NoteFilter.jsx"
 
 
-import { useEffectUpdate } from '../custom-hooks/useEffectUpdate.js'
+import { useNotes } from "../custom-hooks/useNotes.js"
 
-const { useState, useRef, useEffect } = React
-const { useSearchParams, useNavigate } = ReactRouterDOM
 
 export function NoteIndex() {
-    const [searchParams, setSearchParams] = useSearchParams();
-    const [filterBy, setFilterBy] = useState(noteService.getFilterFromSearchParams(searchParams))
-    const [notes, setNotes] = useState(null)
-    console.log('notes',notes)
-    console.log('notes',notes)
-    const [editedNote, setEditedNote] = useState(null)
+    const {
+        notes, filterBy, setFilterBy, updateNote,
+        addNote, removeNote, duplicateNote,openNote,
+        openNoteId,togglePinNote, changeInfo, changeStyle,
+    } = useNotes()
 
-    const openNoteId = searchParams.get('noteId')
-    const openNote = notes ? notes.find(note => {
-       console.log('openNoteId',openNoteId)
-       console.log('note.id',note.id)
-       console.log('note.id === openNoteId',note.id === openNoteId)
-       console.log(' ')
-        return openNoteId && note.id === openNoteId
-    }) : null
-
-    
-    var visibleNotes
-    // the addNote branch only runs for a mail handed over from MrEmail:
-    // the saving to the user. every other visit just loads the list
-    useEffect(() => {
-        loadNotes()
-    }, [])
-
-    useEffectUpdate(() => {
-        setSearchParams(utilService.trimObj(filterBy))
-        loadNotes()
-    }, [filterBy])
-
-    useEffectUpdate(() => {
-        setNotes(null)
-    }, [filterBy.type])
-
-    function loadNotes() {
-        noteService.query({ txt: filterBy.txt, type: filterBy.type }).
-            then(notes => {
-
-                visibleNotes = noteService.getFilteredNotes(notes, filterBy)
-                setNotes([...visibleNotes])
-            })
-    }
-
-    function onUpdateNote(noteToUpdate, func, newInfo) {
-        // const note = noteToUpdate ? notes.find(note => note.id === noteToUpdate.id) : openNote
-
-        const newNote = func(noteToUpdate, newInfo)
-
-        noteService.save(newNote)
-        setNotes(notes.map(n => n.id === noteToUpdate.id ? newNote : n))
-    }
-
-    function onTogglePinNote(note) {
-        return { ...note, isPinned: !note.isPinned }
-    }
-
-    function onChangeInfo(note, newInfo) {
-        return { ...note, info: newInfo }
-        note.info = newInfo
-    }
-
-    function onChangeStyle(note, backgroundColor) {
-        const newStyle = { ...note.style, backgroundColor }
-        console.log('newStyle',newStyle)
-        console.log('note',note)
-        return { ...note, style: newStyle }
-
-    }
-
-    function addNote(draftNote) {
-        const noteIdx = notes.length
-        noteService.save(draftNote)
-            .then(note => {
-                notes.splice(noteIdx, 1, note)
-                setNotes([...notes])
-            })
-
-        notes.push(draftNote)
-
-        setNotes([...notes])
-    }
-
-    function removeNote(noteId) {
-        noteService.remove(noteId)
-        const updatedNotes = [...notes]
-        const removedNoteIsx = notes.findIndex(note => note.id === noteId)
-        updatedNotes.splice(removedNoteIsx, 1)
-        setNotes(updatedNotes)
-    }
 
     function onOpenModal(noteId) {
         setFilterBy({ ...filterBy, noteId })
@@ -111,26 +26,6 @@ export function NoteIndex() {
 
     function onCloseModal() {
         setFilterBy({ ...filterBy, noteId: '' })
-
-    }
-
-    function onDuplicateNote(note) {
-        const duplicatedNote = JSON.parse(JSON.stringify(note))
-        const duplicatedNoteIdx = notes.findIndex(note => note.id === duplicatedNote.id)
-
-        duplicatedNote.id = null
-        notes.splice(duplicatedNoteIdx, 0, duplicatedNote)
-
-        setNotes([...notes])
-
-        // setNotes(notes.map(n => n.id === noteToUpdate.id ? newNote : n))
-
-        noteService.save(duplicatedNote)
-            .then(note => {
-                const newNotes = [...notes]
-                newNotes.splice(duplicatedNoteIdx, 1, note)
-                setNotes(newNotes)
-            })
 
     }
 
@@ -149,13 +44,13 @@ export function NoteIndex() {
 
         <NoteList
             notes={notes}
-            onTogglePinNote={onTogglePinNote}
+            onTogglePinNote={togglePinNote}
             onRemoveNote={removeNote}
-            onChangeStyle={onChangeStyle}
+            onChangeStyle={changeStyle}
             onOpenModal={onOpenModal}
-            onChangeInfo={onChangeInfo}
-            onDuplicateNote={onDuplicateNote}
-            onUpdateNote={onUpdateNote}
+            onChangeInfo={changeInfo}
+            onDuplicateNote={duplicateNote}
+            onUpdateNote={updateNote}
         />
 
 
@@ -168,10 +63,10 @@ export function NoteIndex() {
 
                 <NoteEdit
                     note={openNote}
-                    onUpdateNote={onUpdateNote}
-                    onChangeInfo={onChangeInfo}
-                    onChangeStyle={onChangeStyle}
-                    onTogglePinNote={onTogglePinNote} />
+                    onUpdateNote={updateNote}
+                    onChangeInfo={changeInfo}
+                    onChangeStyle={changeStyle}
+                    onTogglePinNote={togglePinNote} />
                 :
                 <span></span>}
         </NoteModal>
