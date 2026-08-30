@@ -10,7 +10,7 @@ const { useState, useRef, useContext, createContext } = React
 export function NoteList({ notes, onRemoveNote, onOpenModal, onDuplicateNote }) {
     const [colorPickerId, setColoPickerId] = useState(null)
     const backdropRef = useRef()
-    const onUpdateNote = useContext(NoteFuncContext)
+    const {updateNote:onUpdateNote} = useContext(NoteFuncContext)
 
     if (!notes) return <section className="notes-container note-layout">
         <div class="loader"></div>

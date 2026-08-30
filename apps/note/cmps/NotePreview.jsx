@@ -12,7 +12,7 @@ import { NoteContext } from "../custom-hooks/note.context.js"
 const { useContext } = React
 
 export function NotePreview({ updateNote, onChangeInfo }) {
-    const onUpdateNote = useContext(NoteFuncContext)
+    const { updateNote: onUpdateNote } = useContext(NoteFuncContext)
     const note = useContext(NoteContext)
 
     function handleChange(infoField, value, todoIdx) {

@@ -1,5 +1,6 @@
-const { useState, useRef, useEffect } = React
-import { colorOptions } from "../data/note-color-options.js"
+const { useState, useRef, useEffect, useContext } = React
+
+import { NoteFuncContext } from "../custom-hooks/note-func.context.js"
 import { noteService } from "../services/note.service.js"
 import { ColorPicker } from "./ColorPicker.jsx"
 import { TxtEditor } from "./TxtEditor.jsx"
@@ -9,7 +10,9 @@ import { ImgEditor } from "./ImgEditor.jsx"
 import { VideoEditor } from "./VideoEditor.jsx"
 import { AudioEditor } from "./AudioEditor.jsx"
 
-export function NoteEdit({ note, onTogglePinNote, onUpdateNote }) {
+export function NoteEdit({ note, onTogglePinNote }) {
+    const { updateNote: onUpdateNote } = useContext(NoteFuncContext)
+
     const [isColorPickerShown, setIsColorPickerShown] = useState(null)
     const [noteEditStyle, setNoteEditStyle] = useState(note.style)
     const [isPinned, setIsPinned] = useState(note.isPinned)

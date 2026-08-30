@@ -1,13 +1,16 @@
 import { eventBusService } from "../../../services/event-bus.service.js"
+import { noteService } from "../services/note.service.js"
 
-const { useState, useEffect, useRef } = React
+const { useState, useEffect, useRef, useContext } = React
+import { NoteFuncContext } from "../custom-hooks/note-func.context.js"
 import { AudioEditor } from "./AudioEditor.jsx"
 import { TxtEditor } from "./TxtEditor.jsx"
 import { TodosEditor } from "./TodosEditor.jsx"
 import { TitleEditor } from "./TitleEditor.jsx"
 import { ImgEditor } from "./ImgEditor.jsx"
 
-export function NoteComposer({ note, addNote }) {
+export function NoteComposer({ note }) {
+    const { addNote } = useContext(NoteFuncContext)
     const [isPinned, setIsPinned] = useState(false)
     const [draftNote, setDraftNote] = useState({ ...note, type: '' })
     const composerRef = useRef()
@@ -20,14 +23,16 @@ export function NoteComposer({ note, addNote }) {
         })
     }, [])
 
-    function handleChange(newInfo) {
-        setDraftNote(prev => ({ ...prev, info: newInfo }))
+    function handleChange(infoField, value, todoIdx) {
+        const infoChanges = noteService.getInfoChanges(draftNote, infoField, value, todoIdx)
+
+        setDraftNote(prev => ({ ...prev, ...infoChanges}))
     }
 
     function onChangeDraftType(type, ev) {
         if (type === 'NoteTodos') {
             setDraftNote(prev => ({ ...prev, type, info: { title: '', todos: [] } }))
-        
+
         } else if ((type) === 'NoteImg') {
             const reader = new FileReader()
             reader.readAsDataURL(ev.target.files[0])
@@ -51,6 +56,7 @@ export function NoteComposer({ note, addNote }) {
     }
 
     function onSubmit() {
+        console.log('draftNote', draftNote)
         addNote(draftNote)
         setDraftNote({ ...note, type: '' })
         setIsPinned(false)
