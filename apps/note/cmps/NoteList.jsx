@@ -2,12 +2,15 @@ import { eventBusService } from "../../../services/event-bus.service.js"
 import { noteService } from "../services/note.service.js"
 import { NotePreview } from "./NotePreview.jsx"
 import { ColorPicker } from "./ColorPicker.jsx"
-const { useState, useRef } = React
+import { NoteFuncContext } from '../custom-hooks/note-func.context.js'
+import { NoteContext } from "../custom-hooks/note.context.js"
 
-export function NoteList({ notes, onUpdateNote, onRemoveNote,
-    onChangeStyle, onOpenModal, onChangeInfo, onTogglePinNote, onDuplicateNote }) {
+const { useState, useRef, useContext, createContext } = React
+
+export function NoteList({ notes, onRemoveNote, onOpenModal, onDuplicateNote }) {
     const [colorPickerId, setColoPickerId] = useState(null)
     const backdropRef = useRef()
+    const onUpdateNote = useContext(NoteFuncContext)
 
     if (!notes) return <section className="notes-container note-layout">
         <div class="loader"></div>
@@ -22,12 +25,10 @@ export function NoteList({ notes, onUpdateNote, onRemoveNote,
         onUpdateNote(note, styleChanges)
     }
 
-    function handleInfoChange(infoChanges,note) {
-        onUpdateNote(note, infoChanges)
-    }
-
     function handlePinChange(note) {
-        onUpdateNote(note, onTogglePinNote)
+        const togglePinChanges = noteService.getTogglePinChanges(note)
+
+        onUpdateNote(note, togglePinChanges)
     }
 
     function handleColorPickerOpen(ev, colorPickerId) {
@@ -43,8 +44,6 @@ export function NoteList({ notes, onUpdateNote, onRemoveNote,
 
     }
 
-
-
     return <section className="notes">
 
         <section className="pinned-notes">
@@ -53,33 +52,33 @@ export function NoteList({ notes, onUpdateNote, onRemoveNote,
             <ul className="note-list" >
                 {(pinnedNotes.length > 0) && pinnedNotes.map(note => {
                     return <li key={note.id}>
-                        <article key={note.id} className="note" style={note.style} draggable={true} >
-                            <NotePreview
-                                note={note}
-                                onChangeInfo={handleInfoChange} />
+                        <NoteContext.Provider value={note}>
+                            <article key={note.id} className="note" style={note.style} draggable={true} >
 
-                            <button
-                                className="remove-note-btn"
-                                onClick={() => onRemoveNote(note.id)}><i className="fa-solid fa-circle-xmark"></i></button>
+                                <NotePreview note={note} />
 
-                            <div className='note-toolbar'>
-                                <button onClick={ev => handleColorPickerOpen(ev, note.id)} className="toolbar-btn"><i className="fa-solid fa-palette"></i></button>
-                                <button onClick={ev => onOpenModal(note.id)} className="toolbar-btn" id='open-edit'><i className="fa-solid fa-pencil"></i></button>
-                                <button onClick={ev => onDuplicateNote(note)} className="toolbar-btn"><i className="fa-regular fa-clone"></i></button>
-                            </div>
+                                <button
+                                    className="remove-note-btn"
+                                    onClick={() => onRemoveNote(note.id)}><i className="fa-solid fa-circle-xmark"></i></button>
 
-                            <ColorPicker
-                                isPickerShown={colorPickerId && note.id === colorPickerId}
-                                key={`${note.id}-colorpicker`}
-                                style={note.style}
-                                onChangeStyle={ev => handleColorChange(ev, note)} />
+                                <div className='note-toolbar'>
+                                    <button onClick={ev => handleColorPickerOpen(ev, note.id)} className="toolbar-btn"><i className="fa-solid fa-palette"></i></button>
+                                    <button onClick={ev => onOpenModal(note.id)} className="toolbar-btn" id='open-edit'><i className="fa-solid fa-pencil"></i></button>
+                                    <button onClick={ev => onDuplicateNote(note)} className="toolbar-btn"><i className="fa-regular fa-clone"></i></button>
+                                </div>
 
-                            <button onClick={ev => handlePinChange(note)} className="note-pin pinned">
-                                <i className="fa-solid fa-thumbtack"></i>
-                            </button>
+                                <ColorPicker
+                                    isPickerShown={colorPickerId && note.id === colorPickerId}
+                                    key={`${note.id}-colorpicker`}
+                                    style={note.style}
+                                    onChangeStyle={ev => handleColorChange(ev, note)} />
 
-                        </article>
+                                <button onClick={ev => handlePinChange(note)} className="note-pin pinned">
+                                    <i className="fa-solid fa-thumbtack"></i>
+                                </button>
 
+                            </article>
+                        </NoteContext.Provider>
                     </li>
 
                 })}
@@ -97,10 +96,11 @@ export function NoteList({ notes, onUpdateNote, onRemoveNote,
                 {(unpinnedNotes.length > 0) && unpinnedNotes.map(note => {
 
                     return <li key={note.id}>
+                        <NoteContext.Provider value={note}>
                         <article key={note.id} className="note" style={note.style} >
+
                             <NotePreview
-                                note={note}
-                                onChangeInfo={handleInfoChange} />
+                                note={note} />
 
                             <button
                                 className="remove-note-btn"
@@ -121,15 +121,15 @@ export function NoteList({ notes, onUpdateNote, onRemoveNote,
                             <button onClick={ev => handlePinChange(note)} className="note-pin unpinned">
                                 <i className="fa-solid fa-thumbtack-slash"></i>                            </button>
                         </article>
+                    </NoteContext.Provider>
 
                     </li>
 
                 })}
-                <div className="color-picker-backdrop" onClick={handleColorPickerClose} ref={backdropRef}></div>
-                {(unpinnedNotes.length === 0) && <div><p>No matching notes...</p></div>}
-            </ul>
-        </section>
-
+            <div className="color-picker-backdrop" onClick={handleColorPickerClose} ref={backdropRef}></div>
+            {(unpinnedNotes.length === 0) && <div><p>No matching notes...</p></div>}
+        </ul>
     </section>
 
+    </section >
 }

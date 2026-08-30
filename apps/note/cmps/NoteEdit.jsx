@@ -9,7 +9,7 @@ import { ImgEditor } from "./ImgEditor.jsx"
 import { VideoEditor } from "./VideoEditor.jsx"
 import { AudioEditor } from "./AudioEditor.jsx"
 
-export function NoteEdit({ note, updateNote, onChangeInfo, onChangeStyle, onTogglePinNote, onUpdateNote }) {
+export function NoteEdit({ note, onTogglePinNote, onUpdateNote }) {
     const [isColorPickerShown, setIsColorPickerShown] = useState(null)
     const [noteEditStyle, setNoteEditStyle] = useState(note.style)
     const [isPinned, setIsPinned] = useState(note.isPinned)
@@ -34,7 +34,7 @@ export function NoteEdit({ note, updateNote, onChangeInfo, onChangeStyle, onTogg
 
     function handleTogglePinChange() {
         setIsPinned(!isPinned)
-        onUpdateNote(note, onTogglePinNote)
+        onUpdateNote(note, onTogglePinNote(note))
     }
 
     function handleColorChange(ev) {

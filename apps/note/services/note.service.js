@@ -18,7 +18,8 @@ export const noteService = {
     getFilteredNotes,
     getStyleChanges,
     getInfoChanges,
-    getTodoChanges
+    getTodoChanges,
+    getTogglePinChanges
 
 }
 
@@ -165,7 +166,7 @@ function getInfoChanges(note, infoField, value, todoIdx) {
     } else if (!todoIdx && typeof (todoIdx) === 'number') {
         newTodos = [...todos]
         newTodos.push({ txt: '', isDone: false })
-        
+
         newInfo = { ...note.info, todos: newTodos }
     } else {
         newInfo = { ...note.info, [infoField]: value }
@@ -185,4 +186,9 @@ function getTodoChanges(note) {
 
     }
     newInfo = { ...note.info, todos: newTodos }
+}
+
+
+function getTogglePinChanges(note) {
+    return { isPinned: !note.isPinned }
 }

@@ -9,10 +9,10 @@ import { NoteEdit } from "../cmps/NoteEdit.jsx"
 import { NoteComposer } from "../cmps/NoteComposer.jsx"
 import { NoteFilter } from "../cmps/NoteFilter.jsx"
 
-
 import { useEffectUpdate } from '../custom-hooks/useEffectUpdate.js'
+import { NoteFuncContext } from  '../custom-hooks/note-func.context.js'
 
-const { useState, useRef, useEffect } = React
+const { useState, useRef, useEffect, createContext } = React
 const { useSearchParams, useNavigate } = ReactRouterDOM
 
 export function NoteIndex() {
@@ -51,16 +51,6 @@ export function NoteIndex() {
                 setNotes([...visibleNotes])
             })
     }
-
-    // function onUpdateNote(noteToUpdate, func, newInfo) {
-    //     // const note = noteToUpdate ? notes.find(note => note.id === noteToUpdate.id) : openNote
-
-    //     const newNote = func(noteToUpdate, newInfo)
-
-    //     noteService.save(newNote)
-    //     setNotes(notes.map(n => n.id === noteToUpdate.id ? newNote : n))
-    // }
-
 
     function onUpdateNote(noteToUpdate, changes) {
         const note = noteToUpdate ? notes.find(note => note.id === noteToUpdate.id) : openNote
@@ -144,47 +134,46 @@ export function NoteIndex() {
     }
 
     return <section className="notes-container note-layout" onClick={ev => eventBusService.emit('click', ev)}>
+        <NoteFuncContext.Provider value={ onUpdateNote }>
 
-        <NoteFilter
-            filterBy={filterBy}
-            onSetFilterBy={setFilterBy}
-            onClearFilter={''} />
-
-
-        <NoteComposer
-            note={noteService.getEmptyNote()}
-            addNote={addNote}
-        />
-
-        <NoteList
-            notes={notes}
-            onTogglePinNote={onTogglePinNote}
-            onRemoveNote={removeNote}
-            onChangeStyle={onChangeStyle}
-            onOpenModal={onOpenModal}
-            onChangeInfo={onChangeInfo}
-            onDuplicateNote={onDuplicateNote}
-            onUpdateNote={onUpdateNote}
-        />
+            <NoteFilter
+                filterBy={filterBy}
+                onSetFilterBy={setFilterBy}
+                onClearFilter={''} />
 
 
-        <NoteModal
-            isShown={openNote}
-            onClose={onCloseModal}
-            style={openNoteId && openNoteId.style}
-        >
-            {openNote ?
+            <NoteComposer
+                note={noteService.getEmptyNote()}
+                addNote={addNote}
+            />
 
-                <NoteEdit
-                    note={openNote}
-                    onUpdateNote={onUpdateNote}
-                    onChangeInfo={onChangeInfo}
-                    onChangeStyle={onChangeStyle}
-                    onTogglePinNote={onTogglePinNote} />
-                :
-                <span></span>}
-        </NoteModal>
+            <NoteList
+                notes={notes}
+                onTogglePinNote={onTogglePinNote}
+                onRemoveNote={removeNote}
+                onChangeStyle={onChangeStyle}
+                onOpenModal={onOpenModal}
+                onDuplicateNote={onDuplicateNote}
+            />
 
 
+            <NoteModal
+                isShown={openNote}
+                onClose={onCloseModal}
+                style={openNoteId && openNoteId.style}
+            >
+                {openNote ?
+
+                    <NoteEdit
+                        note={openNote}
+                        onUpdateNote={onUpdateNote}
+                        onChangeInfo={onChangeInfo}
+                        onChangeStyle={onChangeStyle}
+                        onTogglePinNote={onTogglePinNote} />
+                    :
+                    <span></span>}
+            </NoteModal>
+
+        </NoteFuncContext.Provider>
     </section>
 }

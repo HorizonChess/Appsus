@@ -6,13 +6,19 @@ import { TitleEditor } from "./TitleEditor.jsx"
 import { ImgEditor } from "./ImgEditor.jsx"
 import { VideoEditor } from "./VideoEditor.jsx"
 import { AudioEditor } from "./AudioEditor.jsx"
+import { NoteFuncContext } from "../custom-hooks/note-func.context.js"
+import { NoteContext } from "../custom-hooks/note.context.js"
 
-export function NotePreview({ note, updateNote, onChangeInfo }) {
+const { useContext } = React
+
+export function NotePreview({ updateNote, onChangeInfo }) {
+    const onUpdateNote = useContext(NoteFuncContext)
+    const note = useContext(NoteContext)
 
     function handleChange(infoField, value, todoIdx) {
         const infoChanges = noteService.getInfoChanges(note, infoField, value, todoIdx)
 
-        onChangeInfo(infoChanges, note)
+        onUpdateNote(note, infoChanges)
     }
 
     return <section className="note-preview">
@@ -28,8 +34,6 @@ export function NotePreview({ note, updateNote, onChangeInfo }) {
         />
 
     </section>
-
-
 }
 
 function DynamicPreview(props) {
