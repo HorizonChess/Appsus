@@ -36,13 +36,20 @@ export function useNotes() {
     }
 
 
-    function updateNote(noteToUpdate, func, newInfo) {
-        // const note = noteToUpdate ? notes.find(note => note.id === noteToUpdate.id) : openNote
+    function updateNote(noteToUpdate, changes) {
+        const note = noteToUpdate ? notes.find(note => note.id === noteToUpdate.id) : openNote
 
-        const newNote = func(noteToUpdate, newInfo)
+        const prevNotes = notes
+        const updatedNote = { ...note, ...changes }
 
-        noteService.save(newNote)
-        setNotes(notes.map(n => n.id === noteToUpdate.id ? newNote : n))
+        setNotes(notes.map(note => note.id === noteToUpdate.id ? updatedNote : note))
+
+        noteService.save(updatedNote)
+            .catch(err => {
+                console.log('Had issues saving note', err)
+                setNotes(prevNotes)
+                showErrorMsg('Could not save note')
+            })
     }
 
     function togglePinNote(note) {

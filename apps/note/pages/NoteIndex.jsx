@@ -9,13 +9,13 @@ import { NoteComposer } from "../cmps/NoteComposer.jsx"
 import { NoteFilter } from "../cmps/NoteFilter.jsx"
 
 import { useNotes } from "../custom-hooks/useNotes.js"
-
+import { NoteFuncContext } from "../custom-hooks/note-func.context.js"
 
 export function NoteIndex() {
     const {
         notes, filterBy, setFilterBy, updateNote,
-        addNote, removeNote, duplicateNote,openNote,
-        openNoteId,togglePinNote, changeInfo, changeStyle,
+        addNote, removeNote, duplicateNote, openNote,
+        openNoteId, togglePinNote, changeInfo, changeStyle,
     } = useNotes()
 
 
@@ -29,7 +29,7 @@ export function NoteIndex() {
     }
 
     return <section className="notes-container note-layout" onClick={ev => eventBusService.emit('click', ev)}>
-        <NoteFuncContext.Provider value={ onUpdateNote }>
+        <NoteFuncContext.Provider value={updateNote}>
 
             <NoteFilter
                 filterBy={filterBy}
@@ -42,16 +42,16 @@ export function NoteIndex() {
                 addNote={addNote}
             />
 
-        <NoteList
-            notes={notes}
-            onTogglePinNote={togglePinNote}
-            onRemoveNote={removeNote}
-            onChangeStyle={changeStyle}
-            onOpenModal={onOpenModal}
-            onChangeInfo={changeInfo}
-            onDuplicateNote={duplicateNote}
-            onUpdateNote={updateNote}
-        />
+            <NoteList
+                notes={notes}
+                onTogglePinNote={togglePinNote}
+                onRemoveNote={removeNote}
+                onChangeStyle={changeStyle}
+                onOpenModal={onOpenModal}
+                onChangeInfo={changeInfo}
+                onDuplicateNote={duplicateNote}
+                onUpdateNote={updateNote}
+            />
 
 
             <NoteModal
@@ -61,15 +61,15 @@ export function NoteIndex() {
             >
                 {openNote ?
 
-                <NoteEdit
-                    note={openNote}
-                    onUpdateNote={updateNote}
-                    onChangeInfo={changeInfo}
-                    onChangeStyle={changeStyle}
-                    onTogglePinNote={togglePinNote} />
-                :
-                <span></span>}
-        </NoteModal>
+                    <NoteEdit
+                        note={openNote}
+                        onUpdateNote={updateNote}
+                        onChangeInfo={changeInfo}
+                        onChangeStyle={changeStyle}
+                        onTogglePinNote={togglePinNote} />
+                    :
+                    <span></span>}
+            </NoteModal>
 
         </NoteFuncContext.Provider>
     </section>
