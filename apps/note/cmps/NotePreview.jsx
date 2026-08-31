@@ -11,7 +11,7 @@ import { NoteContext } from "../custom-hooks/note.context.js"
 
 const { useContext } = React
 
-export function NotePreview({ updateNote, onChangeInfo }) {
+export function NotePreview() {
     const { updateNote: onUpdateNote } = useContext(NoteFuncContext)
     const note = useContext(NoteContext)
 

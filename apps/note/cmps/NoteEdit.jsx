@@ -1,4 +1,4 @@
-const { useState, useRef, useEffect, useContext } = React
+const { useState, useRef, useContext } = React
 
 import { NoteFuncContext } from "../custom-hooks/note-func.context.js"
 import { noteService } from "../services/note.service.js"
@@ -10,7 +10,7 @@ import { ImgEditor } from "./ImgEditor.jsx"
 import { VideoEditor } from "./VideoEditor.jsx"
 import { AudioEditor } from "./AudioEditor.jsx"
 
-export function NoteEdit({ note, onTogglePinNote }) {
+export function NoteEdit({ note }) {
     const { updateNote: onUpdateNote } = useContext(NoteFuncContext)
 
     const [isColorPickerShown, setIsColorPickerShown] = useState(null)
@@ -35,9 +35,11 @@ export function NoteEdit({ note, onTogglePinNote }) {
         backdropRef.current.style.display = 'none'
     }
 
-    function handleTogglePinChange() {
+    function handleTogglePinChange(note) {
+        console.log('note',note)
+        const togglePinChanges = noteService.getTogglePinChanges(note)
+        onUpdateNote(note, togglePinChanges)
         setIsPinned(!isPinned)
-        onUpdateNote(note, onTogglePinNote(note))
     }
 
     function handleColorChange(ev) {
@@ -66,11 +68,11 @@ export function NoteEdit({ note, onTogglePinNote }) {
         <ColorPicker isPickerShown={isColorPickerShown} key={`${note.id}-colorpicker`} style={note.style} onChangeStyle={handleColorChange} />
 
 
-        {isPinned && <button onClick={handleTogglePinChange} className="note-pin pinned">
+        {isPinned && <button onClick={()=>handleTogglePinChange(note)} className="note-pin pinned">
             <i className="fa-solid fa-thumbtack"></i>
 
         </button>}
-        {!isPinned && <button onClick={handleTogglePinChange} className="note-pin pinned">
+        {!isPinned && <button onClick={()=>handleTogglePinChange(note)} className="note-pin pinned">
             <i className="fa-solid fa-thumbtack-slash"></i>
 
         </button>}

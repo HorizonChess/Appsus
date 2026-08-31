@@ -5,12 +5,16 @@ import { ColorPicker } from "./ColorPicker.jsx"
 import { NoteFuncContext } from '../custom-hooks/note-func.context.js'
 import { NoteContext } from "../custom-hooks/note.context.js"
 
-const { useState, useRef, useContext, createContext } = React
+const { useState, useRef, useContext } = React
 
-export function NoteList({ notes, onRemoveNote, onOpenModal, onDuplicateNote }) {
+export function NoteList({ notes, onOpenModal }) {
+    const {
+        updateNote: onUpdateNote,
+        removeNote: onRemoveNote,
+        duplicateNote: onDuplicateNote } = useContext(NoteFuncContext)
+
     const [colorPickerId, setColoPickerId] = useState(null)
     const backdropRef = useRef()
-    const {updateNote:onUpdateNote} = useContext(NoteFuncContext)
 
     if (!notes) return <section className="notes-container note-layout">
         <div class="loader"></div>
@@ -41,7 +45,6 @@ export function NoteList({ notes, onRemoveNote, onOpenModal, onDuplicateNote }) 
     function handleColorPickerClose() {
         setColoPickerId(null)
         backdropRef.current.style.display = 'none'
-
     }
 
     return <section className="notes">
@@ -55,7 +58,7 @@ export function NoteList({ notes, onRemoveNote, onOpenModal, onDuplicateNote }) 
                         <NoteContext.Provider value={note}>
                             <article key={note.id} className="note" style={note.style} draggable={true} >
 
-                                <NotePreview note={note} />
+                                <NotePreview />
 
                                 <button
                                     className="remove-note-btn"
@@ -97,39 +100,39 @@ export function NoteList({ notes, onRemoveNote, onOpenModal, onDuplicateNote }) 
 
                     return <li key={note.id}>
                         <NoteContext.Provider value={note}>
-                        <article key={note.id} className="note" style={note.style} >
+                            <article key={note.id} className="note" style={note.style} >
 
-                            <NotePreview
-                                note={note} />
+                                <NotePreview
+                                    note={note} />
 
-                            <button
-                                className="remove-note-btn"
-                                onClick={() => onRemoveNote(note.id)}><i className="fa-solid fa-circle-xmark"></i></button>
+                                <button
+                                    className="remove-note-btn"
+                                    onClick={() => onRemoveNote(note.id)}><i className="fa-solid fa-circle-xmark"></i></button>
 
-                            <div className='note-toolbar'>
-                                <button onClick={ev => handleColorPickerOpen(ev, note.id)} className="toolbar-btn"><i className="fa-solid fa-palette"></i></button>
-                                <button onClick={() => onOpenModal(note.id)} className="toolbar-btn"><i className="fa-solid fa-pencil"></i></button>
-                                <button onClick={() => onDuplicateNote(note)} className="toolbar-btn"><i className="fa-regular fa-clone"></i></button>
-                            </div>
+                                <div className='note-toolbar'>
+                                    <button onClick={ev => handleColorPickerOpen(ev, note.id)} className="toolbar-btn"><i className="fa-solid fa-palette"></i></button>
+                                    <button onClick={() => onOpenModal(note.id)} className="toolbar-btn"><i className="fa-solid fa-pencil"></i></button>
+                                    <button onClick={() => onDuplicateNote(note)} className="toolbar-btn"><i className="fa-regular fa-clone"></i></button>
+                                </div>
 
-                            <ColorPicker
-                                isPickerShown={note.id === colorPickerId}
-                                pickerKey={`${note.id}-colorpicker`}
-                                style={note.style}
-                                onChangeStyle={ev => handleColorChange(ev, note)} />
+                                <ColorPicker
+                                    isPickerShown={note.id === colorPickerId}
+                                    pickerKey={`${note.id}-colorpicker`}
+                                    style={note.style}
+                                    onChangeStyle={ev => handleColorChange(ev, note)} />
 
-                            <button onClick={ev => handlePinChange(note)} className="note-pin unpinned">
-                                <i className="fa-solid fa-thumbtack-slash"></i>                            </button>
-                        </article>
-                    </NoteContext.Provider>
+                                <button onClick={ev => handlePinChange(note)} className="note-pin unpinned">
+                                    <i className="fa-solid fa-thumbtack-slash"></i>                            </button>
+                            </article>
+                        </NoteContext.Provider>
 
                     </li>
 
                 })}
-            <div className="color-picker-backdrop" onClick={handleColorPickerClose} ref={backdropRef}></div>
-            {(unpinnedNotes.length === 0) && <div><p>No matching notes...</p></div>}
-        </ul>
-    </section>
+                <div className="color-picker-backdrop" onClick={handleColorPickerClose} ref={backdropRef}></div>
+                {(unpinnedNotes.length === 0) && <div><p>No matching notes...</p></div>}
+            </ul>
+        </section>
 
     </section >
 }

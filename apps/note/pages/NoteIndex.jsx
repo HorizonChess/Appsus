@@ -15,7 +15,7 @@ export function NoteIndex() {
     const {
         notes, filterBy, setFilterBy, updateNote,
         addNote, removeNote, duplicateNote, openNote,
-        openNoteId, togglePinNote,
+        openNoteId,
     } = useNotes()
 
 
@@ -29,7 +29,7 @@ export function NoteIndex() {
     }
 
     return <section className="notes-container note-layout" onClick={ev => eventBusService.emit('click', ev)}>
-        <NoteFuncContext.Provider value={{updateNote,addNote}}>
+        <NoteFuncContext.Provider value={{ updateNote, addNote, removeNote, duplicateNote }}>
             <NoteFilter
                 filterBy={filterBy}
                 onSetFilterBy={setFilterBy}
@@ -43,10 +43,7 @@ export function NoteIndex() {
 
             <NoteList
                 notes={notes}
-                onTogglePinNote={togglePinNote}
-                onRemoveNote={removeNote}
                 onOpenModal={onOpenModal}
-                onDuplicateNote={duplicateNote}
             />
 
 
@@ -55,13 +52,7 @@ export function NoteIndex() {
                 onClose={onCloseModal}
                 style={openNoteId && openNoteId.style}
             >
-                {openNote ?
-
-                    <NoteEdit
-                        note={openNote}
-                        onTogglePinNote={togglePinNote} />
-                    :
-                    <span></span>}
+                {openNote ? <NoteEdit note={openNote} /> : <span></span>}
             </NoteModal>
         </NoteFuncContext.Provider>
     </section>

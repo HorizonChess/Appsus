@@ -56,7 +56,6 @@ export function NoteComposer({ note }) {
     }
 
     function onSubmit() {
-        console.log('draftNote', draftNote)
         addNote(draftNote)
         setDraftNote({ ...note, type: '' })
         setIsPinned(false)
