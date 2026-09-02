@@ -1,5 +1,5 @@
 export function TitleEditor({ info, onChangeTitle, isEditMode }) {
-
+    
     if (!isEditMode) return <input
         type="text"
         contentEditable={false}

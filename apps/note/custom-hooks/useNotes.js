@@ -1,6 +1,7 @@
 import { utilService } from "../../../services/util.service.js"
 import { noteService } from "../services/note.service.js"
-import {useEffectUpdate} from '/useEffectUpdate.js'
+import { showSuccessMsg } from "../../../services/event-bus.service.js"
+import { useEffectUpdate } from '/useEffectUpdate.js'
 const { useState, useRef, useEffect } = React
 const { useSearchParams, useNavigate } = ReactRouterDOM
 
@@ -8,7 +9,7 @@ export function useNotes() {
     const [searchParams, setSearchParams] = useSearchParams();
     const [filterBy, setFilterBy] = useState(noteService.getFilterFromSearchParams(searchParams))
     const [notes, setNotes] = useState(null)
-    
+
     const openNoteId = searchParams.get('noteId')
     const openNote = notes ? notes.find(note => {
         return openNoteId && note.id === openNoteId
@@ -48,7 +49,7 @@ export function useNotes() {
             .catch(err => {
                 console.log('Had issues saving note', err)
                 setNotes(prevNotes)
-                showErrorMsg('Could not save note')
+                eventBusService.showErrorMsg('Had issues saving note')
             })
     }
 
@@ -63,10 +64,8 @@ export function useNotes() {
 
     function changeStyle(note, backgroundColor) {
         const newStyle = { ...note.style, backgroundColor }
-        console.log('newStyle', newStyle)
-        console.log('note', note)
-        return { ...note, style: newStyle }
 
+        return { ...note, style: newStyle }
     }
 
     function addNote(draftNote) {
@@ -84,6 +83,8 @@ export function useNotes() {
 
     function removeNote(noteId) {
         noteService.remove(noteId)
+            .then(noteId => showSuccessMsg(`Note ${noteId} was successfully removed`))
+
         const updatedNotes = [...notes]
         const removedNoteIsx = notes.findIndex(note => note.id === noteId)
         updatedNotes.splice(removedNoteIsx, 1)

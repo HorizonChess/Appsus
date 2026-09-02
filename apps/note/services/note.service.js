@@ -48,8 +48,9 @@ function save(note) {
 
 function remove(noteId) {
     return storageService.remove(NOTES_KEY, noteId)
-        .then(() => console.log(`Note ${noteId} was successfully remove`))
-        .catch(() => console.log(`Note ${noteId} does not exist`))
+        .then(()=>noteId)
+        // .then(() => console.log(`Note ${noteId} was successfully remove`))
+        // .catch(() => console.log(`Note ${noteId} does not exist`))
 }
 
 function _createNotes() {
