@@ -1,16 +1,84 @@
 .app-header {
+    position: relative;
+    z-index: 10;
     display: flex;
+    flex-wrap: wrap;
+    align-items: center;
     justify-content: space-between;
-    padding: 1em;
-    background: var(--bg1);
+    gap: .5rem 1.5rem;
+    padding: .625rem clamp(1rem, 3vw, 2rem);
+    background: rgb(255, 255, 255);
+    border-block-end: 1px solid rgb(218, 220, 224);
+    box-shadow: 0 1px 2px rgba(60, 64, 67, .08);
+    font-family: google-sans, Roboto, Helvetica, Arial, sans-serif;
 }
 
-nav a {
-    margin: .5em;
+.app-logo {
+    display: flex;
+    align-items: center;
+    gap: .625rem;
+    border-radius: .75rem;
 }
 
-nav a.active {
-    color: var(--color1);
-    font-weight: bold;
-    text-decoration: overline;
+.app-logo .logo-mark {
+    inline-size: 2rem;
+    block-size: 2rem;
+    transition: transform .3s ease;
+}
+
+.app-logo:hover .logo-mark {
+    transform: rotate(90deg);
+}
+
+.logo-word {
+    font-size: 1.5rem;
+    letter-spacing: -.01em;
+    color: rgb(60, 64, 67);
+}
+
+.logo-word-accent {
+    color: rgb(26, 115, 232);
+}
+
+.app-nav {
+    display: flex;
+    /* google-sans only ships a regular cut, so the bolder active link uses roboto */
+    font-family: roboto, Helvetica, Arial, sans-serif;
+    flex-wrap: wrap;
+    gap: .25rem;
+}
+
+.app-nav a {
+    padding: .5rem 1rem;
+    border-radius: 999px;
+    font-size: .9375rem;
+    color: rgb(60, 64, 67);
+    transition: background-color .15s, color .15s;
+}
+
+.app-nav a:hover {
+    background-color: rgb(241, 243, 244);
+}
+
+.app-nav a.active {
+    background-color: rgb(211, 227, 253);
+    color: rgb(4, 30, 73);
+    font-weight: 500;
+}
+
+.app-logo:focus-visible,
+.app-nav a:focus-visible {
+    outline: 2px solid rgb(26, 115, 232);
+    outline-offset: 2px;
+}
+
+/* phones: logo on top, the links in one centred row underneath */
+@media (max-width: 560px) {
+    .app-header {
+        justify-content: center;
+    }
+
+    .app-nav a {
+        padding: .375rem .75rem;
+    }
 }
