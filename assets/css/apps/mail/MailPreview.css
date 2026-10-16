@@ -96,6 +96,17 @@
     font-weight: var(--mail-fw-read);
 }
 
+/* in css rather than the text, so a phone - where the snippet has a line of its
+   own - can drop it */
+.mail-preview .mail-snippet::before {
+    content: '- ';
+}
+
+/* the phone's stand in for the checkbox - mail-responsive.css shows it */
+.mail-avatar {
+    display: none;
+}
+
 .mail-preview .mail-end {
     display: flex;
     align-items: center;
