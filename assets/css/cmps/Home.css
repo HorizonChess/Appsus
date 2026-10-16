@@ -57,10 +57,18 @@
     transition: transform .18s ease, box-shadow .18s ease;
 }
 
-.home-app:hover,
 .home-app:focus-visible {
     transform: translateY(-6px);
     box-shadow: var(--home-shadow-lift);
+}
+
+/* a touch screen has no pointer to hover with - :hover there sticks to the last
+   card that was tapped and leaves it lifted, so only a device that can hover gets it */
+@media (hover: hover) {
+    .home-app:hover {
+        transform: translateY(-6px);
+        box-shadow: var(--home-shadow-lift);
+    }
 }
 
 /* no app behind it yet, so it does not invite a click */
@@ -70,7 +78,8 @@
     border: 1px dashed rgb(218, 220, 224);
 }
 
-.home-app.is-soon:hover {
+.home-app.is-soon:hover,
+.home-app.is-soon:focus-visible {
     transform: none;
     box-shadow: none;
 }
@@ -109,6 +118,71 @@
 .home-app-tagline {
     margin: 0;
     color: var(--home-ink-muted);
+}
+
+/* the card's height is 100% of its list item and the padding comes on top of
+   that, so every card is taller than its slot. side by side that only shows as
+   spare room under the text, but once they stack the overflow lands on the card
+   below and the two overlap. counting the padding inside the height stops it. kept
+   to the widths where they stack so the desktop cards stay exactly as they were */
+@media (max-width: 767px) {
+    .home-app {
+        box-sizing: border-box;
+    }
+}
+
+/* phones: the desktop card is a tall, centred block, so one app fills the screen
+   and the other two are a scroll away. here each is a row - icon on the left, name
+   and tagline beside it - and all three fit at once */
+@media (max-width: 560px) {
+    .home {
+        padding-block: 1.5rem 2rem;
+        padding-inline: 1rem;
+        text-align: start;
+    }
+
+    .home-hero {
+        margin-block-end: 1.5rem;
+        text-align: center;
+    }
+
+    .home-apps {
+        gap: .75rem;
+    }
+
+    .home-app {
+        display: grid;
+        grid-template-columns: auto minmax(0, 1fr);
+        grid-template-areas:
+            "icon name"
+            "icon tagline";
+        align-items: center;
+        gap: .125rem 1rem;
+        padding: 1rem 1.25rem;
+    }
+
+    .home-app-icon {
+        grid-area: icon;
+        inline-size: 4rem;
+        block-size: 4rem;
+        font-size: 2.25rem;
+    }
+
+    .home-app-icon img {
+        inline-size: 2.25rem;
+        block-size: 2.25rem;
+    }
+
+    .home-app-name {
+        grid-area: name;
+        align-self: end;
+        font-size: 1.25rem;
+    }
+
+    .home-app-tagline {
+        grid-area: tagline;
+        align-self: start;
+    }
 }
 
 /* the lift is decoration - it should not move for anyone who asked it not to */

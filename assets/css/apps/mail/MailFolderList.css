@@ -107,3 +107,10 @@
     font-variation-settings: 'FILL' 1;
     color: var(--mail-clr-text);
 }
+
+/* the phone's compose button and the dimmer behind its drawer. neither exists
+   anywhere else - mail-responsive.css turns them on */
+.mail-fab,
+.mail-nav-scrim {
+    display: none;
+}
