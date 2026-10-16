@@ -5,12 +5,15 @@ import { useMailFilter } from '../custom-hooks/useMailFilter.js'
 import { useIsPhone } from '../custom-hooks/useIsPhone.js'
 import { useKeyListener } from '../custom-hooks/useKeyListener.js'
 import { MailLabels } from './MailLabels.jsx'
+import { MailLogo } from './MailLogo.jsx'
+import { MailComposeBtn } from './MailComposeBtn.jsx'
 
 const { useState, useEffect, Fragment } = React
-const { useNavigate, useParams } = ReactRouterDOM
+const { useNavigate } = ReactRouterDOM
 
-// icon names are material symbols ligatures - the same set gmail draws from
-const FOLDER_DISPLAY = {
+// icon names are material symbols ligatures - the same set gmail draws from.
+// the list's title on a phone reads the label off here too
+export const FOLDER_DISPLAY = {
     inbox: { label: 'Inbox', icon: 'inbox' },
     starred: { label: 'Starred', icon: 'star' },
     sent: { label: 'Sent', icon: 'send' },
@@ -30,7 +33,6 @@ export function MailFolderList() {
     const navigate = useNavigate()
 
     const { folder: activeFolder } = useMailFilter()
-    const { mailId } = useParams()
     const isPhone = useIsPhone()
 
     // one url flag, two meanings: a desktop nav starts open and can fold down to a
@@ -66,11 +68,6 @@ export function MailFolderList() {
         navigate(`/mail?folder=${encodeURIComponent(folder)}`)
     }
 
-    // a phone's drawer has done its job once compose is up, so it goes with it
-    function onOpenCompose() {
-        setParams(isPhone ? { compose: 'new', nav: '' } : { compose: 'new' })
-    }
-
     function onCloseDrawer() {
         setParams({ nav: '' })
     }
@@ -79,10 +76,11 @@ export function MailFolderList() {
 
         <nav className={`mail-folder-list ${isRail ? 'is-rail' : ''} ${isDrawerOpen ? 'is-open' : ''}`}>
 
-            <button className="mail-compose-btn" onClick={onOpenCompose}>
-                <span className="material-symbols-outlined">edit</span>
-                <span>Compose</span>
-            </button>
+            {/* gmail's phone drawer opens on the app's name, not a compose button -
+                that one floats over the list instead */}
+            {isPhone
+                ? <div className="mail-drawer-brand"><MailLogo /></div>
+                : <MailComposeBtn />}
 
             <div className="mail-folders">
                 {MAIL_FOLDERS.map(folder => {
@@ -110,13 +108,6 @@ export function MailFolderList() {
         </nav>
 
         {isDrawerOpen && <div className="mail-nav-scrim" onClick={onCloseDrawer}></div>}
-
-        {/* only a phone shows this - the drawer hides the real button, and an open
-            mail has its own reply. css keeps it hidden everywhere else */}
-        {!mailId && <button className="mail-compose-btn mail-fab" onClick={onOpenCompose}>
-            <span className="material-symbols-outlined">edit</span>
-            <span>Compose</span>
-        </button>}
 
     </Fragment>
 }
