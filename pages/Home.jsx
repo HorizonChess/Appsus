@@ -1,8 +1,5 @@
 const { Link } = ReactRouterDOM
 
-// each tile is the app's own mark on its google palette tint - gmail's blue
-// container, keep's yellow 100 and green 100. the keep logo and the book glyph
-// (material symbols' auto_stories) are google's own files, not redrawn
 const APPS = [
     {
         path: '/mail',
@@ -10,6 +7,7 @@ const APPS = [
         tagline: 'Read, write and organise your mail.',
         img: 'assets/MrEmail-icon.png',
         tint: 'rgb(211, 227, 253)',
+        ink: 'rgb(11, 87, 208)',
     },
     {
         path: '/note',
@@ -22,8 +20,9 @@ const APPS = [
         path: '/book',
         name: 'missBooks',
         tagline: 'Browse and review books.',
-        img: 'assets/auto_stories.svg',
-        tint: 'rgb(206, 234, 214)',
+        icon: 'fa-solid fa-plus',
+        tint: 'rgb(232, 234, 237)',
+        ink: 'rgb(95, 99, 104)',
     },
 ]
 
@@ -34,11 +33,13 @@ function AppCard({ app }) {
 
     return <Card
         className={`home-app ${app.path ? '' : 'is-soon'}`}
-        style={{ '--app-tint': app.tint }}
+        style={{ '--app-tint': app.tint, '--app-ink': app.ink }}
         {...linkProps}>
 
         <span className="home-app-icon">
-            <img src={app.img} alt="" />
+            {app.img
+                ? <img src={app.img} alt="" />
+                : <i className={app.icon}></i>}
         </span>
 
         <h2 className="home-app-name">{app.name}</h2>

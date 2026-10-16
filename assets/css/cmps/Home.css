@@ -1,163 +1,66 @@
-/* home - the shared landing page for all the apps.
-   the tiles are material 3 elevated cards, with the values taken from google's
-   own token files (material-web, tokens/versions/v0_192): 12px corners, elevation
-   level 1 rising to 2 on hover, and an on-surface state layer at 8% hover and 12%
-   focus or press. colours are the ones the mail app snapped off gmail */
+/* home - the shared landing page for both apps */
 
 .home {
     --home-surface: rgb(255, 255, 255);
     --home-ink: rgb(32, 33, 36);
     --home-ink-muted: rgb(95, 99, 104);
-    --home-focus: rgb(11, 87, 208);
-    --home-font-brand: google-sans, Roboto, Helvetica, Arial, sans-serif;
-    /* google's product shadows - the same pair gmail's cards and menus use */
-    --home-shadow-1: 0 1px 2px 0 rgba(60, 64, 67, .3), 0 1px 3px 1px rgba(60, 64, 67, .15);
-    --home-shadow-2: 0 1px 2px 0 rgba(60, 64, 67, .3), 0 2px 6px 2px rgba(60, 64, 67, .15);
-    --home-radius: 12px;
-    --home-state-hover: .08;
-    --home-state-press: .12;
-    --home-gap: clamp(.75rem, 2vmin, 1.5rem);
+    --home-shadow: 0 1px 2px rgba(60, 64, 67, .3), 0 1px 3px 1px rgba(60, 64, 67, .15);
+    --home-shadow-lift: 0 6px 10px rgba(60, 64, 67, .18), 0 12px 28px 4px rgba(60, 64, 67, .16);
 
-    /* background and font come from .page in layout.css. the page is exactly the
-       height the header leaves, so the tiles can split that between them */
-    display: flex;
-    flex-direction: column;
-    flex: 1 1 auto;
-    min-block-size: 0;
-    padding-block: clamp(1rem, 4vh, 3rem);
-    padding-inline: clamp(1rem, 4vw, 3rem);
-    /* only a screen too small to hold even shrunk tiles ever scrolls, and then the
-       page scrolls inside itself rather than pushing the header away */
-    overflow-y: auto;
+    /* background, font and padding come from .page in layout.css */
     text-align: center;
 }
 
-/* the same move the mail app makes - the root becomes a column one screen tall,
-   the header keeps its height and the page takes the rest */
-.root-cmp:has(.home) {
-    display: flex;
-    flex-direction: column;
-    block-size: 100dvh;
-}
-
 .home-hero {
-    flex: 0 0 auto;
-    margin-block-end: var(--home-gap);
+    margin-block-end: clamp(2rem, 6vh, 3.5rem);
 }
 
-/* material's display-medium, in google sans - google sets its headlines at the
-   regular weight, which is also the only cut the app ships */
 .home-title {
-    font-family: var(--home-font-brand);
-    font-size: 2.8125rem;
-    font-weight: 400;
-    line-height: 3.25rem;
-    color: var(--home-ink);
+    font-size: clamp(2.25rem, 6vw, 3.5rem);
+    font-weight: 700;
+    letter-spacing: -.02em;
 }
 
-/* body-large */
 .home-subtitle {
-    margin-block: .25rem 0;
-    font-size: 1rem;
-    line-height: 1.5rem;
-    letter-spacing: .03125rem;
+    margin-block-start: .5rem;
+    font-size: clamp(1rem, 2.5vw, 1.25rem);
     color: var(--home-ink-muted);
 }
 
-/* one track per app, laid out along the screen's long side - three across on a
-   landscape screen, three down on a portrait one. auto-flow rather than repeat(3)
-   so a fourth app needs no change here either */
 .home-apps {
     display: grid;
-    grid-auto-flow: column;
-    grid-auto-columns: minmax(0, 1fr);
-    grid-template-rows: minmax(0, 1fr);
-    gap: var(--home-gap);
-    flex: 1 1 auto;
-    min-block-size: 0;
-    inline-size: 100%;
-    max-inline-size: 90rem;
-    margin: 0 auto;
+    /* as many across as fit, stacked when they do not - a fourth app needs no
+       change here either */
+    grid-template-columns: repeat(auto-fit, minmax(14rem, 1fr));
+    gap: 1.5rem;
+    max-inline-size: 60rem;
+    margin-inline: auto;
     padding: 0;
     list-style: none;
 }
 
-@media (orientation: portrait) {
-    .home-apps {
-        grid-auto-flow: row;
-        grid-auto-rows: minmax(0, 1fr);
-        grid-template-rows: none;
-        grid-template-columns: minmax(0, 1fr);
-    }
-}
-
 /* base.css pads every li */
 .home-apps li {
-    min-block-size: 0;
     padding: 0;
 }
 
 .home-app {
-    position: relative;
     display: flex;
+    block-size: 100%;
     flex-direction: column;
     align-items: center;
-    justify-content: center;
-    /* viewport units, not container ones - a container's own padding resolves
-       against the container above it, and there is none */
-    gap: clamp(.25rem, 1.5vmin, 1rem);
-    box-sizing: border-box;
-    block-size: 100%;
-    padding: clamp(.75rem, 3vmin, 2rem);
-    overflow: hidden;
-    border-radius: var(--home-radius);
+    gap: .75rem;
+    padding: 2.5rem 1.5rem;
+    border-radius: 1rem;
     background-color: var(--home-surface);
-    box-shadow: var(--home-shadow-1);
-    color: var(--home-ink);
-    transition: box-shadow .15s ease;
-    /* the icon sizes itself off the tile, so a tile a third of
-       a phone tall and one a third of a desktop wide both stay in proportion */
-    container-type: size;
-    container-name: home-app;
-    -webkit-tap-highlight-color: transparent;
+    box-shadow: var(--home-shadow);
+    transition: transform .18s ease, box-shadow .18s ease;
 }
 
-/* the state layer - material tints the whole card with its on-surface colour
-   rather than moving it */
-.home-app::after {
-    content: '';
-    position: absolute;
-    inset: 0;
-    border-radius: inherit;
-    background-color: var(--home-ink);
-    opacity: 0;
-    transition: opacity .15s ease;
-    pointer-events: none;
-}
-
+.home-app:hover,
 .home-app:focus-visible {
-    outline: 3px solid var(--home-focus);
-    outline-offset: 2px;
-}
-
-.home-app:focus-visible::after,
-.home-app:active::after {
-    opacity: var(--home-state-press);
-}
-
-/* a touch screen has no pointer, and :hover there sticks to the last tile tapped */
-@media (hover: hover) {
-    .home-app:hover {
-        box-shadow: var(--home-shadow-2);
-    }
-
-    .home-app:hover::after {
-        opacity: var(--home-state-hover);
-    }
-
-    .home-app:active::after {
-        opacity: var(--home-state-press);
-    }
+    transform: translateY(-6px);
+    box-shadow: var(--home-shadow-lift);
 }
 
 /* no app behind it yet, so it does not invite a click */
@@ -167,107 +70,166 @@
     border: 1px dashed rgb(218, 220, 224);
 }
 
-.home-app.is-soon::after {
-    display: none;
-}
-
 .home-app.is-soon:hover {
+    transform: none;
     box-shadow: none;
 }
 
-/* the app's mark on its tint - the circle grows with the tile */
+/* both tints come off the card's own custom properties, set from the app list.
+   the font awesome kit runs in js mode, which swaps the <i> for an <svg> sized at
+   1em - so the glyph size has to be set here, on the circle, not on the <i> */
 .home-app-icon {
     display: grid;
-    flex: 0 0 auto;
     place-items: center;
-    inline-size: clamp(2.5rem, 34cqmin, 9rem);
-    block-size: clamp(2.5rem, 34cqmin, 9rem);
+    inline-size: 5.5rem;
+    block-size: 5.5rem;
     border-radius: 50%;
     background-color: var(--app-tint);
+    font-size: 3.5rem;
 }
 
 /* base.css stretches images to fill and crops them, which would eat the mark */
 .home-app-icon img {
-    inline-size: 60%;
-    block-size: 60%;
+    inline-size: 3.25rem;
+    block-size: 3.25rem;
     object-fit: contain;
 }
 
-/* title-large */
-.home-app-name {
-    font-family: var(--home-font-brand);
-    font-size: 1.375rem;
-    font-weight: 400;
-    line-height: 1.75rem;
+/* whichever of the two the kit ends up rendering */
+.home-app-icon i,
+.home-app-icon svg {
+    color: var(--app-ink);
 }
 
-/* body-large, but body-medium in a short tile */
+.home-app-name {
+    font-size: 1.375rem;
+    font-weight: 500;
+}
+
 .home-app-tagline {
     margin: 0;
-    font-size: 1rem;
-    line-height: 1.5rem;
-    letter-spacing: .03125rem;
     color: var(--home-ink-muted);
 }
 
-@container home-app (max-height: 9rem) {
-    .home-app-tagline {
-        font-size: .875rem;
-        line-height: 1.25rem;
-        letter-spacing: .015625rem;
+/* the lift is decoration - it should not move for anyone who asked it not to */
+@media (prefers-reduced-motion: reduce) {
+    .home-app {
+        transition: none;
+    }
+
+    .home-app:hover,
+    .home-app:focus-visible {
+        transform: none;
     }
 }
 
-/* the smallest phones leave a tile about 100px - the icon and the name are the
-   choice, so the name drops to title-medium and the tagline is what gives */
-@container home-app (max-height: 7.5rem) {
-    .home-app-name {
-        font-size: 1rem;
-        font-weight: 500;
-        line-height: 1.5rem;
-        letter-spacing: .009375rem;
-    }
+/* ------------------------------------------------- one screen, no scrolling
+   layout only - the look above stays as it was. the root becomes a column one
+   screen tall (the same move the mail app makes), the header keeps its height,
+   and the three cards split whatever is left between them */
 
+.root-cmp:has(.home) {
+    display: flex;
+    flex-direction: column;
+    block-size: 100dvh;
+}
+
+.home {
+    display: flex;
+    flex-direction: column;
+    flex: 1 1 auto;
+    min-block-size: 0;
+    /* only a screen too small to hold even shrunk cards ever scrolls, and then
+       inside the page rather than pushing the header away */
+    overflow-y: auto;
+}
+
+.home-hero {
+    flex: 0 0 auto;
+}
+
+/* one track per app along the screen's long side - across on a landscape
+   screen, down on a portrait one. auto-flow keeps a fourth app free of changes */
+.home-apps {
+    flex: 1 1 auto;
+    min-block-size: 0;
+    inline-size: 100%;
+    grid-auto-flow: column;
+    grid-auto-columns: minmax(0, 1fr);
+    grid-template-columns: none;
+    grid-template-rows: minmax(0, 1fr);
+}
+
+@media (orientation: portrait) {
+    .home-apps {
+        grid-auto-flow: row;
+        grid-auto-rows: minmax(0, 1fr);
+        grid-template-columns: minmax(0, 1fr);
+        grid-template-rows: none;
+    }
+}
+
+.home-apps li {
+    min-block-size: 0;
+}
+
+/* the height is 100% of the track and the padding has to count inside it, or
+   the cards poke out of their slots. the icon sizes itself off the card, so the
+   card is a size container - a third of a phone and a third of a desktop both
+   keep their proportions */
+.home-app {
+    box-sizing: border-box;
+    justify-content: center;
+    container-type: size;
+    container-name: home-app;
+}
+
+/* the desktop sizes above are the ceiling - a card only shrinks them once it is
+   too small to hold them */
+.home-app-icon {
+    flex: 0 0 auto;
+    inline-size: clamp(2.5rem, 34cqmin, 5.5rem);
+    block-size: clamp(2.5rem, 34cqmin, 5.5rem);
+    font-size: clamp(1.625rem, 22cqmin, 3.5rem);
+}
+
+.home-app-icon img {
+    inline-size: 59%;
+    block-size: 59%;
+}
+
+/* a short card keeps the choice - the icon and the name - and lets the tagline go */
+@container home-app (max-height: 6.5rem) {
     .home-app-tagline {
         display: none;
     }
 }
 
-/* phones, or any screen short on height: the headline drops to display-small and
-   the subtitle to body-medium, so the room goes to the tiles */
+/* a phone, or any short screen: less air around everything so the room goes to
+   the cards */
 @media (max-width: 560px), (max-height: 560px) {
-    .home-title {
-        font-size: 2.25rem;
-        line-height: 2.75rem;
+    .home {
+        padding-block: 1rem;
+        padding-inline: 1rem;
     }
 
-    .home-subtitle {
-        margin-block-start: 0;
-        font-size: .875rem;
-        line-height: 1.25rem;
-        letter-spacing: .015625rem;
-    }
-}
-
-/* a landscape phone has about 300px under the header - the headline and the
-   tagline would leave the tiles nothing, so the subtitle sits beside the title */
-@media (max-height: 420px) {
     .home-hero {
-        display: flex;
-        align-items: baseline;
-        justify-content: center;
+        margin-block-end: 1rem;
+    }
+
+    /* the browser's own margins on the p and the ul - harmless on a desktop,
+       but on a phone they are 48px a card could use */
+    .home-subtitle {
+        margin-block-end: 0;
+    }
+
+    .home-apps {
         gap: .75rem;
+        margin-block: 0;
     }
 
-    .home-title {
-        font-size: 1.75rem;
-        line-height: 2.25rem;
-    }
-}
-
-@media (prefers-reduced-motion: reduce) {
-    .home-app,
-    .home-app::after {
-        transition: none;
+    .home-app {
+        gap: .5rem;
+        padding: .75rem 1rem;
     }
 }
