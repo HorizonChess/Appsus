@@ -200,20 +200,25 @@ export function MailDetails() {
 
                     <span className="mail-details-date">{mailService.formatMailDate(sentAt)}</span>
 
-                    <button
-                        className="mail-icon-btn"
-                        title={isStared ? 'Starred' : 'Not starred'}
-                        onClick={onStarClick}>
-                        <span className={`material-symbols-outlined ${isStared ? 'is-stared' : ''}`}>star</span>
-                    </button>
+                    {/* a wrapper only so a phone can drop these under the sender - it
+                        takes no part in the layout anywhere else */}
+                    <div className="mail-details-actions">
+                        <button
+                            className="mail-icon-btn"
+                            title={isStared ? 'Starred' : 'Not starred'}
+                            onClick={onStarClick}>
+                            <span className={`material-symbols-outlined ${isStared ? 'is-stared' : ''}`}>star</span>
+                        </button>
 
-                    <button className="mail-icon-btn" title="Save as note" onClick={onSaveAsNote}>
-                        <i className="fa-regular fa-lightbulb"></i>
-                    </button>
+                        <button className="mail-icon-btn" title="Save as note" onClick={onSaveAsNote}>
+                            <i className="fa-regular fa-lightbulb"></i>
+                        </button>
 
-                    <button className="mail-icon-btn" title="Reply" onClick={onReply}>
-                        <span className="material-symbols-outlined">reply</span>
-                    </button>
+                        <button className="mail-icon-btn" title="Reply" onClick={onReply}>
+                            <span className="material-symbols-outlined">reply</span>
+                        </button>
+                    </div>
+
                 </header>
 
                 <p className="mail-details-body">{body}</p>

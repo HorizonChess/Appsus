@@ -1,5 +1,6 @@
 import { useMailParams } from '../custom-hooks/useMailParams.js'
 import { useMailFilter } from '../custom-hooks/useMailFilter.js'
+import { useIsPhone } from '../custom-hooks/useIsPhone.js'
 
 const { useState, useEffect } = React
 
@@ -7,6 +8,7 @@ const { useState, useEffect } = React
 export function MailFilter() {
     const [searchParams, setParams] = useMailParams()
     const { txt: txtParam } = useMailFilter()
+    const isPhone = useIsPhone()
     // local state so typing is instant, the url catches up on a pause
     const [txt, setTxt] = useState(txtParam)
 
@@ -29,9 +31,14 @@ export function MailFilter() {
         setParams({ txt: '' })
     }
 
-    // the sidebar reads this off the url, so the two never have to be wired together
+    // the sidebar reads this off the url, so the two never have to be wired together.
+    // on a phone the nav is a drawer that starts shut, so the flag means the
+    // opposite there: 'open' rather than 'rail'
     function onToggleNav() {
-        setParams({ nav: searchParams.get('nav') ? '' : 'rail' })
+        const nav = searchParams.get('nav')
+
+        if (isPhone) setParams({ nav: nav === 'open' ? '' : 'open' })
+        else setParams({ nav: nav === 'rail' ? '' : 'rail' })
     }
 
     return <div className="mail-filter">
@@ -41,6 +48,7 @@ export function MailFilter() {
                 type="button"
                 className="mail-icon-btn"
                 title="Main menu"
+                aria-expanded={isPhone ? searchParams.get('nav') === 'open' : undefined}
                 onClick={onToggleNav}>
                 <span className="material-symbols-outlined">menu</span>
             </button>

@@ -7,6 +7,9 @@
     --mail-fs-title: 22px;
     --mail-fs-message: 13px;
     --mail-fs-search: 16px;
+    /* ios safari zooms the page in when a field under 16px takes focus, so on a
+       phone every field is raised to this */
+    --mail-fs-input: 16px;
     /* gmail's .aAv - a step up from the nav rows it sits over, not down. the
        .6875rem uppercase rule on that class is overridden, so it never lands */
     --mail-fs-section: 16px;
@@ -77,6 +80,8 @@
     --mail-radius-nav: 0 16px 16px 0;
     --mail-sidebar-w: 256px;
     --mail-rail-w: 72px;
+    /* the phone nav is a drawer over the list, not a column beside it */
+    --mail-drawer-w: 280px;
     --mail-search-w: 720px;
     --mail-search-h: 48px;
     --mail-row-h: 40px;

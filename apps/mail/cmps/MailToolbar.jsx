@@ -51,7 +51,7 @@ export function MailToolbar({ total, pageIdx, pageCount, pageIds, selectedIds, o
                 <span className="material-symbols-outlined">arrow_drop_down</span>
             </button>
 
-            <button className="mail-icon-btn" title="Refresh" onClick={onRefresh}>
+            <button className="mail-icon-btn mail-hide-narrow" title="Refresh" onClick={onRefresh}>
                 <span className="material-symbols-outlined">refresh</span>
             </button>
 
