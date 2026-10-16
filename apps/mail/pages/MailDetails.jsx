@@ -6,6 +6,7 @@ import { MailFilter } from '../cmps/MailFilter.jsx'
 import { MailLabelChip } from '../cmps/MailLabelChip.jsx'
 import { useMailParams } from '../custom-hooks/useMailParams.js'
 import { useMailFilter } from '../custom-hooks/useMailFilter.js'
+import { useIsPhone } from '../custom-hooks/useIsPhone.js'
 
 const { useState, useEffect } = React
 const { useParams, useNavigate } = ReactRouterDOM
@@ -17,6 +18,7 @@ export function MailDetails() {
     const [searchParams, setParams] = useMailParams()
     const { folder, txt, sortBy, sortDir } = useMailFilter()
     const navigate = useNavigate()
+    const isPhone = useIsPhone()
 
     // prev and next walk the order you came from, and the whole folder rather than
     // the page you happened to open it from. named for the list order, not for
@@ -138,6 +140,14 @@ export function MailDetails() {
     const senderName = fromName || from
     const recipient = to === mailService.loggedinUser.email ? 'me' : to
 
+    // gmail's phone view hangs the star off the subject, the desktop off the sender
+    const starBtn = <button
+        className="mail-icon-btn mail-details-star"
+        title={isStared ? 'Starred' : 'Not starred'}
+        onClick={onStarClick}>
+        <span className={`material-symbols-outlined ${isStared ? 'is-stared' : ''}`}>star</span>
+    </button>
+
     return <section className="mail-index">
 
         <MailFilter />
@@ -184,6 +194,8 @@ export function MailDetails() {
                         key={label}
                         label={label}
                         onRemove={() => onRemoveLabel(label)} />)}
+
+                    {isPhone && starBtn}
                 </div>
 
                 <header className="mail-details-header">
@@ -200,20 +212,20 @@ export function MailDetails() {
 
                     <span className="mail-details-date">{mailService.formatMailDate(sentAt)}</span>
 
-                    <button
-                        className="mail-icon-btn"
-                        title={isStared ? 'Starred' : 'Not starred'}
-                        onClick={onStarClick}>
-                        <span className={`material-symbols-outlined ${isStared ? 'is-stared' : ''}`}>star</span>
-                    </button>
+                    {/* a wrapper only so a phone can drop these under the sender - it
+                        takes no part in the layout anywhere else */}
+                    <div className="mail-details-actions">
+                        {!isPhone && starBtn}
 
-                    <button className="mail-icon-btn" title="Save as note" onClick={onSaveAsNote}>
-                        <i className="fa-regular fa-lightbulb"></i>
-                    </button>
+                        <button className="mail-icon-btn" title="Save as note" onClick={onSaveAsNote}>
+                            <i className="fa-regular fa-lightbulb"></i>
+                        </button>
 
-                    <button className="mail-icon-btn" title="Reply" onClick={onReply}>
-                        <span className="material-symbols-outlined">reply</span>
-                    </button>
+                        <button className="mail-icon-btn" title="Reply" onClick={onReply}>
+                            <span className="material-symbols-outlined">reply</span>
+                        </button>
+                    </div>
+
                 </header>
 
                 <p className="mail-details-body">{body}</p>

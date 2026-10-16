@@ -122,3 +122,114 @@
         transform: none;
     }
 }
+
+/* ------------------------------------------------- one screen, no scrolling
+   layout only - the look above stays as it was. the root becomes a column one
+   screen tall (the same move the mail app makes), the header keeps its height,
+   and the three cards split whatever is left between them */
+
+.root-cmp:has(.home) {
+    display: flex;
+    flex-direction: column;
+    block-size: 100dvh;
+}
+
+.home {
+    display: flex;
+    flex-direction: column;
+    flex: 1 1 auto;
+    min-block-size: 0;
+    /* only a screen too small to hold even shrunk cards ever scrolls, and then
+       inside the page rather than pushing the header away */
+    overflow-y: auto;
+}
+
+.home-hero {
+    flex: 0 0 auto;
+}
+
+/* one track per app along the screen's long side - across on a landscape
+   screen, down on a portrait one. auto-flow keeps a fourth app free of changes */
+.home-apps {
+    flex: 1 1 auto;
+    min-block-size: 0;
+    inline-size: 100%;
+    grid-auto-flow: column;
+    grid-auto-columns: minmax(0, 1fr);
+    grid-template-columns: none;
+    grid-template-rows: minmax(0, 1fr);
+}
+
+@media (orientation: portrait) {
+    .home-apps {
+        grid-auto-flow: row;
+        grid-auto-rows: minmax(0, 1fr);
+        grid-template-columns: minmax(0, 1fr);
+        grid-template-rows: none;
+    }
+}
+
+.home-apps li {
+    min-block-size: 0;
+}
+
+/* the height is 100% of the track and the padding has to count inside it, or
+   the cards poke out of their slots. the icon sizes itself off the card, so the
+   card is a size container - a third of a phone and a third of a desktop both
+   keep their proportions */
+.home-app {
+    box-sizing: border-box;
+    justify-content: center;
+    container-type: size;
+    container-name: home-app;
+}
+
+/* the desktop sizes above are the ceiling - a card only shrinks them once it is
+   too small to hold them */
+.home-app-icon {
+    flex: 0 0 auto;
+    inline-size: clamp(2.5rem, 34cqmin, 5.5rem);
+    block-size: clamp(2.5rem, 34cqmin, 5.5rem);
+    font-size: clamp(1.625rem, 22cqmin, 3.5rem);
+}
+
+.home-app-icon img {
+    inline-size: 59%;
+    block-size: 59%;
+}
+
+/* a short card keeps the choice - the icon and the name - and lets the tagline go */
+@container home-app (max-height: 6.5rem) {
+    .home-app-tagline {
+        display: none;
+    }
+}
+
+/* a phone, or any short screen: less air around everything so the room goes to
+   the cards */
+@media (max-width: 560px), (max-height: 560px) {
+    .home {
+        padding-block: 1rem;
+        padding-inline: 1rem;
+    }
+
+    .home-hero {
+        margin-block-end: 1rem;
+    }
+
+    /* the browser's own margins on the p and the ul - harmless on a desktop,
+       but on a phone they are 48px a card could use */
+    .home-subtitle {
+        margin-block-end: 0;
+    }
+
+    .home-apps {
+        gap: .75rem;
+        margin-block: 0;
+    }
+
+    .home-app {
+        gap: .5rem;
+        padding: .75rem 1rem;
+    }
+}

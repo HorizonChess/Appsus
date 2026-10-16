@@ -2,13 +2,18 @@ import { MAIL_FOLDERS, mailService } from '../services/mail.service.js'
 import { eventBusService } from '../../../services/event-bus.service.js'
 import { useMailParams } from '../custom-hooks/useMailParams.js'
 import { useMailFilter } from '../custom-hooks/useMailFilter.js'
+import { useIsPhone } from '../custom-hooks/useIsPhone.js'
+import { useKeyListener } from '../custom-hooks/useKeyListener.js'
 import { MailLabels } from './MailLabels.jsx'
+import { MailLogo } from './MailLogo.jsx'
+import { MailComposeBtn } from './MailComposeBtn.jsx'
 
-const { useState, useEffect } = React
+const { useState, useEffect, Fragment } = React
 const { useNavigate } = ReactRouterDOM
 
-// icon names are material symbols ligatures - the same set gmail draws from
-const FOLDER_DISPLAY = {
+// icon names are material symbols ligatures - the same set gmail draws from.
+// the list's title on a phone reads the label off here too
+export const FOLDER_DISPLAY = {
     inbox: { label: 'Inbox', icon: 'inbox' },
     starred: { label: 'Starred', icon: 'star' },
     sent: { label: 'Sent', icon: 'send' },
@@ -28,7 +33,15 @@ export function MailFolderList() {
     const navigate = useNavigate()
 
     const { folder: activeFolder } = useMailFilter()
-    const isRail = searchParams.get('nav') === 'rail'
+    const isPhone = useIsPhone()
+
+    // one url flag, two meanings: a desktop nav starts open and can fold down to a
+    // rail, a phone nav is a drawer that starts shut and can be slid open
+    const nav = searchParams.get('nav')
+    const isRail = !isPhone && nav === 'rail'
+    const isDrawerOpen = isPhone && nav === 'open'
+
+    useKeyListener('Escape', () => { if (isDrawerOpen) onCloseDrawer() })
 
     // both signals, because the numbers move whether or not the list already
     // knows - see _notifyCounts in the service
@@ -55,39 +68,46 @@ export function MailFolderList() {
         navigate(`/mail?folder=${encodeURIComponent(folder)}`)
     }
 
-    function onOpenCompose() {
-        setParams({ compose: 'new' })
+    function onCloseDrawer() {
+        setParams({ nav: '' })
     }
 
-    return <nav className={`mail-folder-list ${isRail ? 'is-rail' : ''}`}>
+    return <Fragment>
 
-        <button className="mail-compose-btn" onClick={onOpenCompose}>
-            <span className="material-symbols-outlined">edit</span>
-            <span>Compose</span>
-        </button>
+        <nav className={`mail-folder-list ${isRail ? 'is-rail' : ''} ${isDrawerOpen ? 'is-open' : ''}`}>
 
-        <div className="mail-folders">
-            {MAIL_FOLDERS.map(folder => {
-                const { label, icon } = FOLDER_DISPLAY[folder]
-                const badge = getBadge(folder, counts[folder])
+            {/* gmail's phone drawer opens on the app's name, not a compose button -
+                that one floats over the list instead */}
+            {isPhone
+                ? <div className="mail-drawer-brand"><MailLogo /></div>
+                : <MailComposeBtn />}
 
-                return <button
-                    key={folder}
-                    className={`mail-folder ${folder === activeFolder ? 'is-active' : ''}`}
-                    onClick={() => onSetFolder(folder)}>
+            <div className="mail-folders">
+                {MAIL_FOLDERS.map(folder => {
+                    const { label, icon } = FOLDER_DISPLAY[folder]
+                    const badge = getBadge(folder, counts[folder])
 
-                    <span className="material-symbols-outlined">{icon}</span>
-                    <span className="mail-folder-label">{label}</span>
-                    {badge > 0 && <span className="mail-folder-count">{badge}</span>}
+                    return <button
+                        key={folder}
+                        className={`mail-folder ${folder === activeFolder ? 'is-active' : ''}`}
+                        onClick={() => onSetFolder(folder)}>
 
-                </button>
-            })}
-        </div>
+                        <span className="material-symbols-outlined">{icon}</span>
+                        <span className="mail-folder-label">{label}</span>
+                        {badge > 0 && <span className="mail-folder-count">{badge}</span>}
 
-        <MailLabels
-            counts={counts}
-            activeFolder={activeFolder}
-            onSetFolder={onSetFolder} />
+                    </button>
+                })}
+            </div>
 
-    </nav>
+            <MailLabels
+                counts={counts}
+                activeFolder={activeFolder}
+                onSetFolder={onSetFolder} />
+
+        </nav>
+
+        {isDrawerOpen && <div className="mail-nav-scrim" onClick={onCloseDrawer}></div>}
+
+    </Fragment>
 }

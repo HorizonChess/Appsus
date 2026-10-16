@@ -13,9 +13,8 @@ const APPS = [
         path: '/note',
         name: 'missKeep',
         tagline: 'Keep notes, lists, images and video.',
-        icon: 'fa-regular fa-lightbulb',
+        img: 'assets/Google_Keep_2020_Logo.svg',
         tint: 'rgb(254, 239, 195)',
-        ink: 'rgb(158, 118, 12)',
     },
     {
         path: '/book',

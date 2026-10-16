@@ -53,6 +53,12 @@
     font-weight: var(--mail-fw-unread);
 }
 
+/* only exists so a phone can move the three buttons onto a row of their own.
+   everywhere else they lay out as if the wrapper were not there */
+.mail-details-actions {
+    display: contents;
+}
+
 /* sender and recipient stack, so the header row stays two lines like gmail's */
 .mail-details-from {
     display: flex;

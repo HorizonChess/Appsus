@@ -1,9 +1,11 @@
 import { MailPreview } from './MailPreview.jsx'
 
-export function MailList({ mails, selectedIds, onToggleSelect, onToggleStar, onSetRead, onClickMail, onRemoveMail }) {
+export function MailList({ mails, title, onScroll, selectedIds, onToggleSelect, onToggleStar, onSetRead, onClickMail, onRemoveMail }) {
     if (!mails.length) return <p className="mail-list-empty">No mails found</p>
 
-    return <ul className="mail-list">
+    // the title scrolls away with the rows, the way gmail's does on a phone
+    return <ul className="mail-list" onScroll={onScroll}>
+        {title && <li className="mail-list-title">{title}</li>}
         {mails.map(mail => (
             <MailPreview
                 key={mail.id}

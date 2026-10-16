@@ -4,6 +4,7 @@ import { MailEditor } from './MailEditor.jsx'
 import { useMailParams } from '../custom-hooks/useMailParams.js'
 import { useKeyListener } from '../custom-hooks/useKeyListener.js'
 import { useDraft } from '../custom-hooks/useDraft.js'
+import { useIsPhone } from '../custom-hooks/useIsPhone.js'
 
 const { useState, useEffect } = React
 
@@ -12,6 +13,7 @@ const { useState, useEffect } = React
 export function MailCompose() {
     const [mailToEdit, setMailToEdit] = useState(null)
     const [searchParams, setParams] = useMailParams()
+    const isPhone = useIsPhone()
 
     const composeId = searchParams.get('compose')
     const srcId = searchParams.get('src')
@@ -102,20 +104,35 @@ export function MailCompose() {
 
     if (!composeId || !mailToEdit) return null
 
+    // a phone's compose is gmail's full screen one: back on the left of the app
+    // bar, send as an icon on its right, and no footer
+    const closeBtn = <button
+        type="button"
+        className="mail-icon-btn"
+        title={isPhone ? 'Back' : 'Close'}
+        onClick={onCloseCompose}>
+        <span className="material-symbols-outlined">{isPhone ? 'arrow_back' : 'close'}</span>
+    </button>
+
     return <form className="mail-compose" onSubmit={onSend}>
 
         <header className="mail-compose-header">
-            <h3 className="mail-compose-title">{srcId ? 'Reply' : 'New Message'}</h3>
-            <button type="button" className="mail-icon-btn" title="Close" onClick={onCloseCompose}>
-                <span className="material-symbols-outlined">close</span>
-            </button>
+            {isPhone && closeBtn}
+
+            <h3 className="mail-compose-title">{srcId ? 'Reply' : (isPhone ? 'Compose' : 'New Message')}</h3>
+
+            {isPhone
+                ? <button type="submit" className="mail-icon-btn" title="Send">
+                    <span className="material-symbols-outlined">send</span>
+                </button>
+                : closeBtn}
         </header>
 
         <MailEditor mail={mailToEdit} onChange={handleChange} />
 
-        <footer className="mail-compose-footer">
+        {!isPhone && <footer className="mail-compose-footer">
             <button type="submit" className="mail-compose-send">Send</button>
-        </footer>
+        </footer>}
 
     </form>
 }

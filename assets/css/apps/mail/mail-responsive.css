@@ -71,3 +71,572 @@
         display: none;
     }
 }
+
+/* ------------------------------------------------------------------ phones
+   at this width mail stops being gmail's desktop squeezed down and becomes
+   gmail's phone layout: one column, a search pill that holds the menu and the
+   account, a drawer in place of the nav, three line rows that lead with the
+   sender's avatar, and a compose button floating over the list. the sizes are
+   material 3's (touch targets 48, icons 24, drawer items 56) - the system gmail's
+   own apps are drawn in. the same 600px is in useIsPhone.js */
+@media (max-width: 600px) {
+    .mail-index {
+        --mail-sidebar-w: min(360px, calc(100vw - 56px));
+        --mail-icon-btn-size: 48px;
+        --mail-icon-size: 24px;
+        --mail-compose-header-h: 64px;
+        /* material's level 3 - what a floating button sits at */
+        --mail-shadow-fab: 0 1px 3px 0 rgba(60, 64, 67, .3), 0 4px 8px 3px rgba(60, 64, 67, .15);
+        /* the nav is out of the flow, so nothing sits beside the list */
+        grid-template-columns: minmax(0, 1fr);
+        /* the selection bar is laid over the search band from here */
+        position: relative;
+        /* the phone list sits on the plain surface, not on the app background */
+        background-color: var(--mail-clr-surface);
+    }
+
+    /* no tap delay, and no grey flash over the control that was just pressed */
+    .mail-index button {
+        touch-action: manipulation;
+        -webkit-tap-highlight-color: transparent;
+    }
+
+    /* --- the search bar: one pill holding the menu, the field and the account */
+
+    .mail-filter {
+        block-size: 56px;
+        margin: var(--mail-sp-2) var(--mail-sp-4);
+        padding-block: 0;
+        padding-inline: var(--mail-sp-1) var(--mail-sp-3);
+        border-radius: 28px;
+        background-color: var(--mail-clr-search-bg);
+    }
+
+    .mail-filter:focus-within {
+        background-color: var(--mail-clr-surface);
+        box-shadow: var(--mail-shadow-search-focus);
+    }
+
+    .mail-brand {
+        padding-inline-start: 0;
+    }
+
+    /* the logo moves to the top of the drawer, where gmail keeps its own, and the
+       menu button takes the magnifier's place */
+    .mail-brand .mail-logo,
+    .mail-search-icon {
+        display: none;
+    }
+
+    .mail-search {
+        gap: var(--mail-sp-1);
+        min-block-size: 0;
+        max-inline-size: none;
+        padding-inline: var(--mail-sp-1) 0;
+        background: none;
+    }
+
+    .mail-search:focus-within {
+        background: none;
+        box-shadow: none;
+    }
+
+    .mail-account {
+        display: grid;
+        flex: 0 0 auto;
+        place-items: center;
+        inline-size: 32px;
+        block-size: 32px;
+        border-radius: 50%;
+        background-color: var(--mail-clr-accent);
+        font-size: var(--mail-fs-body);
+        font-weight: 500;
+        color: var(--mail-clr-surface);
+    }
+
+    /* --- the drawer */
+
+    .mail-folder-list {
+        position: fixed;
+        z-index: 30;
+        inset-block: 0;
+        inset-inline-start: 0;
+        gap: 0;
+        block-size: 100dvh;
+        padding-block: 0 var(--mail-sp-4);
+        border-radius: 0 var(--mail-radius-btn) var(--mail-radius-btn) 0;
+        box-shadow: var(--mail-shadow-btn-hover);
+        /* visibility goes last, so it is still drawn while it slides out and is out
+           of the tab order and the screen reader's reach once it has gone */
+        translate: -100% 0;
+        visibility: hidden;
+        transition: translate .2s ease, visibility 0s linear .2s;
+    }
+
+    .mail-folder-list.is-open {
+        translate: 0 0;
+        visibility: visible;
+        transition-delay: 0s;
+    }
+
+    .mail-nav-scrim {
+        position: fixed;
+        z-index: 29;
+        inset: 0;
+        background-color: var(--mail-clr-scrim);
+    }
+
+    .mail-drawer-brand {
+        display: flex;
+        flex: 0 0 auto;
+        align-items: center;
+        gap: var(--mail-sp-2);
+        block-size: 64px;
+        padding-inline: 28px;
+    }
+
+    .mail-drawer-brand .mail-logo {
+        block-size: 32px;
+    }
+
+    /* the 1000px rule hides the name in the search band - here it is the heading */
+    .mail-drawer-brand .mail-logo-txt {
+        display: inline;
+    }
+
+    .mail-folders,
+    .mail-labels {
+        padding-inline: var(--mail-sp-3);
+    }
+
+    /* material's drawer item: 56 tall, a full pill, the label at label-large */
+    .mail-folder {
+        gap: var(--mail-sp-3);
+        block-size: 56px;
+        margin-inline-end: 0;
+        padding-inline: var(--mail-sp-4) var(--mail-sp-5);
+        border-radius: 28px;
+        font-weight: 500;
+    }
+
+    .mail-folder.is-active {
+        font-weight: 500;
+    }
+
+    .mail-folder-count {
+        font-size: var(--mail-fs-body);
+        font-weight: 500;
+    }
+
+    .mail-label.is-nested {
+        padding-inline-start: calc(var(--mail-sp-4) + var(--mail-icon-size) + var(--mail-sp-3));
+    }
+
+    .mail-labels-title {
+        block-size: 56px;
+        padding-inline: var(--mail-sp-4);
+        font-size: var(--mail-fs-body);
+        color: var(--mail-clr-text-secondary);
+    }
+
+    /* --- the compose button, floating over the list */
+
+    .mail-fab {
+        position: fixed;
+        /* base.css makes every li position: relative, which would paint the rows
+           over it without this */
+        z-index: 1;
+        inset-block-end: var(--mail-sp-4);
+        inset-inline-end: var(--mail-sp-4);
+        gap: var(--mail-sp-3);
+        margin: 0;
+        padding-inline: var(--mail-sp-4) 20px;
+        box-shadow: var(--mail-shadow-fab);
+        transition: inset-block-end .2s ease, padding .15s ease;
+    }
+
+    /* scrolling down folds it to its icon, scrolling up brings the label back */
+    .mail-fab.is-compact {
+        padding-inline: var(--mail-sp-4);
+    }
+
+    .mail-fab.is-compact .mail-compose-label {
+        display: none;
+    }
+
+    /* a toast slides up into the same corner, so the button steps out of its way */
+    .root-cmp:has(.user-msg.open) .mail-fab {
+        inset-block-end: calc(var(--mail-sp-4) + 3.5rem);
+    }
+
+    /* --- the list */
+
+    .mail-content {
+        border-radius: 0;
+    }
+
+    /* so the last row can be scrolled clear of the compose button */
+    .mail-list {
+        padding-block-end: calc(var(--mail-compose-btn-h) + var(--mail-sp-6));
+    }
+
+    .mail-list .mail-list-title {
+        padding: var(--mail-sp-2) var(--mail-sp-4) var(--mail-sp-1);
+        font-size: var(--mail-fs-body);
+        font-weight: 500;
+        line-height: var(--mail-lh-body);
+        color: var(--mail-clr-text-secondary);
+    }
+
+    /* avatar | sender and date / subject / snippet and star - and no dividers,
+       no tint for read mail, no labels. bold is the only thing unread changes */
+    .mail-preview {
+        grid-template-columns: var(--mail-avatar-size) minmax(0, 1fr) auto;
+        grid-template-areas:
+            "avatar sender  end"
+            "avatar subject subject"
+            "avatar snippet star";
+        column-gap: var(--mail-sp-4);
+        min-height: 0;
+        padding: var(--mail-sp-3) var(--mail-sp-4);
+        box-shadow: none;
+    }
+
+    .mail-preview.is-read,
+    .mail-preview.is-unread {
+        background-color: var(--mail-clr-surface);
+    }
+
+    /* specific enough to beat the touch screen rule further down, which would
+       put a divider back under the row last tapped */
+    .mail-index .mail-preview:hover {
+        box-shadow: none;
+    }
+
+    .mail-preview.is-selected {
+        background-color: var(--mail-clr-row-selected);
+    }
+
+    .mail-preview .mail-preview-check,
+    .mail-preview .mail-chip {
+        display: none;
+    }
+
+    .mail-avatar {
+        display: grid;
+        grid-area: avatar;
+        align-self: start;
+        place-items: center;
+        inline-size: var(--mail-avatar-size);
+        block-size: var(--mail-avatar-size);
+        padding: 0;
+        border: none;
+        border-radius: 50%;
+        background-color: var(--avatar-clr);
+        font-family: inherit;
+        font-size: 18px;
+        font-weight: 500;
+        color: var(--mail-clr-surface);
+        cursor: pointer;
+    }
+
+    .mail-avatar[aria-checked="true"] {
+        background-color: var(--mail-clr-accent);
+    }
+
+    .mail-avatar-check {
+        inline-size: var(--mail-icon-size);
+        block-size: var(--mail-icon-size);
+    }
+
+    .mail-preview .mail-sender {
+        grid-area: sender;
+        padding-inline-end: 0;
+        font-size: var(--mail-fs-search);
+        line-height: 24px;
+    }
+
+    /* the subject and the snippet each get a line of their own */
+    .mail-preview .mail-txt {
+        display: contents;
+    }
+
+    .mail-preview .mail-subject {
+        grid-area: subject;
+    }
+
+    .mail-preview .mail-snippet {
+        grid-area: snippet;
+    }
+
+    .mail-preview .mail-snippet::before {
+        content: none;
+    }
+
+    .mail-preview .mail-end {
+        grid-area: end;
+        min-inline-size: 0;
+        padding-inline-start: var(--mail-sp-2);
+    }
+
+    .mail-preview.is-read .mail-date {
+        color: var(--mail-clr-text-secondary);
+    }
+
+    /* a 48px target on a 20px line - the negative margins let it overhang the
+       row instead of making it taller, and line the star up with the date */
+    .mail-preview .star-btn {
+        grid-area: star;
+        inline-size: var(--mail-icon-btn-size);
+        block-size: var(--mail-icon-btn-size);
+        margin-block: -14px;
+        margin-inline: 0 calc(var(--mail-sp-3) * -1);
+    }
+
+    /* --- the selection bar, laid over the search band while mails are ticked */
+
+    .mail-select-bar {
+        position: absolute;
+        z-index: 5;
+        inset-block-start: 0;
+        inset-inline: 0;
+        justify-content: flex-start;
+        gap: var(--mail-sp-1);
+        block-size: calc(56px + var(--mail-sp-2) * 2);
+        padding-inline: var(--mail-sp-1) var(--mail-sp-2);
+        background-color: var(--mail-clr-surface);
+    }
+
+    /* the toolbar's own select all - the 720px rule hid it, and here it takes a
+       full touch target */
+    .mail-select-bar .mail-select-all {
+        display: grid;
+        inline-size: var(--mail-icon-btn-size);
+        block-size: var(--mail-icon-btn-size);
+        margin: 0;
+    }
+
+    .mail-select-count {
+        flex: 1 1 auto;
+        padding-inline-start: var(--mail-sp-2);
+        font-size: var(--mail-fs-title);
+        line-height: var(--mail-lh-title);
+    }
+
+    /* the bar ends at the screen edge, so its menu hangs off the right */
+    .mail-select-bar .mail-menu {
+        inset-inline: auto 0;
+    }
+
+    /* --- an open mail: gmail's app bar, then subject, sender and the body */
+
+    /* gmail's open mail has its own app bar and no search above it */
+    .mail-index:has(.mail-details) .mail-filter {
+        display: none;
+    }
+
+    .mail-details {
+        padding: 0 0 var(--mail-sp-5);
+    }
+
+    /* back on the left, the actions on the right. there is no previous and next -
+       gmail moves between mails with a swipe */
+    .mail-details-toolbar {
+        gap: 0;
+        block-size: 64px;
+        margin-block-end: 0;
+        padding-inline: var(--mail-sp-1) var(--mail-sp-2);
+    }
+
+    .mail-details-toolbar > :first-child {
+        margin-inline-end: auto;
+    }
+
+    .mail-details-prev,
+    .mail-details-prev + .mail-icon-btn {
+        display: none;
+    }
+
+    /* the subject and its star share the first line, the labels wrap under it */
+    .mail-details-subject-line {
+        padding-inline: var(--mail-sp-4) var(--mail-sp-1);
+    }
+
+    .mail-details-subject {
+        flex: 1 0 calc(100% - var(--mail-icon-btn-size) - var(--mail-sp-2));
+        overflow-wrap: anywhere;
+    }
+
+    .mail-details-star {
+        order: 1;
+        align-self: flex-start;
+        margin-block-start: calc((var(--mail-lh-title) - var(--mail-icon-btn-size)) / 2);
+    }
+
+    .mail-details-subject-line .mail-chip {
+        order: 2;
+    }
+
+    /* avatar | name and date / to me | reply. the address stays hidden, as it
+       does in gmail until the header is opened */
+    .mail-details-header {
+        display: grid;
+        grid-template-columns: var(--mail-avatar-size) minmax(0, max-content) minmax(0, 1fr) auto;
+        grid-template-areas:
+            "avatar sender date actions"
+            "avatar to     to   actions";
+        /* the desktop's flex gap would space the two lines apart as a row gap too */
+        gap: 0 var(--mail-sp-2);
+        align-items: center;
+        margin-block: var(--mail-sp-4) var(--mail-sp-2);
+        padding-inline: var(--mail-sp-4) var(--mail-sp-1);
+    }
+
+    .mail-details-avatar {
+        grid-area: avatar;
+        margin-inline-end: var(--mail-sp-1);
+    }
+
+    .mail-details-from,
+    .mail-details-sender-line {
+        display: contents;
+    }
+
+    /* the two lines hug the middle, rather than spreading to the height of the
+       avatar and the button beside them */
+    .mail-details-sender,
+    .mail-details-date {
+        align-self: end;
+    }
+
+    .mail-details-to {
+        align-self: start;
+    }
+
+    .mail-details-sender {
+        grid-area: sender;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+
+    .mail-details-address {
+        display: none;
+    }
+
+    .mail-details-to {
+        grid-area: to;
+    }
+
+    .mail-details-date {
+        grid-area: date;
+        margin-inline-start: 0;
+        white-space: nowrap;
+    }
+
+    .mail-details-actions {
+        display: flex;
+        grid-area: actions;
+    }
+
+    .mail-details-body {
+        padding-inline: var(--mail-sp-4);
+        font-size: var(--mail-fs-body);
+        overflow-wrap: anywhere;
+    }
+
+    /* material's outlined button, shared out evenly across the width */
+    .mail-details-reply {
+        padding-inline: var(--mail-sp-4);
+    }
+
+    .mail-reply-btn {
+        flex: 1 1 0;
+        justify-content: center;
+        block-size: 40px;
+        border-color: var(--mail-clr-placeholder);
+        border-radius: 20px;
+        font-weight: 500;
+    }
+
+    /* --- compose: the whole screen, under gmail's app bar */
+
+    .mail-compose {
+        inset: 0;
+        inline-size: 100%;
+        max-inline-size: none;
+        block-size: 100dvh;
+        max-block-size: none;
+        border-radius: 0;
+        box-shadow: none;
+    }
+
+    .mail-compose-header {
+        justify-content: flex-start;
+        gap: var(--mail-sp-1);
+        padding-inline: var(--mail-sp-1);
+        border-radius: 0;
+        background-color: var(--mail-clr-surface);
+    }
+
+    .mail-compose-title {
+        flex: 1 1 auto;
+        font-size: var(--mail-fs-title);
+        font-weight: 400;
+        line-height: var(--mail-lh-title);
+    }
+
+    .mail-compose .mail-editor-field {
+        block-size: 56px;
+    }
+
+    /* --- menus and dialogs */
+
+    .mail-label-menu {
+        max-inline-size: calc(100vw - var(--mail-sp-4));
+    }
+
+    .mail-dialog {
+        padding: var(--mail-sp-4);
+    }
+
+    /* --- fields at 16px, so ios does not zoom the page in on them */
+
+    .mail-editor-field,
+    .mail-editor-body,
+    .mail-label-search-input,
+    .mail-dialog-input,
+    .mail-dialog-select {
+        font-size: var(--mail-fs-input);
+    }
+}
+
+/* a finger leaves no pointer behind, so :hover would stick to whatever was last
+   touched - a grey circle on a button, the date swapped for two icons on a row.
+   the row's delete and unread are one tap further in, on the open mail */
+@media (hover: none) {
+    .mail-icon-btn:hover:not(:disabled),
+    .mail-check:hover {
+        background-color: transparent;
+        box-shadow: none;
+    }
+
+    .mail-preview:hover {
+        box-shadow: var(--mail-shadow-row-line);
+    }
+
+    .mail-preview:hover .mail-date {
+        display: inline;
+    }
+
+    .mail-preview:hover .mail-actions {
+        display: none;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .mail-folder-list,
+    .mail-fab {
+        transition: none;
+    }
+}

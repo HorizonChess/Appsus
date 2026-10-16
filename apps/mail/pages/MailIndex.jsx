@@ -5,10 +5,13 @@ import { MailCompose } from '../cmps/MailCompose.jsx'
 import { MailFolderList } from '../cmps/MailFolderList.jsx'
 import { MailFilter } from '../cmps/MailFilter.jsx'
 import { MailToolbar } from '../cmps/MailToolbar.jsx'
+import { FOLDER_DISPLAY } from '../cmps/MailFolderList.jsx'
+import { MailComposeBtn } from '../cmps/MailComposeBtn.jsx'
 import { useMailFilter } from '../custom-hooks/useMailFilter.js'
 import { useMailParams } from '../custom-hooks/useMailParams.js'
+import { useIsPhone } from '../custom-hooks/useIsPhone.js'
 
-const { useState, useEffect } = React
+const { useState, useEffect, useRef } = React
 const { useNavigate } = ReactRouterDOM
 
 export function MailIndex() {
@@ -16,6 +19,13 @@ export function MailIndex() {
     const [selectedIds, setSelectedIds] = useState([])
     const [searchParams, setParams] = useMailParams()
     const navigate = useNavigate()
+    const isPhone = useIsPhone()
+
+    // a phone has no pager - gmail keeps adding a page as you scroll toward the end
+    const [phonePageCount, setPhonePageCount] = useState(1)
+    // and folds the compose button down to its icon while you scroll down
+    const [isFabCompact, setIsFabCompact] = useState(false)
+    const lastScrollTopRef = useRef(0)
 
     const { folder, txt, sortBy, sortDir } = useMailFilter()
     // not part of the filter - it survives a reload where the four above reset it
@@ -24,7 +34,12 @@ export function MailIndex() {
     // clamped, so emptying the last page or narrowing the folder cannot strand you
     const pageCount = mails ? Math.max(Math.ceil(mails.length / PAGE_SIZE), 1) : 1
     const pageIdxToShow = Math.min(Math.max(pageIdx, 0), pageCount - 1)
-    const pageMails = mails && mails.slice(pageIdxToShow * PAGE_SIZE, (pageIdxToShow + 1) * PAGE_SIZE)
+    const pageMails = !mails ? null
+        : isPhone ? mails.slice(0, phonePageCount * PAGE_SIZE)
+            : mails.slice(pageIdxToShow * PAGE_SIZE, (pageIdxToShow + 1) * PAGE_SIZE)
+
+    // the folder's name heads the list on a phone, where there is no toolbar
+    const listTitle = FOLDER_DISPLAY[folder] ? FOLDER_DISPLAY[folder].label : mailService.getLabelName(folder)
 
     // a folder switch drops the old rows right away - the loader covers the gap
     useEffect(() => {
@@ -36,6 +51,10 @@ export function MailIndex() {
     useEffect(() => {
         setSelectedIds([])
     }, [folder, txt, pageIdx])
+
+    useEffect(() => {
+        setPhonePageCount(1)
+    }, [folder, txt, sortBy, sortDir])
 
     useEffect(() => {
         loadMails()
@@ -65,6 +84,20 @@ export function MailIndex() {
         setMails(mails
             .map(mail => (mail.id === mailId ? { ...mail, ...changes } : mail))
             .filter(mail => mailService.isInFolder(mail, folder)))
+    }
+
+    function onListScroll({ target }) {
+        const { scrollTop, scrollHeight, clientHeight } = target
+
+        // the browser can fire twice for one position, and that must not read as
+        // a change of direction
+        if (scrollTop !== lastScrollTopRef.current) setIsFabCompact(scrollTop > lastScrollTopRef.current)
+        lastScrollTopRef.current = scrollTop
+
+        // a screen's worth from the end is early enough that the next page is
+        // there before you reach it
+        const isNearEnd = scrollHeight - scrollTop - clientHeight < clientHeight
+        if (isNearEnd && phonePageCount * PAGE_SIZE < mails.length) setPhonePageCount(phonePageCount + 1)
     }
 
     function onToggleSelect(mailId) {
@@ -131,6 +164,8 @@ export function MailIndex() {
 
             {mails && <MailList
                 mails={pageMails}
+                title={isPhone ? listTitle : null}
+                onScroll={isPhone ? onListScroll : null}
                 selectedIds={selectedIds}
                 onToggleSelect={onToggleSelect}
                 onToggleStar={onToggleStar}
@@ -138,6 +173,8 @@ export function MailIndex() {
                 onClickMail={onClickMail}
                 onRemoveMail={onRemoveMail} />}
         </main>
+
+        {isPhone && <MailComposeBtn className={`mail-fab ${isFabCompact ? 'is-compact' : ''}`} />}
 
         <MailCompose />
 
